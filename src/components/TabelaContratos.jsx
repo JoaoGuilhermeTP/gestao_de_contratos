@@ -57,7 +57,7 @@ export default function TabelaContratos({ contratos, setContratos }) {
       <h2>Contratos cadastrados</h2>
       {contratos.length > 0 ? (
         <>
-          <h2>Filtrar contratos</h2>
+          <h3>Filtrar contratos</h3>
           <input
             type="number"
             placeholder="Número"
