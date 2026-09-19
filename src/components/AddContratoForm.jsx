@@ -2,8 +2,6 @@ import { useState } from "react";
 
 export default function AddContratoForm({ contratos, setContratos }) {
 
-  console.log(contratos)
-
   const [novoContrato, setNovoContrato] = useState({
     id: null,
     numero: null,
@@ -27,6 +25,8 @@ export default function AddContratoForm({ contratos, setContratos }) {
 
   return (
     <>
+    <h2>Adicionar novo contrato</h2>
+    <button>Importar arquivo</button>
       <form
         onSubmit={handleSubmit}
       >

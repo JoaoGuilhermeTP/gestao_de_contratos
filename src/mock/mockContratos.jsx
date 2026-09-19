@@ -1,0 +1,222 @@
+export const mockContratos = [
+  {
+    id: 1,
+    numero: "012",
+    ano: 2026,
+    objeto: "Aquisição de 50 notebooks para o setor administrativo",
+    fornecedor: "Tech Solutions Informática Ltda",
+    procedimento: "Pregão Eletrônico",
+    tipo: "Aquisição de Bens",
+    dataDaAssinatura: "2026-01-15",
+    dataDeTermino: "2026-12-31"
+  },
+  {
+    id: 2,
+    numero: "015",
+    ano: 2026,
+    objeto: "Prestação de serviços de limpeza e conservação",
+    fornecedor: "Clean Service S/A",
+    procedimento: "Pregão Eletrônico",
+    tipo: "Prestação de Serviços",
+    dataDaAssinatura: "2026-02-01",
+    dataDeTermino: "2027-02-01"
+  },
+  {
+    id: 3,
+    numero: "003",
+    ano: 2025,
+    objeto: "Reforma do telhado do prédio principal",
+    fornecedor: "Construtora Alfa e Ômega",
+    procedimento: "Tomada de Preços",
+    tipo: "Obras",
+    dataDaAssinatura: "2025-05-10",
+    dataDeTermino: "2025-11-10"
+  },
+  {
+    id: 4,
+    numero: "042",
+    ano: 2026,
+    objeto: "Contratação de consultoria jurídica especializada",
+    fornecedor: "Mendes e Silva Advogados Associados",
+    procedimento: "Inexigibilidade",
+    tipo: "Serviço Especializado",
+    dataDaAssinatura: "2026-03-20",
+    dataDeTermino: "2027-03-20"
+  },
+  {
+    id: 5,
+    numero: "088",
+    ano: 2026,
+    objeto: "Fornecimento de material de expediente (papelaria)",
+    fornecedor: "Papelaria Central Distribuidora",
+    procedimento: "Dispensa de Licitação",
+    tipo: "Aquisição de Bens",
+    dataDaAssinatura: "2026-04-05",
+    dataDeTermino: "2026-10-05"
+  },
+  {
+    id: 6,
+    numero: "102",
+    ano: 2025,
+    objeto: "Locação de veículos para frota oficial",
+    fornecedor: "Auto Locadora Brasil",
+    procedimento: "Pregão Eletrônico",
+    tipo: "Locação",
+    dataDaAssinatura: "2025-08-12",
+    dataDeTermino: "2027-08-12"
+  },
+  {
+    id: 7,
+    numero: "005",
+    ano: 2026,
+    objeto: "Manutenção preventiva de aparelhos de ar-condicionado",
+    fornecedor: "Clima Bom Refrigeração",
+    procedimento: "Convite",
+    tipo: "Manutenção",
+    dataDaAssinatura: "2026-01-22",
+    dataDeTermino: "2026-07-22"
+  },
+  {
+    id: 8,
+    numero: "034",
+    ano: 2026,
+    objeto: "Renovação de licenças de software antivírus",
+    fornecedor: "CyberSec Brasil Cloud",
+    procedimento: "Pregão Eletrônico",
+    tipo: "Aquisição de Software",
+    dataDaAssinatura: "2026-05-15",
+    dataDeTermino: "2027-05-15"
+  },
+  {
+    id: 9,
+    numero: "055",
+    ano: 2024,
+    objeto: "Construção de um novo galpão de armazenamento",
+    fornecedor: "Edifica Construções e Projetos",
+    procedimento: "Concorrência Pública",
+    tipo: "Obras",
+    dataDaAssinatura: "2024-11-01",
+    dataDeTermino: "2026-11-01"
+  },
+  {
+    id: 10,
+    numero: "091",
+    ano: 2026,
+    objeto: "Fornecimento de internet em fibra óptica 1Gbps",
+    fornecedor: "NetFast Telecom",
+    procedimento: "Pregão Eletrônico",
+    tipo: "Prestação de Serviços",
+    dataDaAssinatura: "2026-02-15",
+    dataDeTermino: "2028-02-15"
+  },
+  {
+    id: 11,
+    numero: "110",
+    ano: 2026,
+    objeto: "Assinatura de plataforma de cursos online para servidores",
+    fornecedor: "EducaTech Cursos",
+    procedimento: "Inexigibilidade",
+    tipo: "Treinamento e Capacitação",
+    dataDaAssinatura: "2026-06-10",
+    dataDeTermino: "2027-06-10"
+  },
+  {
+    id: 12,
+    numero: "008",
+    ano: 2025,
+    objeto: "Fornecimento de água mineral em galões de 20 litros",
+    fornecedor: "Fonte Pura Distribuidora",
+    procedimento: "Dispensa de Licitação",
+    tipo: "Aquisição de Bens",
+    dataDaAssinatura: "2025-01-05",
+    dataDeTermino: "2025-12-31"
+  },
+  {
+    id: 13,
+    numero: "077",
+    ano: 2026,
+    objeto: "Serviço de vigilância armada 24 horas",
+    fornecedor: "Gavião Segurança e Transporte de Valores",
+    procedimento: "Pregão Eletrônico",
+    tipo: "Prestação de Serviços",
+    dataDaAssinatura: "2026-03-01",
+    dataDeTermino: "2028-03-01"
+  },
+  {
+    id: 14,
+    numero: "023",
+    ano: 2026,
+    objeto: "Compra de mobiliário corporativo (mesas e cadeiras ergonômicas)",
+    fornecedor: "Móveis Office Design",
+    procedimento: "Pregão Eletrônico",
+    tipo: "Aquisição de Bens",
+    dataDaAssinatura: "2026-04-20",
+    dataDeTermino: "2026-06-20"
+  },
+  {
+    id: 15,
+    numero: "049",
+    ano: 2025,
+    objeto: "Serviço de dedetização e controle de pragas urbanas",
+    fornecedor: "PragaZero Ambiental",
+    procedimento: "Convite",
+    tipo: "Manutenção",
+    dataDaAssinatura: "2025-09-14",
+    dataDeTermino: "2026-09-14"
+  },
+  {
+    id: 16,
+    numero: "018",
+    ano: 2026,
+    objeto: "Locação de impressoras multifuncionais com franquia de páginas",
+    fornecedor: "PrintMax Soluções em Impressão",
+    procedimento: "Pregão Eletrônico",
+    tipo: "Locação",
+    dataDaAssinatura: "2026-01-10",
+    dataDeTermino: "2029-01-10"
+  },
+  {
+    id: 17,
+    numero: "062",
+    ano: 2026,
+    objeto: "Contratação de agência para gestão de mídias sociais",
+    fornecedor: "Viraliza Agência Digital",
+    procedimento: "Tomada de Preços",
+    tipo: "Serviço Especializado",
+    dataDaAssinatura: "2026-05-01",
+    dataDeTermino: "2027-05-01"
+  },
+  {
+    id: 18,
+    numero: "002",
+    ano: 2026,
+    objeto: "Aquisição de uniformes para equipe operacional",
+    fornecedor: "Têxtil Uniformes Profissionais",
+    procedimento: "Dispensa de Licitação",
+    tipo: "Aquisição de Bens",
+    dataDaAssinatura: "2026-02-18",
+    dataDeTermino: "2026-04-18"
+  },
+  {
+    id: 19,
+    numero: "134",
+    ano: 2025,
+    objeto: "Serviço de engenharia para laudo estrutural",
+    fornecedor: "Engenharia Master Projetos",
+    procedimento: "Inexigibilidade",
+    tipo: "Serviço Especializado",
+    dataDaAssinatura: "2025-10-25",
+    dataDeTermino: "2025-12-25"
+  },
+  {
+    id: 20,
+    numero: "099",
+    ano: 2026,
+    objeto: "Fornecimento de coffee break para eventos institucionais",
+    fornecedor: "Sabor e Arte Buffet",
+    procedimento: "Pregão Eletrônico",
+    tipo: "Fornecimento",
+    dataDaAssinatura: "2026-03-10",
+    dataDeTermino: "2027-03-10"
+  }
+];
