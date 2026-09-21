@@ -1,11 +1,11 @@
 // import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ContratosPage from "./pages/contratosPage";
+import ContratosPage from "./pages/ContratosPage";
 import HomePage from "./pages/HomePage";
 import Navbar from "./components/NavBar";
 import { mockContratos } from "./mock/mockContratos";
 import { useState } from "react";
-import Contrato from "./components/Contrato";
+import Contrato from "./pages/ContratoPage";
 
 function App() {
 

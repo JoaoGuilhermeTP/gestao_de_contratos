@@ -3,8 +3,6 @@ import { useParams } from "react-router-dom";
 export default function Contrato({ contratos, setContratos }) {
   const { id } = useParams();
 
-  console.log(`Id is: ${id}`);
-
   const contrato = contratos.find((contrato) => contrato.id === Number(id));
 
   return (
