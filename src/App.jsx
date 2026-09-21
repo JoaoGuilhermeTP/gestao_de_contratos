@@ -21,7 +21,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/contratos" element={<ContratosPage contratos={contratos} setContratos={setContratos} fornecedores={fornecedores}/>} />
-        <Route path={`/contratos/:id`} element={<Contrato contratos={contratos} setContratos={setContratos} />} />
+        <Route path={`/contratos/:id`} element={<Contrato contratos={contratos} setContratos={setContratos} fornecedores={fornecedores} />} />
         <Route path={`/fornecedor/:id`} element={<FornecedorPage fornecedores={fornecedores} setFornecedores={setFornecedores} contratos={contratos} />} />
       </Routes>
     </BrowserRouter>
