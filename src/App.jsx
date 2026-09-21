@@ -1,6 +1,6 @@
 // import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ContratosPage from "./pages/ContratosPage";
+import ContratosPage from "./pages/contratosPage";
 import HomePage from "./pages/HomePage";
 import Navbar from "./components/NavBar";
 import { mockContratos } from "./mock/mockContratos";
