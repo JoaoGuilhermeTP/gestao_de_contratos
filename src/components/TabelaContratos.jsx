@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function TabelaContratos({ contratos, setContratos }) {
+export default function TabelaContratos({ contratos, setContratos, fornecedores }) {
+
   const [filtros, setFiltros] = useState({
     numero: "",
     ano: "",
@@ -123,7 +124,7 @@ export default function TabelaContratos({ contratos, setContratos }) {
                     </Link>
                   </td>
                   <td>{contrato.objeto}</td>
-                  <td>{contrato.fornecedor}</td>
+                  <td>{fornecedores.find((fornecedor) => fornecedor.id === Number(contrato.fornecedor)).nome}</td>
                   <td>{contrato.procedimento}</td>
                   <td>{contrato.tipo}</td>
                   <td>{contrato.dataDaAssinatura}</td>

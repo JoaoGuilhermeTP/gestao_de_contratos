@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function AddContratoForm({ contratos, setContratos }) {
+export default function AddContratoForm({ contratos, setContratos, fornecedores, setFornecedores }) {
 
   const [novoContrato, setNovoContrato] = useState({
     id: null,
@@ -54,14 +54,22 @@ export default function AddContratoForm({ contratos, setContratos }) {
             setNovoContrato({ ...novoContrato, objeto: e.target.value })
           }
         />
-        <input
-          type="text"
-          placeholder="fornecedor"
+        <select
           value={novoContrato.fornecedor || ""}
           onChange={(e) =>
             setNovoContrato({ ...novoContrato, fornecedor: e.target.value })
           }
-        />
+        >
+          <option value="" disabled>
+            Selecione um fornecedor
+          </option>
+          {fornecedores.map((fornecedor) => (
+            <option value={fornecedor.id}>{fornecedor.nome} - {fornecedor.cnpj}</option>
+          ))}
+
+        </select>
+      
+      
         <input
           type="text"
           placeholder="procedimento"
