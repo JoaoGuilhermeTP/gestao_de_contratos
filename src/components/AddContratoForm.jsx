@@ -6,24 +6,25 @@ export default function AddContratoForm({
   fornecedores,
   setFornecedores,
 }) {
-  const [novoContrato, setNovoContrato] = useState({
-    id: null,
-    numero: null,
-    ano: null,
-    objeto: null,
-    fornecedor_id: null,
-    procedimento: null,
-    tipo: null,
-    dataDaAssinatura: null,
-    dataDeTermino: null,
-  });
+  const initialContrato = {
+    numero: "",
+    ano: "",
+    objeto: "",
+    fornecedor_id: "",
+    procedimento: "",
+    tipo: "",
+    dataDaAssinatura: "",
+    dataDeTermino: "",
+  };
+
+  const [novoContrato, setNovoContrato] = useState(initialContrato);
 
   function handleSubmit(e) {
     e.preventDefault();
     if (novoContrato.numero && novoContrato.ano && novoContrato.objeto) {
       const contrato = { ...novoContrato, id: Date.now() };
       setContratos([...contratos, contrato]);
-      setNovoContrato({ id: null, numero: null, ano: null, objeto: null });
+      setNovoContrato(initialContrato);
     }
   }
 
@@ -35,7 +36,7 @@ export default function AddContratoForm({
         <input
           type="number"
           placeholder="Número"
-          value={novoContrato.numero || ""}
+          value={novoContrato.numero}
           onChange={(e) =>
             setNovoContrato({ ...novoContrato, numero: e.target.value })
           }
@@ -43,7 +44,7 @@ export default function AddContratoForm({
         <input
           type="number"
           placeholder="Ano"
-          value={novoContrato.ano || ""}
+          value={novoContrato.ano}
           onChange={(e) =>
             setNovoContrato({ ...novoContrato, ano: e.target.value })
           }
@@ -51,22 +52,25 @@ export default function AddContratoForm({
         <input
           type="text"
           placeholder="Objeto"
-          value={novoContrato.objeto || ""}
+          value={novoContrato.objeto}
           onChange={(e) =>
             setNovoContrato({ ...novoContrato, objeto: e.target.value })
           }
         />
         <select
-          value={novoContrato.fornecedor_id || ""}
+          value={novoContrato.fornecedor_id}
           onChange={(e) =>
-            setNovoContrato({ ...novoContrato, fornecedor: e.target.value })
+            setNovoContrato({
+              ...novoContrato,
+              fornecedor_id: Number(e.target.value),
+            })
           }
         >
           <option value="" disabled>
             Selecione um fornecedor
           </option>
           {fornecedores.map((fornecedor) => (
-            <option value={fornecedor.id}>
+            <option key={fornecedor.id} value={fornecedor.id}>
               {fornecedor.nome} - {fornecedor.cnpj}
             </option>
           ))}
@@ -75,7 +79,7 @@ export default function AddContratoForm({
         <input
           type="text"
           placeholder="procedimento"
-          value={novoContrato.procedimento || ""}
+          value={novoContrato.procedimento}
           onChange={(e) =>
             setNovoContrato({ ...novoContrato, procedimento: e.target.value })
           }
@@ -83,7 +87,7 @@ export default function AddContratoForm({
         <input
           type="text"
           placeholder="tipo"
-          value={novoContrato.tipo || ""}
+          value={novoContrato.tipo}
           onChange={(e) =>
             setNovoContrato({ ...novoContrato, tipo: e.target.value })
           }
@@ -91,7 +95,7 @@ export default function AddContratoForm({
         <input
           type="date"
           placeholder="Data de assinatura"
-          value={novoContrato.dataDaAssinatura || ""}
+          value={novoContrato.dataDaAssinatura}
           onChange={(e) =>
             setNovoContrato({
               ...novoContrato,
@@ -102,7 +106,7 @@ export default function AddContratoForm({
         <input
           type="date"
           placeholder="Data de término"
-          value={novoContrato.dataDeTermino || ""}
+          value={novoContrato.dataDeTermino}
           onChange={(e) =>
             setNovoContrato({ ...novoContrato, dataDeTermino: e.target.value })
           }
