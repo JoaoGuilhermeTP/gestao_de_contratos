@@ -1,11 +1,10 @@
 import { useState } from "react";
 import TabelaContratos from "../components/TabelaContratos";
 import AddContratoForm from "../components/AddContratoForm";
-import { mockFornecedores } from "../mock/mockFornecedores";
 
-export default function ContratosPage({contratos, setContratos}) {
+export default function ContratosPage({contratos, setContratos, fornecedores, setFornecedores}) {
 
-  const [fornecedores, setFornecedores] = useState(mockFornecedores);
+  
 
   return (
     <>
