@@ -9,7 +9,6 @@ expertMode = true
 [[ports]]
 localPort = 5173
 externalPort = 80
-exposeLocalhost = true
 
 [workflows]
 runButton = "Project"
