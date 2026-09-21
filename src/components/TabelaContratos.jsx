@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function TabelaContratos({ contratos, setContratos }) {
   const [filtros, setFiltros] = useState({
@@ -11,8 +12,10 @@ export default function TabelaContratos({ contratos, setContratos }) {
   });
 
   const contratosFiltrados = contratos.filter((contrato) => {
+
     const matchNumero =
       !filtros.numero || String(contrato.numero) === filtros.numero;
+
     const matchAno = !filtros.ano || String(contrato.ano) === filtros.ano;
 
     const matchObjeto =
@@ -115,7 +118,9 @@ export default function TabelaContratos({ contratos, setContratos }) {
               {contratosFiltrados.map((contrato) => (
                 <tr key={contrato.id}>
                   <td>
+                    <Link to={`/contratos/${contrato.id}`}>
                     {contrato.numero}/{contrato.ano}
+                    </Link>
                   </td>
                   <td>{contrato.objeto}</td>
                   <td>{contrato.fornecedor}</td>

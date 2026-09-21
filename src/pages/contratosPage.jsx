@@ -3,9 +3,7 @@ import TabelaContratos from "../components/TabelaContratos";
 import AddContratoForm from "../components/AddContratoForm";
 import { mockContratos } from "../mock/mockContratos";
 
-export default function ContratosPage() {
-
-  const [contratos, setContratos] = useState(mockContratos);
+export default function ContratosPage({contratos, setContratos}) {
 
   return (
     <>
