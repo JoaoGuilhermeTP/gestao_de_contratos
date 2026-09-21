@@ -124,7 +124,7 @@ export default function TabelaContratos({ contratos, setContratos, fornecedores 
                     </Link>
                   </td>
                   <td>{contrato.objeto}</td>
-                  <td>{fornecedores.find((fornecedor) => fornecedor.id === Number(contrato.fornecedor)).nome}</td>
+                  <td>{fornecedores.find((fornecedor) => fornecedor.id === Number(contrato.fornecedor_id)).nome}</td>
                   <td>{contrato.procedimento}</td>
                   <td>{contrato.tipo}</td>
                   <td>{contrato.dataDaAssinatura}</td>

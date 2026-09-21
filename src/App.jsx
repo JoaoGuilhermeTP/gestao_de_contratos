@@ -9,7 +9,7 @@ import Contrato from "./pages/ContratoPage";
 
 function App() {
 
-  const [contratos, setContratos] = useState([]);
+  const [contratos, setContratos] = useState(mockContratos);
 
   return (
     <BrowserRouter>
