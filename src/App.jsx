@@ -8,6 +8,7 @@ import {mockFornecedores} from "./mock/mockFornecedores"
 import { useState } from "react";
 import Contrato from "./pages/ContratoPage";
 import FornecedorPage from "./pages/FornecedorPage";
+import AdicionarContratoPage from "./pages/AdicionarContratoPage";
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/contratos" element={<ContratosPage contratos={contratos} setContratos={setContratos} fornecedores={fornecedores}/>} />
         <Route path={`/contratos/:id`} element={<Contrato contratos={contratos} setContratos={setContratos} fornecedores={fornecedores} />} />
+        <Route path={'/adicionar_contrato'} element={<AdicionarContratoPage contratos={contratos} setContratos={setContratos} fornecedores={fornecedores} />} />
         <Route path={`/fornecedor/:id`} element={<FornecedorPage fornecedores={fornecedores} setFornecedores={setFornecedores} contratos={contratos} />} />
       </Routes>
     </BrowserRouter>

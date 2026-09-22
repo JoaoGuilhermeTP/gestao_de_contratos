@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function AddContratoForm({
   contratos,
@@ -6,6 +7,7 @@ export default function AddContratoForm({
   fornecedores,
   setFornecedores,
 }) {
+  const navigate = useNavigate();
   const initialContrato = {
     numero: "",
     ano: "",
@@ -25,6 +27,7 @@ export default function AddContratoForm({
       const contrato = { ...novoContrato, id: Date.now() };
       setContratos([...contratos, contrato]);
       setNovoContrato(initialContrato);
+      navigate("/contratos");
     }
   }
 

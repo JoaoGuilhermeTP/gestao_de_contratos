@@ -1,16 +1,23 @@
 import { useState } from "react";
 import TabelaContratos from "../components/TabelaContratos";
 import AddContratoForm from "../components/AddContratoForm";
+import { Link } from "react-router-dom";
 
-export default function ContratosPage({contratos, setContratos, fornecedores, setFornecedores}) {
-
-  
-
+export default function ContratosPage({
+  contratos,
+  setContratos,
+  fornecedores,
+  setFornecedores,
+}) {
   return (
     <>
-    <h1>Contratos</h1>
-      <AddContratoForm contratos={contratos} setContratos={setContratos} fornecedores={fornecedores}/>
-      <TabelaContratos contratos={contratos} setContratos={setContratos} fornecedores={fornecedores} />
+      <h1>Contratos</h1>
+      <Link to="/adicionar_contrato">Adicionar Contrato</Link>
+      <TabelaContratos
+        contratos={contratos}
+        setContratos={setContratos}
+        fornecedores={fornecedores}
+      />
     </>
   );
 }
