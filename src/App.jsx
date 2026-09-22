@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ContratosPage from "./pages/ContratosPage";
 import HomePage from "./pages/HomePage";
 import Navbar from "./components/NavBar";
-import Contrato from "./pages/ContratoPage";
+import ContratoPage from "./pages/ContratoPage";
 import AdicionarContratoPage from "./pages/AdicionarContratoPage";
 import FornecedorPage from "./pages/FornecedorPage";
 
@@ -32,7 +32,7 @@ function App() {
         <Route
           path={`/contratos/:id`}
           element={
-            <Contrato
+            <ContratoPage
               contratos={contratos}
               setContratos={setContratos}
               fornecedores={fornecedores}
