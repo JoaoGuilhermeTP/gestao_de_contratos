@@ -1,6 +1,5 @@
 import { useState } from "react";
 import TabelaContratos from "../components/TabelaContratos";
-import AddContratoForm from "../components/AddContratoForm";
 import { Link } from "react-router-dom";
 
 export default function ContratosPage({

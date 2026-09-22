@@ -1,30 +1,64 @@
 // import "./App.css";
+import { mockContratos } from "./mock/mockContratos";
+import { mockFornecedores } from "./mock/mockFornecedores";
+import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ContratosPage from "./pages/contratosPage";
+import ContratosPage from "./pages/ContratosPage";
 import HomePage from "./pages/HomePage";
 import Navbar from "./components/NavBar";
-import { mockContratos } from "./mock/mockContratos";
-import {mockFornecedores} from "./mock/mockFornecedores"
-import { useState } from "react";
 import Contrato from "./pages/ContratoPage";
-import FornecedorPage from "./pages/FornecedorPage";
 import AdicionarContratoPage from "./pages/AdicionarContratoPage";
-
+import FornecedorPage from "./pages/FornecedorPage";
 
 function App() {
-
   const [contratos, setContratos] = useState(mockContratos);
   const [fornecedores, setFornecedores] = useState(mockFornecedores);
 
   return (
     <BrowserRouter>
-    <Navbar />
+      <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/contratos" element={<ContratosPage contratos={contratos} setContratos={setContratos} fornecedores={fornecedores}/>} />
-        <Route path={`/contratos/:id`} element={<Contrato contratos={contratos} setContratos={setContratos} fornecedores={fornecedores} />} />
-        <Route path={'/adicionar_contrato'} element={<AdicionarContratoPage contratos={contratos} setContratos={setContratos} fornecedores={fornecedores} />} />
-        <Route path={`/fornecedor/:id`} element={<FornecedorPage fornecedores={fornecedores} setFornecedores={setFornecedores} contratos={contratos} />} />
+        <Route
+          path="/contratos"
+          element={
+            <ContratosPage
+              contratos={contratos}
+              setContratos={setContratos}
+              fornecedores={fornecedores}
+            />
+          }
+        />
+        <Route
+          path={`/contratos/:id`}
+          element={
+            <Contrato
+              contratos={contratos}
+              setContratos={setContratos}
+              fornecedores={fornecedores}
+            />
+          }
+        />
+        <Route
+          path={"/adicionar_contrato"}
+          element={
+            <AdicionarContratoPage
+              contratos={contratos}
+              setContratos={setContratos}
+              fornecedores={fornecedores}
+            />
+          }
+        />
+        <Route
+          path={`/fornecedor/:id`}
+          element={
+            <FornecedorPage
+              fornecedores={fornecedores}
+              setFornecedores={setFornecedores}
+              contratos={contratos}
+            />
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
