@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function AddContratoForm({ contratos, setContratos, fornecedores, setFornecedores }) {
+export default function AddContratoForm({
+  contratos,
+  setContratos,
+  fornecedores,
+  setFornecedores,
+}) {
   // Navigate hook to navigate to main contratos page after adding new contract
   const navigate = useNavigate();
 
@@ -26,8 +31,13 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores,
     const newErrors = {};
 
     // Check contract number
-    if (!novoContrato.numero || !Number.isInteger(novoContrato.numero) || novoContrato.numero < 1) {
-      newErrors.numero = "Número do contrato precsa ser um número maior que zero";
+    if (
+      !novoContrato.numero ||
+      !Number.isInteger(novoContrato.numero) ||
+      novoContrato.numero < 1
+    ) {
+      newErrors.numero =
+        "Número do contrato precsa ser um número maior que zero";
     }
 
     // Check contract year
@@ -62,8 +72,13 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores,
       newErrors.dataDeTermino = "Data de término é obrigatória.";
     }
 
-    if (novoContrato.dataDaAssinatura && novoContrato.dataDeTermino && novoContrato.dataDeTermino < novoContrato.dataDaAssinatura) {
-      newErrors.dataDeTermino = "A data de término não pode ser anterior à data da assinatura.";
+    if (
+      novoContrato.dataDaAssinatura &&
+      novoContrato.dataDeTermino &&
+      novoContrato.dataDeTermino < novoContrato.dataDaAssinatura
+    ) {
+      newErrors.dataDeTermino =
+        "A data de término não pode ser anterior à data da assinatura.";
     }
 
     setErrors(newErrors);
@@ -88,6 +103,7 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores,
     <>
       <h2>Adicionar novo contrato</h2>
       <button>Importar arquivo</button>
+      <span>Funcionalidade a ser implementada</span>
       <form onSubmit={handleSubmit}>
         <label>
           Número do contrato
@@ -155,7 +171,9 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores,
               </option>
             ))}
           </select>
-          {errors.fornecedor_id && <span className="form-error">{errors.fornecedor_id}</span>}
+          {errors.fornecedor_id && (
+            <span className="form-error">{errors.fornecedor_id}</span>
+          )}
         </label>
 
         <label>
@@ -170,7 +188,9 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores,
               })
             }
           />
-          {errors.procedimento && <span className="form-error">{errors.procedimento}</span>}
+          {errors.procedimento && (
+            <span className="form-error">{errors.procedimento}</span>
+          )}
         </label>
 
         <label>
@@ -200,7 +220,9 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores,
               })
             }
           />
-          {errors.dataDaAssinatura && <span className="form-error">{errors.dataDaAssinatura}</span>}
+          {errors.dataDaAssinatura && (
+            <span className="form-error">{errors.dataDaAssinatura}</span>
+          )}
         </label>
 
         <label>
@@ -215,7 +237,9 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores,
               })
             }
           />
-          {errors.dataDeTermino && <span className="form-error">{errors.dataDeTermino}</span>}
+          {errors.dataDeTermino && (
+            <span className="form-error">{errors.dataDeTermino}</span>
+          )}
         </label>
 
         <button type="submit">Adicionar</button>
