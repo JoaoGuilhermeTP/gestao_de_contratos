@@ -423,6 +423,15 @@ form label select {
   margin-top: 0;
 }
 
+.form-error {
+  margin-top: 2px;
+
+  color: #dc2626;
+
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
 /* ========================================
    Search / Filter Controls
    ======================================== */

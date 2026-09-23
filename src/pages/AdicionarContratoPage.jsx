@@ -2,7 +2,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function AddContratoForm({ contratos, setContratos, fornecedores, setFornecedores }) {
+  // Navigate hook to navigate to main contratos page after adding new contract
   const navigate = useNavigate();
+
+  // Initial state for contrato
   const initialContrato = {
     numero: "",
     ano: "",
@@ -14,15 +17,70 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores,
     dataDeTermino: "",
   };
 
+  // State variables
   const [novoContrato, setNovoContrato] = useState(initialContrato);
+  const [errors, setErrors] = useState({});
+
+  // Function for validating form
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Check contract number
+    if (!novoContrato.numero || !Number.isInteger(novoContrato.numero) || novoContrato.numero < 1) {
+      newErrors.numero = "Número do contrato precsa ser um número maior que zero";
+    }
+
+    // Check contract year
+    const currentYear = new Date().getFullYear();
+    if (!novoContrato.ano) {
+      newErrors.ano = "Ano é obrigatório.";
+    } else if (novoContrato.ano > currentYear) {
+      newErrors.ano = "O ano não pode ser posterior ao ano atual.";
+    }
+
+    if (!novoContrato.objeto.trim()) {
+      newErrors.objeto = "Objeto é obrigatório.";
+    }
+
+    if (!novoContrato.fornecedor_id) {
+      newErrors.fornecedor_id = "Selecione um fornecedor.";
+    }
+
+    if (!novoContrato.procedimento.trim()) {
+      newErrors.procedimento = "Procedimento é obrigatório.";
+    }
+
+    if (!novoContrato.tipo.trim()) {
+      newErrors.tipo = "Tipo de contrato é obrigatório.";
+    }
+
+    if (!novoContrato.dataDaAssinatura) {
+      newErrors.dataDaAssinatura = "Data da assinatura é obrigatória.";
+    }
+
+    if (!novoContrato.dataDeTermino) {
+      newErrors.dataDeTermino = "Data de término é obrigatória.";
+    }
+
+    if (novoContrato.dataDaAssinatura && novoContrato.dataDeTermino && novoContrato.dataDeTermino < novoContrato.dataDaAssinatura) {
+      newErrors.dataDeTermino = "A data de término não pode ser anterior à data da assinatura.";
+    }
+
+    setErrors(newErrors);
+
+    // Check if there's any error added
+    return Object.keys(newErrors).length === 0;
+  };
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (novoContrato.numero && novoContrato.ano && novoContrato.objeto) {
+    if (validateForm()) {
       const contrato = { ...novoContrato, id: Date.now() };
       setContratos([...contratos, contrato]);
       setNovoContrato(initialContrato);
       navigate("/contratos");
+    } else {
+      return;
     }
   }
 
@@ -39,10 +97,11 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores,
             onChange={(e) =>
               setNovoContrato({
                 ...novoContrato,
-                numero: e.target.value,
+                numero: Number(e.target.value),
               })
             }
           />
+          {errors.numero && <span className="form-error">{errors.numero}</span>}
         </label>
 
         <label>
@@ -57,6 +116,7 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores,
               })
             }
           />
+          {errors.ano && <span className="form-error">{errors.ano}</span>}
         </label>
 
         <label>
@@ -71,6 +131,7 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores,
               })
             }
           />
+          {errors.objeto && <span className="form-error">{errors.objeto}</span>}
         </label>
 
         <label>
@@ -94,6 +155,7 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores,
               </option>
             ))}
           </select>
+          {errors.fornecedor_id && <span className="form-error">{errors.fornecedor_id}</span>}
         </label>
 
         <label>
@@ -108,6 +170,7 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores,
               })
             }
           />
+          {errors.procedimento && <span className="form-error">{errors.procedimento}</span>}
         </label>
 
         <label>
@@ -122,6 +185,7 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores,
               })
             }
           />
+          {errors.tipo && <span className="form-error">{errors.tipo}</span>}
         </label>
 
         <label>
@@ -136,6 +200,7 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores,
               })
             }
           />
+          {errors.dataDaAssinatura && <span className="form-error">{errors.dataDaAssinatura}</span>}
         </label>
 
         <label>
@@ -150,6 +215,7 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores,
               })
             }
           />
+          {errors.dataDeTermino && <span className="form-error">{errors.dataDeTermino}</span>}
         </label>
 
         <button type="submit">Adicionar</button>
