@@ -1,12 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function AddContratoForm({
-  contratos,
-  setContratos,
-  fornecedores,
-  setFornecedores,
-}) {
+export default function AddContratoForm({ contratos, setContratos, fornecedores, setFornecedores }) {
   const navigate = useNavigate();
   const initialContrato = {
     numero: "",
@@ -36,30 +31,9 @@ export default function AddContratoForm({
       <h2>Adicionar novo contrato</h2>
       <button>Importar arquivo</button>
       <form onSubmit={handleSubmit}>
-        <input
-          type="number"
-          placeholder="Número"
-          value={novoContrato.numero}
-          onChange={(e) =>
-            setNovoContrato({ ...novoContrato, numero: e.target.value })
-          }
-        />
-        <input
-          type="number"
-          placeholder="Ano"
-          value={novoContrato.ano}
-          onChange={(e) =>
-            setNovoContrato({ ...novoContrato, ano: e.target.value })
-          }
-        />
-        <input
-          type="text"
-          placeholder="Objeto"
-          value={novoContrato.objeto}
-          onChange={(e) =>
-            setNovoContrato({ ...novoContrato, objeto: e.target.value })
-          }
-        />
+        <input type="number" placeholder="Número" value={novoContrato.numero} onChange={(e) => setNovoContrato({ ...novoContrato, numero: e.target.value })} />
+        <input type="number" placeholder="Ano" value={novoContrato.ano} onChange={(e) => setNovoContrato({ ...novoContrato, ano: e.target.value })} />
+        <input type="text" placeholder="Objeto" value={novoContrato.objeto} onChange={(e) => setNovoContrato({ ...novoContrato, objeto: e.target.value })} />
         <select
           value={novoContrato.fornecedor_id}
           onChange={(e) =>
@@ -79,22 +53,8 @@ export default function AddContratoForm({
           ))}
         </select>
 
-        <input
-          type="text"
-          placeholder="procedimento"
-          value={novoContrato.procedimento}
-          onChange={(e) =>
-            setNovoContrato({ ...novoContrato, procedimento: e.target.value })
-          }
-        />
-        <input
-          type="text"
-          placeholder="tipo"
-          value={novoContrato.tipo}
-          onChange={(e) =>
-            setNovoContrato({ ...novoContrato, tipo: e.target.value })
-          }
-        />
+        <input type="text" placeholder="procedimento" value={novoContrato.procedimento} onChange={(e) => setNovoContrato({ ...novoContrato, procedimento: e.target.value })} />
+        <input type="text" placeholder="tipo" value={novoContrato.tipo} onChange={(e) => setNovoContrato({ ...novoContrato, tipo: e.target.value })} />
         <input
           type="date"
           value={novoContrato.dataDaAssinatura}
@@ -105,13 +65,7 @@ export default function AddContratoForm({
             })
           }
         />
-        <input
-          type="date"
-          value={novoContrato.dataDeTermino}
-          onChange={(e) =>
-            setNovoContrato({ ...novoContrato, dataDeTermino: e.target.value })
-          }
-        />
+        <input type="date" value={novoContrato.dataDeTermino} onChange={(e) => setNovoContrato({ ...novoContrato, dataDeTermino: e.target.value })} />
         <button>Adicionar</button>
       </form>
     </>
