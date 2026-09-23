@@ -60,7 +60,7 @@ export default function ContratoPage({ contratos, setContratos, fornecedores }) 
         />
         <input type="date" value={edited.dataDeTermino} onChange={(e) => setEdited({ ...edited, dataDeTermino: e.target.value })} />
         <button onClick={handleSubmit}>Salvar</button>
-        <button onClick={() => setIsEditing(false)}>Cancelar edição</button>
+        <button className="button-danger" onClick={() => setIsEditing(false)}>Cancelar edição</button>
       </>
     );
   } else {
