@@ -408,6 +408,21 @@ form button {
   justify-self: start;
 }
 
+form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  color: #475569;
+  font-size: 0.82rem;
+  font-weight: 650;
+}
+
+form label input,
+form label select {
+  margin-top: 0;
+}
+
 /* ========================================
    Search / Filter Controls
    ======================================== */
