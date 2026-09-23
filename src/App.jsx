@@ -56,6 +56,7 @@ function App() {
               fornecedores={fornecedores}
               setFornecedores={setFornecedores}
               contratos={contratos}
+              setContratos={setContratos}
             />
           }
         />
