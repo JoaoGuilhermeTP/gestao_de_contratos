@@ -114,7 +114,9 @@ export default function TabelaContratos({
                 <th>Objeto</th>
                 <th>Fornecedor</th>
                 <th>Procedimento</th>
-                <th>Tipo</th>
+                <th>Status</th>
+                <th>Valor Global</th>
+                <th>Prorrogável</th>
                 <th>Data da assinatura</th>
                 <th>Data de término</th>
               </tr>
@@ -122,7 +124,7 @@ export default function TabelaContratos({
                 <tr key={contrato.id}>
                   <td>
                     <Link to={`/contratos/${contrato.id}`}>
-                      {contrato.numero}/{contrato.ano}
+                      {contrato.numero}
                     </Link>
                   </td>
                   <td>{contrato.objeto}</td>
@@ -131,15 +133,17 @@ export default function TabelaContratos({
                       {
                         fornecedores.find(
                           (fornecedor) =>
-                            fornecedor.id === Number(contrato.fornecedor_id),
-                        ).nome
+                            fornecedor.id === contrato.fornecedor_id,
+                        ).razao_social
                       }
                     </Link>
                   </td>
-                  <td>{contrato.procedimento}</td>
-                  <td>{contrato.tipo}</td>
-                  <td>{contrato.dataDaAssinatura}</td>
-                  <td>{contrato.dataDeTermino}</td>
+                  <td>{contrato.procedimento_id}</td>
+                  <td>{contrato.status}</td>
+                  <td>{contrato.valor_global}</td>
+                  <td>{contrato.prorrogavel}</td>
+                  <td>{contrato.data_de_assinatura}</td>
+                  <td>{contrato.data_de_termino}</td>
                   <td>
                     <button onClick={() => deletarContrato(contrato.id)}>
                       Deletar

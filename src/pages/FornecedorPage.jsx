@@ -8,25 +8,24 @@ export default function FornecedorPage({ fornecedores, setFornecedores, contrato
 
   return (
     <>
-      <h1>Nome: {fornecedor.nome}</h1>
+      <h1>Nome: {fornecedor.razao_social}</h1>
       <ul>
         <li>
             Tipo: {fornecedor.tipo}
         </li>
         <li>
-            CNPJ: {fornecedor.cnpj}
+            CNPJ: {fornecedor.cpf_cnpj}
         </li>
         <li>
-            E-mails: {fornecedor.emails}
+            E-mails: {fornecedor.email}
         </li>
         <li>
-            Telefones: {fornecedor.telefones}
+            Telefones: {fornecedor.telefone}
         </li>
         <li>
             Cidade: {fornecedor.cidade}/{fornecedor.estado}
         </li>
       </ul>
-      <h2>Contratos assinados:</h2>
       <TabelaContratos contratos={contratos.filter((contrato) => contrato.fornecedor_id === Number(id))} setContratos={setContratos} fornecedores={fornecedores} />
     </>
   );

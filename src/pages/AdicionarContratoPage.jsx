@@ -1,25 +1,23 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function AddContratoForm({
-  contratos,
-  setContratos,
-  fornecedores,
-  setFornecedores,
-}) {
+export default function AddContratoForm({ contratos, setContratos, fornecedores }) {
   // Navigate hook to navigate to main contratos page after adding new contract
   const navigate = useNavigate();
 
   // Initial state for contrato
   const initialContrato = {
+    ata_id: "",
     numero: "",
     ano: "",
     objeto: "",
     fornecedor_id: "",
-    procedimento: "",
-    tipo: "",
-    dataDaAssinatura: "",
-    dataDeTermino: "",
+    procedimento_id: "",
+    status: "",
+    valor_global: "",
+    prorrogavel: "",
+    data_de_assinatura: "",
+    data_de_termino: "",
   };
 
   // State variables
@@ -31,13 +29,8 @@ export default function AddContratoForm({
     const newErrors = {};
 
     // Check contract number
-    if (
-      !novoContrato.numero ||
-      !Number.isInteger(novoContrato.numero) ||
-      novoContrato.numero < 1
-    ) {
-      newErrors.numero =
-        "Número do contrato precsa ser um número maior que zero";
+    if (!novoContrato.numero) {
+      newErrors.numero = "Informe o número do contrato";
     }
 
     // Check contract year
@@ -56,12 +49,12 @@ export default function AddContratoForm({
       newErrors.fornecedor_id = "Selecione um fornecedor.";
     }
 
-    if (!novoContrato.procedimento.trim()) {
-      newErrors.procedimento = "Procedimento é obrigatório.";
+    if (!novoContrato.procedimento_id) {
+      newErrors.procedimento_id = "Informe o procedimento";
     }
 
-    if (!novoContrato.tipo.trim()) {
-      newErrors.tipo = "Tipo de contrato é obrigatório.";
+    if (!novoContrato.procedimento_id.trim()) {
+      newErrors.procedimento = "Procedimento é obrigatório.";
     }
 
     if (!novoContrato.dataDaAssinatura) {
@@ -72,13 +65,8 @@ export default function AddContratoForm({
       newErrors.dataDeTermino = "Data de término é obrigatória.";
     }
 
-    if (
-      novoContrato.dataDaAssinatura &&
-      novoContrato.dataDeTermino &&
-      novoContrato.dataDeTermino < novoContrato.dataDaAssinatura
-    ) {
-      newErrors.dataDeTermino =
-        "A data de término não pode ser anterior à data da assinatura.";
+    if (novoContrato.dataDaAssinatura && novoContrato.dataDeTermino && novoContrato.dataDeTermino < novoContrato.dataDaAssinatura) {
+      newErrors.dataDeTermino = "A data de término não pode ser anterior à data da assinatura.";
     }
 
     setErrors(newErrors);
@@ -106,9 +94,24 @@ export default function AddContratoForm({
       <span>Funcionalidade a ser implementada</span>
       <form onSubmit={handleSubmit}>
         <label>
+          Ata de Registro de Preços
+          <input
+            type="text"
+            value={novoContrato.ata_id}
+            onChange={(e) =>
+              setNovoContrato({
+                ...novoContrato,
+                ata_id: e.target.value,
+              })
+            }
+          />
+          {errors.numero && <span className="form-error">{errors.ata_id}</span>}
+        </label>
+
+        <label>
           Número do contrato
           <input
-            type="number"
+            type="text"
             value={novoContrato.numero}
             onChange={(e) =>
               setNovoContrato({
@@ -171,75 +174,97 @@ export default function AddContratoForm({
               </option>
             ))}
           </select>
-          {errors.fornecedor_id && (
-            <span className="form-error">{errors.fornecedor_id}</span>
-          )}
+          {errors.fornecedor_id && <span className="form-error">{errors.fornecedor_id}</span>}
         </label>
 
         <label>
           Procedimento
           <input
             type="text"
-            value={novoContrato.procedimento}
+            value={novoContrato.procedimento_id}
             onChange={(e) =>
               setNovoContrato({
                 ...novoContrato,
-                procedimento: e.target.value,
+                procedimento_id: e.target.value,
               })
             }
           />
-          {errors.procedimento && (
-            <span className="form-error">{errors.procedimento}</span>
-          )}
+          {errors.procedimento_id && <span className="form-error">{errors.procedimento_id}</span>}
         </label>
 
         <label>
-          Tipo de contrato
+          Status
           <input
             type="text"
-            value={novoContrato.tipo}
+            value={novoContrato.status}
             onChange={(e) =>
               setNovoContrato({
                 ...novoContrato,
-                tipo: e.target.value,
+                status: e.target.value,
               })
             }
           />
-          {errors.tipo && <span className="form-error">{errors.tipo}</span>}
+          {errors.status && <span className="form-error">{errors.status}</span>}
+        </label>
+
+        <label>
+          Valor Global
+          <input
+            type="text"
+            value={novoContrato.valor_global}
+            onChange={(e) =>
+              setNovoContrato({
+                ...novoContrato,
+                status: e.target.valor_global,
+              })
+            }
+          />
+          {errors.valor_global && <span className="form-error">{errors.valor_global}</span>}
+        </label>
+
+        <label>
+          Prorrogável
+          <input
+            type="text"
+            value={novoContrato.prorrogavel}
+            onChange={(e) =>
+              setNovoContrato({
+                ...novoContrato,
+                prorrogavel: e.target.value,
+              })
+            }
+          />
+          {errors.prorrogavel && <span className="form-error">{errors.prorrogavel}</span>}
         </label>
 
         <label>
           Data da assinatura
           <input
             type="date"
-            value={novoContrato.dataDaAssinatura}
+            value={novoContrato.data_de_assinatura}
             onChange={(e) =>
               setNovoContrato({
                 ...novoContrato,
-                dataDaAssinatura: e.target.value,
+                data_de_assinatura: e.target.value,
               })
             }
           />
-          {errors.dataDaAssinatura && (
-            <span className="form-error">{errors.dataDaAssinatura}</span>
-          )}
+          {errors.data_de_assinatura && <span className="form-error">{errors.data_de_assinatura}</span>}
         </label>
 
         <label>
           Data de término
           <input
             type="date"
-            value={novoContrato.dataDeTermino}
+            value={novoContrato.data_de_termino}
             onChange={(e) =>
               setNovoContrato({
                 ...novoContrato,
-                dataDeTermino: e.target.value,
+                data_de_termino: e.target.value,
               })
             }
           />
-          {errors.dataDeTermino && (
-            <span className="form-error">{errors.dataDeTermino}</span>
-          )}
+          {errors.data_de_termino && <span className="form-error">{errors.data_de_termino}</span>}
         </label>
 
         <button type="submit">Adicionar</button>

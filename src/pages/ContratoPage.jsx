@@ -67,17 +67,16 @@ export default function ContratoPage({ contratos, setContratos, fornecedores }) 
     return (
       <>
         <h1>
-          Contrato nº. {contrato.numero}/{contrato.ano}
+          Contrato nº. {contrato.numero}
         </h1>
         <ul>
           <li>Objeto: {contrato.objeto}</li>
           <li>
-            <Link to={`/fornecedor/${fornecedor.id}`}>Fornecedor: {fornecedor.nome}</Link>
+            <Link to={`/fornecedor/${fornecedor.id}`}>Fornecedor: {fornecedor.razao_social}</Link>
           </li>
-          <li>Procedimento: {contrato.procedimento}</li>
-          <li>Tipo: {contrato.tipo}</li>
-          <li>Data de Assinatura: {contrato.dataDaAssinatura}</li>
-          <li>dataDeTermino: {contrato.dataDeTermino}</li>
+          <li>Procedimento: {contrato.procedimento_id}</li>
+          <li>Data de Assinatura: {contrato.data_de_assinatura}</li>
+          <li>dataDeTermino: {contrato.data_de_termino}</li>
         </ul>
         <button onClick={() => setIsEditing(true)}>Editar contrato</button>
       </>
