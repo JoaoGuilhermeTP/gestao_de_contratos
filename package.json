@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "react": "^19.2.8",
+    "react-currency-input-field": "^4.0.7",
     "react-dom": "^19.2.8",
     "react-router-dom": "^7.18.4",
     "serve": "^14.2.6"

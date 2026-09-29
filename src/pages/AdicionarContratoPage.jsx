@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import CurrencyInput from "react-currency-input-field";
 
-export default function AddContratoForm({ contratos, setContratos, fornecedores }) {
+export default function AddContratoForm({
+  contratos,
+  setContratos,
+  fornecedores,
+}) {
   // Navigate hook to navigate to main contratos page after adding new contract
   const navigate = useNavigate();
 
@@ -27,12 +32,14 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores 
   // Function for validating form
   const validateForm = () => {
     const newErrors = {};
-
+    // Check ata number
+    if (novoContrato.ata_id && !Number.isInteger(novoContrato.ata_id)) {
+      newErrors.ata_id = "Informe uma ata de registro de preços válida";
+    }
     // Check contract number
     if (!novoContrato.numero) {
       newErrors.numero = "Informe o número do contrato";
     }
-
     // Check contract year
     const currentYear = new Date().getFullYear();
     if (!novoContrato.ano) {
@@ -40,35 +47,52 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores 
     } else if (novoContrato.ano > currentYear) {
       newErrors.ano = "O ano não pode ser posterior ao ano atual.";
     }
-
+    // Check contract object
     if (!novoContrato.objeto.trim()) {
       newErrors.objeto = "Objeto é obrigatório.";
     }
-
+    // Check contract supplier
     if (!novoContrato.fornecedor_id) {
       newErrors.fornecedor_id = "Selecione um fornecedor.";
     }
-
+    // Check contract procediment
     if (!novoContrato.procedimento_id) {
       newErrors.procedimento_id = "Informe o procedimento";
     }
-
-    if (!novoContrato.procedimento_id.trim()) {
-      newErrors.procedimento = "Procedimento é obrigatório.";
+    // Check contract status
+    if (!novoContrato.status.trim()) {
+      newErrors.status = "Status é obrigatório.";
     }
-
-    if (!novoContrato.dataDaAssinatura) {
-      newErrors.dataDaAssinatura = "Data da assinatura é obrigatória.";
+    // Check contract global value
+    if (!novoContrato.valor_global) {
+      newErrors.valor_global = "Valor global é obrigatório.";
     }
-
-    if (!novoContrato.dataDeTermino) {
-      newErrors.dataDeTermino = "Data de término é obrigatória.";
+    // Check contrato "prorrogavel"
+    if (!novoContrato.prorrogavel) {
+      newErrors.prorrogavel = "Informe se o contrato é prorrogável.";
+    } else if (
+      novoContrato.prorrogavel !== "Sim" &&
+      novoContrato.prorrogavel !== "Não"
+    ) {
+      newErrors.prorrogavel = "Valores válidos: Sim ou Não.";
     }
-
-    if (novoContrato.dataDaAssinatura && novoContrato.dataDeTermino && novoContrato.dataDeTermino < novoContrato.dataDaAssinatura) {
-      newErrors.dataDeTermino = "A data de término não pode ser anterior à data da assinatura.";
+    // Check contrato signing date
+    if (!novoContrato.data_de_assinatura) {
+      newErrors.data_de_assinatura = "Data de assinatura é obrigatória.";
     }
-
+    // Check contrato due date
+    if (!novoContrato.data_de_termino) {
+      newErrors.data_de_termino = "Data de término é obrigatória.";
+    }
+    // Check if due date comes after signing date
+    if (
+      novoContrato.data_de_assinatura &&
+      novoContrato.data_de_termino &&
+      novoContrato.data_de_termino < novoContrato.data_de_assinatura
+    ) {
+      newErrors.data_de_termino =
+        "A data de término não pode ser anterior à data da assinatura.";
+    }
     setErrors(newErrors);
 
     // Check if there's any error added
@@ -93,21 +117,23 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores 
       <button>Importar arquivo</button>
       <span>Funcionalidade a ser implementada</span>
       <form onSubmit={handleSubmit}>
+        {/* Ata de Registro de Preços */}
         <label>
           Ata de Registro de Preços
           <input
-            type="text"
+            type="number"
             value={novoContrato.ata_id}
             onChange={(e) =>
               setNovoContrato({
                 ...novoContrato,
-                ata_id: e.target.value,
+                ata_id: Number(e.target.value),
               })
             }
           />
-          {errors.numero && <span className="form-error">{errors.ata_id}</span>}
+          {errors.ata_id && <span className="form-error">{errors.ata_id}</span>}
         </label>
 
+        {/* Número do Contrato */}
         <label>
           Número do contrato
           <input
@@ -116,13 +142,14 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores 
             onChange={(e) =>
               setNovoContrato({
                 ...novoContrato,
-                numero: Number(e.target.value),
+                numero: e.target.value,
               })
             }
           />
           {errors.numero && <span className="form-error">{errors.numero}</span>}
         </label>
 
+        {/* Ano do Contrato */}
         <label>
           Ano
           <input
@@ -138,6 +165,7 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores 
           {errors.ano && <span className="form-error">{errors.ano}</span>}
         </label>
 
+        {/* Objeto do Contrato */}
         <label>
           Objeto
           <input
@@ -153,6 +181,7 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores 
           {errors.objeto && <span className="form-error">{errors.objeto}</span>}
         </label>
 
+        {/* Fornecedor */}
         <label>
           Fornecedor
           <select
@@ -170,11 +199,13 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores 
 
             {fornecedores.map((fornecedor) => (
               <option key={fornecedor.id} value={fornecedor.id}>
-                {fornecedor.nome} - {fornecedor.cnpj}
+                {fornecedor.razao_social} - {fornecedor.cpf_cnpj}
               </option>
             ))}
           </select>
-          {errors.fornecedor_id && <span className="form-error">{errors.fornecedor_id}</span>}
+          {errors.fornecedor_id && (
+            <span className="form-error">{errors.fornecedor_id}</span>
+          )}
         </label>
 
         <label>
@@ -189,7 +220,9 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores 
               })
             }
           />
-          {errors.procedimento_id && <span className="form-error">{errors.procedimento_id}</span>}
+          {errors.procedimento_id && (
+            <span className="form-error">{errors.procedimento_id}</span>
+          )}
         </label>
 
         <label>
@@ -209,17 +242,24 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores 
 
         <label>
           Valor Global
-          <input
-            type="text"
+          <CurrencyInput
+            id="contract-currency-input"
+            name="contract-currency-input"
+            placeholder="Please enter a number"
+            allowNegativeValue={false}
+            prefix="R$"
+            decimalsLimit={2}
             value={novoContrato.valor_global}
-            onChange={(e) =>
+            onValueChange={(value) =>
               setNovoContrato({
                 ...novoContrato,
-                status: e.target.valor_global,
+                valor_global: value,
               })
             }
           />
-          {errors.valor_global && <span className="form-error">{errors.valor_global}</span>}
+          {errors.valor_global && (
+            <span className="form-error">{errors.valor_global}</span>
+          )}
         </label>
 
         <label>
@@ -234,7 +274,9 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores 
               })
             }
           />
-          {errors.prorrogavel && <span className="form-error">{errors.prorrogavel}</span>}
+          {errors.prorrogavel && (
+            <span className="form-error">{errors.prorrogavel}</span>
+          )}
         </label>
 
         <label>
@@ -249,7 +291,9 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores 
               })
             }
           />
-          {errors.data_de_assinatura && <span className="form-error">{errors.data_de_assinatura}</span>}
+          {errors.data_de_assinatura && (
+            <span className="form-error">{errors.data_de_assinatura}</span>
+          )}
         </label>
 
         <label>
@@ -264,7 +308,9 @@ export default function AddContratoForm({ contratos, setContratos, fornecedores 
               })
             }
           />
-          {errors.data_de_termino && <span className="form-error">{errors.data_de_termino}</span>}
+          {errors.data_de_termino && (
+            <span className="form-error">{errors.data_de_termino}</span>
+          )}
         </label>
 
         <button type="submit">Adicionar</button>
