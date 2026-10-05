@@ -31,19 +31,23 @@ export default function TabelaFornecedores({ fornecedores, setFornecedores, cont
   }
 
   return (
-    <>
+    <section className="data-section">
       <h2>Fornecedores cadastrados</h2>
       {fornecedores.length > 0 ? (
         <>
-          <h3>Filtrar fornecedores</h3>
-          <input type="text" placeholder="Tipo" value={filtros.tipo} onChange={(e) => setFiltros({ ...filtros, tipo: e.target.value })} />
-          <input type="text" placeholder="Razão Social" value={filtros.razao_social} onChange={(e) => setFiltros({ ...filtros, razao_social: e.target.value })} />
-          <input type="text" placeholder="Nome Fantasia" value={filtros.nome_fantasia} onChange={(e) => setFiltros({ ...filtros, nome_fantasia: e.target.value })} />
-          <input type="text" placeholder="CPF ou CNPJ" value={filtros.cpf_cnpj} onChange={(e) => setFiltros({ ...filtros, cpf_cnpj: e.target.value })} />
-          <input type="text" placeholder="Cidade" value={filtros.cidade} onChange={(e) => setFiltros({ ...filtros, cidade: e.target.value })} />
-          <input type="text" placeholder="Estado" value={filtros.estado} onChange={(e) => setFiltros({ ...filtros, estado: e.target.value })} />
-          <input type="text" placeholder="Representante" value={filtros.representante_legal} onChange={(e) => setFiltros({ ...filtros, representante: e.target.value })} />
-          <input type="text" placeholder="Status" value={filtros.status} onChange={(e) => setFiltros({ ...filtros, status: e.target.value })} />
+          <div className="filter-panel">
+            <h3>Filtrar fornecedores</h3>
+            <div className="filter-grid supplier-filter-grid">
+              <input type="text" placeholder="Tipo" value={filtros.tipo} onChange={(e) => setFiltros({ ...filtros, tipo: e.target.value })} />
+              <input type="text" placeholder="Razão Social" value={filtros.razao_social} onChange={(e) => setFiltros({ ...filtros, razao_social: e.target.value })} />
+              <input type="text" placeholder="Nome Fantasia" value={filtros.nome_fantasia} onChange={(e) => setFiltros({ ...filtros, nome_fantasia: e.target.value })} />
+              <input type="text" placeholder="CPF ou CNPJ" value={filtros.cpf_cnpj} onChange={(e) => setFiltros({ ...filtros, cpf_cnpj: e.target.value })} />
+              <input type="text" placeholder="Cidade" value={filtros.cidade} onChange={(e) => setFiltros({ ...filtros, cidade: e.target.value })} />
+              <input type="text" placeholder="Estado" value={filtros.estado} onChange={(e) => setFiltros({ ...filtros, estado: e.target.value })} />
+              <input type="text" placeholder="Representante" value={filtros.representante_legal} onChange={(e) => setFiltros({ ...filtros, representante: e.target.value })} />
+              <input type="text" placeholder="Status" value={filtros.status} onChange={(e) => setFiltros({ ...filtros, status: e.target.value })} />
+            </div>
+          </div>
 
           <table>
             <tbody>
@@ -77,6 +81,6 @@ export default function TabelaFornecedores({ fornecedores, setFornecedores, cont
       ) : (
         <p>Nenhum fornecedor cadastrato</p>
       )}
-    </>
+    </section>
   );
 }

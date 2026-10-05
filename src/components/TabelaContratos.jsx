@@ -59,54 +59,58 @@ export default function TabelaContratos({
   }
 
   return (
-    <>
+    <section className="data-section">
       <h2>Contratos cadastrados</h2>
       {contratos.length > 0 ? (
         <>
-          <h3>Filtrar contratos</h3>
-          <input
-            type="number"
-            placeholder="Número"
-            value={filtros.numero || ""}
-            onChange={(e) => setFiltros({ ...filtros, numero: e.target.value })}
-          />
-          <input
-            type="number"
-            placeholder="Ano"
-            value={filtros.ano || ""}
-            onChange={(e) => setFiltros({ ...filtros, ano: e.target.value })}
-          />
-          <input
-            type="text"
-            placeholder="Objeto"
-            value={filtros.objeto || ""}
-            onChange={(e) => setFiltros({ ...filtros, objeto: e.target.value })}
-          />
-          <input
-            type="text"
-            placeholder="fornecedor"
-            value={filtros.fornecedor || ""}
-            onChange={(e) =>
-              setFiltros({ ...filtros, fornecedor: e.target.value })
-            }
-          />
-          <input
-            type="text"
-            placeholder="procedimento"
-            value={filtros.procedimento || ""}
-            onChange={(e) =>
-              setFiltros({
-                ...filtros,
-                procedimento: e.target.value,
-              })
-            }
-          />
-          <input
-            type="text"
-            placeholder="tipo"
-            value={filtros.tipo || ""}
-            onChange={(e) => setFiltros({ ...filtros, tipo: e.target.value })}
-          />
+          <div className="filter-panel">
+            <h3>Filtrar contratos</h3>
+            <div className="filter-grid">
+              <input
+                type="number"
+                placeholder="Número"
+                value={filtros.numero || ""}
+                onChange={(e) => setFiltros({ ...filtros, numero: e.target.value })}
+              />
+              <input
+                type="number"
+                placeholder="Ano"
+                value={filtros.ano || ""}
+                onChange={(e) => setFiltros({ ...filtros, ano: e.target.value })}
+              />
+              <input
+                type="text"
+                placeholder="Objeto"
+                value={filtros.objeto || ""}
+                onChange={(e) => setFiltros({ ...filtros, objeto: e.target.value })}
+              />
+              <input
+                type="text"
+                placeholder="Fornecedor"
+                value={filtros.fornecedor || ""}
+                onChange={(e) =>
+                  setFiltros({ ...filtros, fornecedor: e.target.value })
+                }
+              />
+              <input
+                type="text"
+                placeholder="Procedimento"
+                value={filtros.procedimento || ""}
+                onChange={(e) =>
+                  setFiltros({
+                    ...filtros,
+                    procedimento: e.target.value,
+                  })
+                }
+              />
+              <input
+                type="text"
+                placeholder="Tipo"
+                value={filtros.tipo || ""}
+                onChange={(e) => setFiltros({ ...filtros, tipo: e.target.value })}
+              />
+            </div>
+          </div>
           <table>
             <tbody>
               <tr>
@@ -157,6 +161,6 @@ export default function TabelaContratos({
       ) : (
         <p>Nenhum contrato cadastrato</p>
       )}
-    </>
+    </section>
   );
 }

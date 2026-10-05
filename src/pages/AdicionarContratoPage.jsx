@@ -2,11 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CurrencyInput from "react-currency-input-field";
 
-export default function AddContratoForm({
-  contratos,
-  setContratos,
-  fornecedores,
-}) {
+export default function AddContratoForm({ contratos, setContratos, fornecedores }) {
   // Navigate hook to navigate to main contratos page after adding new contract
   const navigate = useNavigate();
 
@@ -70,10 +66,7 @@ export default function AddContratoForm({
     // Check contrato "prorrogavel"
     if (!novoContrato.prorrogavel) {
       newErrors.prorrogavel = "Informe se o contrato é prorrogável.";
-    } else if (
-      novoContrato.prorrogavel !== "Sim" &&
-      novoContrato.prorrogavel !== "Não"
-    ) {
+    } else if (novoContrato.prorrogavel !== "Sim" && novoContrato.prorrogavel !== "Não") {
       newErrors.prorrogavel = "Valores válidos: Sim ou Não.";
     }
     // Check contrato signing date
@@ -85,13 +78,8 @@ export default function AddContratoForm({
       newErrors.data_de_termino = "Data de término é obrigatória.";
     }
     // Check if due date comes after signing date
-    if (
-      novoContrato.data_de_assinatura &&
-      novoContrato.data_de_termino &&
-      novoContrato.data_de_termino < novoContrato.data_de_assinatura
-    ) {
-      newErrors.data_de_termino =
-        "A data de término não pode ser anterior à data da assinatura.";
+    if (novoContrato.data_de_assinatura && novoContrato.data_de_termino && novoContrato.data_de_termino < novoContrato.data_de_assinatura) {
+      newErrors.data_de_termino = "A data de término não pode ser anterior à data da assinatura.";
     }
     setErrors(newErrors);
 
@@ -112,11 +100,25 @@ export default function AddContratoForm({
   }
 
   return (
-    <>
-      <h2>Adicionar novo contrato</h2>
-      <button>Importar arquivo</button>
-      <span>Funcionalidade a ser implementada</span>
-      <form onSubmit={handleSubmit}>
+    <section className="form-page">
+      <header className="form-page-header">
+        <div>
+          <p className="eyebrow">Cadastro de contratos</p>
+          <h1>Novo contrato</h1>
+          <p>Preencha os dados abaixo para registrar um novo contrato no sistema.</p>
+        </div>
+        <div className="import-action">
+          <button type="button" className="button-secondary">Importar arquivo</button>
+          <span>Disponível em breve</span>
+        </div>
+      </header>
+
+      <form className="contract-form" onSubmit={handleSubmit}>
+        <div className="form-section-heading">
+          <strong>Identificação do contrato</strong>
+          <span>Dados básicos e vínculo com o fornecedor</span>
+        </div>
+
         {/* Ata de Registro de Preços */}
         <label>
           Ata de Registro de Preços
@@ -203,9 +205,7 @@ export default function AddContratoForm({
               </option>
             ))}
           </select>
-          {errors.fornecedor_id && (
-            <span className="form-error">{errors.fornecedor_id}</span>
-          )}
+          {errors.fornecedor_id && <span className="form-error">{errors.fornecedor_id}</span>}
         </label>
 
         <label>
@@ -220,9 +220,7 @@ export default function AddContratoForm({
               })
             }
           />
-          {errors.procedimento_id && (
-            <span className="form-error">{errors.procedimento_id}</span>
-          )}
+          {errors.procedimento_id && <span className="form-error">{errors.procedimento_id}</span>}
         </label>
 
         <label>
@@ -245,7 +243,7 @@ export default function AddContratoForm({
           <CurrencyInput
             id="contract-currency-input"
             name="contract-currency-input"
-            placeholder="Please enter a number"
+            placeholder="Informe o valor"
             allowNegativeValue={false}
             prefix="R$"
             decimalsLimit={2}
@@ -257,9 +255,7 @@ export default function AddContratoForm({
               })
             }
           />
-          {errors.valor_global && (
-            <span className="form-error">{errors.valor_global}</span>
-          )}
+          {errors.valor_global && <span className="form-error">{errors.valor_global}</span>}
         </label>
 
         <label>
@@ -274,10 +270,13 @@ export default function AddContratoForm({
               })
             }
           />
-          {errors.prorrogavel && (
-            <span className="form-error">{errors.prorrogavel}</span>
-          )}
+          {errors.prorrogavel && <span className="form-error">{errors.prorrogavel}</span>}
         </label>
+
+        <div className="form-section-heading form-section-heading-spaced">
+          <strong>Vigência</strong>
+          <span>Informe o período de validade do contrato</span>
+        </div>
 
         <label>
           Data da assinatura
@@ -291,9 +290,7 @@ export default function AddContratoForm({
               })
             }
           />
-          {errors.data_de_assinatura && (
-            <span className="form-error">{errors.data_de_assinatura}</span>
-          )}
+          {errors.data_de_assinatura && <span className="form-error">{errors.data_de_assinatura}</span>}
         </label>
 
         <label>
@@ -308,13 +305,13 @@ export default function AddContratoForm({
               })
             }
           />
-          {errors.data_de_termino && (
-            <span className="form-error">{errors.data_de_termino}</span>
-          )}
+          {errors.data_de_termino && <span className="form-error">{errors.data_de_termino}</span>}
         </label>
 
-        <button type="submit">Adicionar</button>
+        <div className="form-actions">
+          <button type="submit" className="button-primary">Adicionar contrato</button>
+        </div>
       </form>
-    </>
+    </section>
   );
 }
