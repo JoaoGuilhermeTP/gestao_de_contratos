@@ -4,23 +4,30 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev:frontend": "vite --host 0.0.0.0 --port 5000",
+    "dev:backend": "node backend/server.js",
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
     "build": "vite build",
     "start": "serve -s dist -l tcp://0.0.0.0:5000",
     "lint": "oxlint",
     "preview": "vite preview"
   },
   "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
     "react": "^19.2.8",
     "react-currency-input-field": "^4.0.7",
     "react-dom": "^19.2.8",
     "react-router-dom": "^7.18.4",
-    "serve": "^14.2.6"
+    "serve": "^14.2.6",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^6.0.1"
   },
   "devDependencies": {
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
     "@vitejs/plugin-react": "^6.1.1",
+    "concurrently": "^9.2.4",
     "oxlint": "^1.81.0",
     "vite": "^8.3.0"
   }

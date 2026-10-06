@@ -2,9 +2,14 @@ modules = ["nodejs-20", "web"]
 
 [nix]
 channel = "stable-25_05"
+packages = ["killall"]
 
 [agent]
 expertMode = true
+
+[[ports]]
+localPort = 3000
+externalPort = 3002
 
 [[ports]]
 localPort = 5000

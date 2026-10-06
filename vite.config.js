@@ -11,5 +11,12 @@ export default defineConfig({
     hmr: {
       clientPort: 443,
     },
+    // Add the proxy configuration here:
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+      }
+    }
   },
 });
