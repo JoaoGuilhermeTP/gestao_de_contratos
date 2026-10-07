@@ -1,6 +1,3 @@
-// import "./App.css";
-import { mockContratos } from "./mock/mockContratos";
-import { mockFornecedores } from "./mock/mockFornecedores";
 import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ContratosPage from "./pages/ContratosPage";

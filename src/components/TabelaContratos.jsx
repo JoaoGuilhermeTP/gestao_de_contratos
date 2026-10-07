@@ -1,11 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function TabelaContratos({
-  contratos,
-  setContratos,
-  fornecedores,
-}) {
+export default function TabelaContratos({ contratos, setContratos, fornecedores }) {
   const [filtros, setFiltros] = useState({
     numero: "",
     ano: "",
@@ -16,47 +12,41 @@ export default function TabelaContratos({
   });
 
   const contratosFiltrados = contratos.filter((contrato) => {
-    const matchNumero =
-      !filtros.numero || String(contrato.numero) === filtros.numero;
+    const matchNumero = !filtros.numero || String(contrato.numero) === filtros.numero;
 
     const matchAno = !filtros.ano || String(contrato.ano) === filtros.ano;
 
-    const matchObjeto =
-      !filtros.objeto ||
-      contrato.objeto.toLowerCase().includes(filtros.objeto.toLowerCase());
+    const matchObjeto = !filtros.objeto || contrato.objeto.toLowerCase().includes(filtros.objeto.toLowerCase());
 
-    const matchFornecedor =
-      !filtros.fornecedor ||
-      contrato.fornecedor
-        .toLowerCase()
-        .includes(filtros.fornecedor.toLowerCase());
+    const matchFornecedor = !filtros.fornecedor || contrato.fornecedor.toLowerCase().includes(filtros.fornecedor.toLowerCase());
 
-    const matchProcedimento =
-      !filtros.procedimento ||
-      contrato.procedimento
-        .toLowerCase()
-        .includes(filtros.procedimento.toLowerCase());
+    const matchProcedimento = !filtros.procedimento || contrato.procedimento.toLowerCase().includes(filtros.procedimento.toLowerCase());
 
-    const matchTipo =
-      !filtros.tipo ||
-      contrato.tipo.toLowerCase().includes(filtros.tipo.toLowerCase());
+    const matchTipo = !filtros.tipo || contrato.tipo.toLowerCase().includes(filtros.tipo.toLowerCase());
 
     // Only keep the contract if ALL active filters match
-    return (
-      matchNumero &&
-      matchAno &&
-      matchObjeto &&
-      matchFornecedor &&
-      matchProcedimento &&
-      matchTipo
-    );
+    return matchNumero && matchAno && matchObjeto && matchFornecedor && matchProcedimento && matchTipo;
   });
 
-  function deletarContrato(id) {
-    setContratos((contratosAtuais) =>
-      contratosAtuais.filter((contrato) => contrato.id !== id),
-    );
+  // Deletar contrato
+  async function deletarContrato(id) {
+    try {
+      const response = await fetch("/api/deletar_contrato", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+
+      if (response.ok) {
+        setContratos((contratosAtuais) => contratosAtuais.filter((contrato) => contrato.id !== id));
+      } else {
+        console.error("Falha ao deletar o contrato no banco de dados.");
+      }
+    } catch (error) {
+      console.error("Erro de rede:", error);
+    }
   }
+
 
   return (
     <section className="data-section">
@@ -66,32 +56,10 @@ export default function TabelaContratos({
           <div className="filter-panel">
             <h3>Filtrar contratos</h3>
             <div className="filter-grid">
-              <input
-                type="number"
-                placeholder="Número"
-                value={filtros.numero || ""}
-                onChange={(e) => setFiltros({ ...filtros, numero: e.target.value })}
-              />
-              <input
-                type="number"
-                placeholder="Ano"
-                value={filtros.ano || ""}
-                onChange={(e) => setFiltros({ ...filtros, ano: e.target.value })}
-              />
-              <input
-                type="text"
-                placeholder="Objeto"
-                value={filtros.objeto || ""}
-                onChange={(e) => setFiltros({ ...filtros, objeto: e.target.value })}
-              />
-              <input
-                type="text"
-                placeholder="Fornecedor"
-                value={filtros.fornecedor || ""}
-                onChange={(e) =>
-                  setFiltros({ ...filtros, fornecedor: e.target.value })
-                }
-              />
+              <input type="number" placeholder="Número" value={filtros.numero || ""} onChange={(e) => setFiltros({ ...filtros, numero: e.target.value })} />
+              <input type="number" placeholder="Ano" value={filtros.ano || ""} onChange={(e) => setFiltros({ ...filtros, ano: e.target.value })} />
+              <input type="text" placeholder="Objeto" value={filtros.objeto || ""} onChange={(e) => setFiltros({ ...filtros, objeto: e.target.value })} />
+              <input type="text" placeholder="Fornecedor" value={filtros.fornecedor || ""} onChange={(e) => setFiltros({ ...filtros, fornecedor: e.target.value })} />
               <input
                 type="text"
                 placeholder="Procedimento"
@@ -103,12 +71,7 @@ export default function TabelaContratos({
                   })
                 }
               />
-              <input
-                type="text"
-                placeholder="Tipo"
-                value={filtros.tipo || ""}
-                onChange={(e) => setFiltros({ ...filtros, tipo: e.target.value })}
-              />
+              <input type="text" placeholder="Tipo" value={filtros.tipo || ""} onChange={(e) => setFiltros({ ...filtros, tipo: e.target.value })} />
             </div>
           </div>
           <table>
@@ -123,24 +86,16 @@ export default function TabelaContratos({
                 <th>Prorrogável</th>
                 <th>Data da assinatura</th>
                 <th>Data de término</th>
+                <th>Ações</th>
               </tr>
               {contratosFiltrados.map((contrato) => (
                 <tr key={contrato.id}>
                   <td>
-                    <Link to={`/contratos/${contrato.id}`}>
-                      {contrato.numero}
-                    </Link>
+                    <Link to={`/contratos/${contrato.id}`}>{contrato.numero}</Link>
                   </td>
                   <td>{contrato.objeto}</td>
                   <td>
-                    <Link to={`/fornecedor/${contrato.fornecedor_id}`}>
-                      {
-                        fornecedores.find(
-                          (fornecedor) =>
-                            fornecedor.id === contrato.fornecedor_id,
-                        ).razao_social
-                      }
-                    </Link>
+                    <Link to={`/fornecedor/${contrato.fornecedor_id}`}>{fornecedores.find((fornecedor) => fornecedor.id === contrato.fornecedor_id).razao_social}</Link>
                   </td>
                   <td>{contrato.procedimento_id}</td>
                   <td>{contrato.status}</td>
@@ -149,9 +104,7 @@ export default function TabelaContratos({
                   <td>{contrato.data_de_assinatura}</td>
                   <td>{contrato.data_de_termino}</td>
                   <td>
-                    <button onClick={() => deletarContrato(contrato.id)}>
-                      Deletar
-                    </button>
+                    <button onClick={() => deletarContrato(contrato.id)}>Deletar</button>
                   </td>
                 </tr>
               ))}
