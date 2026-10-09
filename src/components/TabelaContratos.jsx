@@ -13,17 +13,11 @@ export default function TabelaContratos({ contratos, setContratos, fornecedores 
 
   const contratosFiltrados = contratos.filter((contrato) => {
     const matchNumero = !filtros.numero || String(contrato.numero) === filtros.numero;
-
     const matchAno = !filtros.ano || String(contrato.ano) === filtros.ano;
-
     const matchObjeto = !filtros.objeto || contrato.objeto.toLowerCase().includes(filtros.objeto.toLowerCase());
-
     const matchFornecedor = !filtros.fornecedor || contrato.fornecedor.toLowerCase().includes(filtros.fornecedor.toLowerCase());
-
     const matchProcedimento = !filtros.procedimento || contrato.procedimento.toLowerCase().includes(filtros.procedimento.toLowerCase());
-
     const matchTipo = !filtros.tipo || contrato.tipo.toLowerCase().includes(filtros.tipo.toLowerCase());
-
     // Only keep the contract if ALL active filters match
     return matchNumero && matchAno && matchObjeto && matchFornecedor && matchProcedimento && matchTipo;
   });
@@ -46,7 +40,6 @@ export default function TabelaContratos({ contratos, setContratos, fornecedores 
       console.error("Erro de rede:", error);
     }
   }
-
 
   return (
     <section className="data-section">

@@ -62,11 +62,10 @@ export default function ContratoPage({ contratos, setContratos, fornecedores }) 
           </label>
           <label>
             Fornecedor
-            <select
-              value={edited.fornecedor_id}
-              onChange={(e) => setEdited({ ...edited, fornecedor_id: Number(e.target.value) })}
-            >
-              <option value="" disabled>Selecione um fornecedor</option>
+            <select value={edited.fornecedor_id} onChange={(e) => setEdited({ ...edited, fornecedor_id: Number(e.target.value) })}>
+              <option value="" disabled>
+                Selecione um fornecedor
+              </option>
               {fornecedores.map((fornecedor) => (
                 <option key={fornecedor.id} value={fornecedor.id}>
                   {fornecedor.razao_social} - {fornecedor.cpf_cnpj}
@@ -91,8 +90,12 @@ export default function ContratoPage({ contratos, setContratos, fornecedores }) 
             <input type="date" value={edited.data_de_termino} onChange={(e) => setEdited({ ...edited, data_de_termino: e.target.value })} />
           </label>
           <div className="detail-form-actions">
-            <button type="button" className="button-secondary" onClick={() => setIsEditing(false)}>Cancelar</button>
-            <button type="submit" className="button-primary">Salvar alterações</button>
+            <button type="button" className="button-secondary" onClick={() => setIsEditing(false)}>
+              Cancelar
+            </button>
+            <button type="submit" className="button-primary">
+              Salvar alterações
+            </button>
           </div>
         </form>
       </section>
@@ -106,7 +109,14 @@ export default function ContratoPage({ contratos, setContratos, fornecedores }) 
             <h1>Contrato nº {contrato.numero}</h1>
             <p className="detail-subtitle">Registro completo, vigência e vínculo com o fornecedor.</p>
           </div>
-          <button className="button-primary" onClick={() => setIsEditing(true)}>Editar contrato</button>
+          <span>
+            <button className="button-primary" onClick={() => setIsEditing(true)}>
+              Editar contrato
+            </button>
+            <button className="button-danger" onClick={() => deletarContrato(contrato.id)}>
+              Deletar
+            </button>
+          </span>
         </header>
 
         <div className="detail-card object-card">
@@ -120,10 +130,24 @@ export default function ContratoPage({ contratos, setContratos, fornecedores }) 
             <span className="status-badge">{contrato.status}</span>
           </div>
           <dl className="detail-grid">
-            <div><dt>Fornecedor</dt><dd><Link to={`/fornecedor/${fornecedor.id}`}>{fornecedor.razao_social}</Link></dd></div>
-            <div><dt>Procedimento</dt><dd>{contrato.procedimento_id}</dd></div>
-            <div><dt>Valor global</dt><dd>{formatCurrency(contrato.valor_global)}</dd></div>
-            <div><dt>Prorrogável</dt><dd>{contrato.prorrogavel || "Não informado"}</dd></div>
+            <div>
+              <dt>Fornecedor</dt>
+              <dd>
+                <Link to={`/fornecedor/${fornecedor.id}`}>{fornecedor.razao_social}</Link>
+              </dd>
+            </div>
+            <div>
+              <dt>Procedimento</dt>
+              <dd>{contrato.procedimento_id}</dd>
+            </div>
+            <div>
+              <dt>Valor global</dt>
+              <dd>{formatCurrency(contrato.valor_global)}</dd>
+            </div>
+            <div>
+              <dt>Prorrogável</dt>
+              <dd>{contrato.prorrogavel || "Não informado"}</dd>
+            </div>
           </dl>
         </div>
 
@@ -132,8 +156,14 @@ export default function ContratoPage({ contratos, setContratos, fornecedores }) 
             <h2>Vigência</h2>
           </div>
           <dl className="detail-grid detail-grid-two">
-            <div><dt>Data da assinatura</dt><dd>{formatDate(contrato.data_de_assinatura)}</dd></div>
-            <div><dt>Data de término</dt><dd>{formatDate(contrato.data_de_termino)}</dd></div>
+            <div>
+              <dt>Data da assinatura</dt>
+              <dd>{formatDate(contrato.data_de_assinatura)}</dd>
+            </div>
+            <div>
+              <dt>Data de término</dt>
+              <dd>{formatDate(contrato.data_de_termino)}</dd>
+            </div>
           </dl>
         </div>
       </section>
