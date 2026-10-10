@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useContractStore } from "../store/useContractStore";
 
-export default function TabelaContratos({ contratos, setContratos, fornecedores }) {
+export default function TabelaContratos() {
+
+  const contratos = useContractStore((state) => state.contratos);
+  const fornecedores = useContractStore((state) => state.fornecedores);
+  const deletarContrato = useContractStore((state) => state.deletarContrato);
+
   const [filtros, setFiltros] = useState({
     numero: "",
     ano: "",
@@ -22,24 +28,6 @@ export default function TabelaContratos({ contratos, setContratos, fornecedores 
     return matchNumero && matchAno && matchObjeto && matchFornecedor && matchProcedimento && matchTipo;
   });
 
-  // Deletar contrato
-  async function deletarContrato(id) {
-    try {
-      const response = await fetch("/api/deletar_contrato", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id }),
-      });
-
-      if (response.ok) {
-        setContratos((contratosAtuais) => contratosAtuais.filter((contrato) => contrato.id !== id));
-      } else {
-        console.error("Falha ao deletar o contrato no banco de dados.");
-      }
-    } catch (error) {
-      console.error("Erro de rede:", error);
-    }
-  }
 
   return (
     <section className="data-section">
