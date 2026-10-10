@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ContratosPage from "./pages/ContratosPage";
 import FornecedoresPage from "./pages/FornecedoresPage";
@@ -7,40 +7,21 @@ import Navbar from "./components/NavBar";
 import ContratoPage from "./pages/ContratoPage";
 import AdicionarContratoPage from "./pages/AdicionarContratoPage";
 import FornecedorPage from "./pages/FornecedorPage";
+import { useContractStore } from "./store/useContractStore";
 
 function App() {
-  const [contratos, setContratos] = useState([]);
-  const [fornecedores, setFornecedores] = useState([]);
-  const [loading, setLoading] = useState(true);
 
-  // Fetch data from the backend when the app mounts
+    const loading = useContractStore((state) => state.loading);
+    const fetchContratos = useContractStore((state) => state.fetchContratos);
+    const fetchFornecedores = useContractStore((state) => state.fetchFornecedores);
+
   useEffect(() => {
-    Promise.all([
-      fetch("/api/contratos").then((res) => res.json()),
-      fetch("/api/fornecedores").then((res) => res.json()),
-    ])
-      .then(([contratosData, fornecedoresData]) => {
-        setContratos(contratosData);
-        // Apenas atualiza se for um array, senão mantém vazio
-        setFornecedores(
-          Array.isArray(fornecedoresData) ? fornecedoresData : [],
-        );
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Erro ao buscar dados do banco: ", error);
-        setLoading(false);
-      });
+    fetchContratos();
+    fetchFornecedores();
   }, []);
 
   if (loading) {
-    return (
-      <div
-        style={{ padding: "40px", textAlign: "center", fontFamily: "DM Sans" }}
-      >
-        Conectando ao banco de dados...
-      </div>
-    );
+    return <div style={{ padding: "40px", textAlign: "center", fontFamily: "DM Sans" }}>Conectando ao banco de dados...</div>;
   }
 
   return (
@@ -48,56 +29,11 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route
-          path="/contratos"
-          element={
-            <ContratosPage
-              contratos={contratos}
-              setContratos={setContratos}
-              fornecedores={fornecedores}
-            />
-          }
-        />
-        <Route
-          path="/fornecedores"
-          element={
-            <FornecedoresPage
-              fornecedores={fornecedores}
-              setFornecedores={setFornecedores}
-            />
-          }
-        />
-        <Route
-          path={`/contratos/:id`}
-          element={
-            <ContratoPage
-              contratos={contratos}
-              setContratos={setContratos}
-              fornecedores={fornecedores}
-            />
-          }
-        />
-        <Route
-          path={"/adicionar_contrato"}
-          element={
-            <AdicionarContratoPage
-              contratos={contratos}
-              setContratos={setContratos}
-              fornecedores={fornecedores}
-            />
-          }
-        />
-        <Route
-          path={`/fornecedor/:id`}
-          element={
-            <FornecedorPage
-              fornecedores={fornecedores}
-              setFornecedores={setFornecedores}
-              contratos={contratos}
-              setContratos={setContratos}
-            />
-          }
-        />
+        <Route path="/contratos" element={<ContratosPage />} />
+        <Route path="/fornecedores" element={<FornecedoresPage />} />
+        <Route path={`/contratos/:id`} element={<ContratoPage />} />
+        <Route path={"/adicionar_contrato"} element={<AdicionarContratoPage />} />
+        <Route path={`/fornecedor/:id`} element={<FornecedorPage />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,12 +1,11 @@
 import TabelaContratos from "../components/TabelaContratos";
 import { Link } from "react-router-dom";
+import { useContractStore } from "../store/useContractStore";
 
-export default function ContratosPage({
-  contratos,
-  setContratos,
-  fornecedores,
-  setFornecedores,
-}) {
+export default function ContratosPage() {
+
+  const contratos = useContractStore((state) => state.contratos);
+
   return (
     <section className="listing-page">
       <header className="listing-header">
@@ -22,11 +21,7 @@ export default function ContratosPage({
           Adicionar contrato
         </Link>
       </header>
-      <TabelaContratos
-        contratos={contratos}
-        setContratos={setContratos}
-        fornecedores={fornecedores}
-      />
+      <TabelaContratos />
     </section>
   );
 }
