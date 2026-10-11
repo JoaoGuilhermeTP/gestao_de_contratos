@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useContractStore } from "./store/useContractStore";
 
 function formatDate(value) {
   if (!value) return "Não informado";
@@ -18,6 +19,11 @@ function formatCurrency(value) {
 }
 
 export default function ContratoPage({ contratos, setContratos, fornecedores }) {
+
+  const contratos = useContractStore((state) => state.contratos);
+  const fornecedores = useContractStore((state) => state.fornecedores);
+  const editarContrato = useContractStore((state) => state.editarContrato);
+
   // Id from parameter variable
   const { id } = useParams();
 
@@ -31,8 +37,7 @@ export default function ContratoPage({ contratos, setContratos, fornecedores }) 
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const newContratos = contratos.map((contrato) => (contrato.id === Number(id) ? edited : contrato));
-    setContratos(newContratos);
+    editarContrato(Number(id), edited)
     setIsEditing(false);
   };
 
