@@ -18,15 +18,14 @@ function formatCurrency(value) {
   }).format(Number(value));
 }
 
-export default function ContratoPage({ contratos, setContratos, fornecedores }) {
-
-  const contratos = useContractStore((state) => state.contratos);
-  const fornecedores = useContractStore((state) => state.fornecedores);
-  const editarContrato = useContractStore((state) => state.editarContrato);
+export default function ContratoPage() {
 
   // Id from parameter variable
   const { id } = useParams();
-
+  
+  const contratos = useContractStore((state) => state.contratos);
+  const fornecedores = useContractStore((state) => state.fornecedores);
+  const editarContrato = useContractStore((state) => state.editarContrato);
   // Get this contract and it's supplier from props
   const contrato = contratos.find((contrato) => contrato.id === Number(id));
   const fornecedor = fornecedores.find((fornecedor) => fornecedor.id === Number(contrato.fornecedor_id));
