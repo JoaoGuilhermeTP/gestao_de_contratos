@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { useContractStore } from "./store/useContractStore";
+import { useContractStore } from "../store/useContractStore.js";
 
 function formatDate(value) {
   if (!value) return "Não informado";

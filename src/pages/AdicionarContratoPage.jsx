@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CurrencyInput from "react-currency-input-field";
-import { useContractStore } from "./store/useContractStore";
+import { useContractStore } from "../store/useContractStore.js";
 
 export default function AddContratoForm() {
   // Navigate hook to navigate to main contratos page after adding new contract

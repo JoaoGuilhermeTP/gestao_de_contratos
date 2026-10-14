@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useContractStore } from "./store/useContractStore";
+import { useContractStore } from "../store/useContractStore.js";
 
 export default function TabelaFornecedores() {
 

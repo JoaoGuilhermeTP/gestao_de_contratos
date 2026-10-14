@@ -2,11 +2,13 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useContractStore } from "../store/useContractStore";
 
-export default function TabelaContratos() {
+export default function TabelaContratos({fornecedorId}) {
 
-  const contratos = useContractStore((state) => state.contratos);
+  const todosContratos = useContractStore((state) => state.contratos);
   const fornecedores = useContractStore((state) => state.fornecedores);
   const deletarContrato = useContractStore((state) => state.deletarContrato);
+
+  const contratos = fornecedorId ? todosContratos.filter((contrato) => contrato.fornecedor_id === Number(fornecedorId)) : todosContratos;
 
   const [filtros, setFiltros] = useState({
     numero: "",
