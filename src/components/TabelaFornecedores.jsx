@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useContractStore } from "../store/useContractStore.js";
 
-export default function TabelaFornecedores({ fornecedores, setFornecedores, contratos }) {
+export default function TabelaFornecedores() {
+
+  const fornecedores = useContractStore((state) => state.fornecedores);
+
   const [filtros, setFiltros] = useState({
     tipo: "",
     razao_social: "",
@@ -26,9 +30,6 @@ export default function TabelaFornecedores({ fornecedores, setFornecedores, cont
     return matchTipo && matchRazaoSocial && matchNomeFantasia && matchCpfCnpj && matchCidade && matchEstado && matchRepresentante && matchStatus;
   });
 
-  function deletarFornecedor(id) {
-    setFornecedor((fornecedoresAtuais) => fornecedoresAtuais.filter((fornecedor) => fornecedor.id !== id));
-  }
 
   return (
     <section className="data-section">

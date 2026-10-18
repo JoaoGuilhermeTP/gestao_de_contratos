@@ -1,8 +1,12 @@
 import { useParams } from "react-router-dom";
 import TabelaContratos from "../components/TabelaContratos";
+import { useContractStore } from "../store/useContractStore.js";
 
-export default function FornecedorPage({ fornecedores, setFornecedores, contratos, setContratos }) {
+export default function FornecedorPage({ setContratos }) {
   const { id } = useParams();
+
+  const fornecedores = useContractStore((status) => status.fornecedores);
+  const contratos = useContractStore((status) => status.contratos);
 
   const fornecedor = fornecedores.find((fornecedor) => fornecedor.id === Number(id));
 
@@ -32,7 +36,7 @@ export default function FornecedorPage({ fornecedores, setFornecedores, contrato
         </dl>
       </div>
 
-      <TabelaContratos contratos={contratos.filter((contrato) => contrato.fornecedor_id === Number(id))} setContratos={setContratos} fornecedores={fornecedores} />
+      <TabelaContratos fornecedorId={id}/>
     </section>
   );
 }

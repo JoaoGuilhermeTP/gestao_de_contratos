@@ -1,10 +1,11 @@
 import TabelaFornecedores from "../components/TabelaFornecedores";
 import { Link } from "react-router-dom";
+import { useContractStore } from "../store/useContractStore.js";
 
-export default function FornecedoresPage({
-  fornecedores,
-  setFornecedores,
-}) {
+export default function FornecedoresPage() {
+
+  const fornecedores = useContractStore((state) => state.fornecedores);
+
   return (
     <section className="listing-page">
       <header className="listing-header">
@@ -17,10 +18,7 @@ export default function FornecedoresPage({
           <p>Encontre rapidamente empresas e responsáveis vinculados à gestão contratual.</p>
         </div>
       </header>
-      <TabelaFornecedores
-        fornecedores={fornecedores}
-        setFornecedores={setFornecedores}
-      />
+      <TabelaFornecedores />
     </section>
   );
 }

@@ -76,6 +76,29 @@ app.post('/api/contratos', async (req, res) => {
   }
 });
 
+// DELETE: Deletar um contrato
+app.delete('/api/deletar_contrato', async (req, res) => {
+  try {
+	const db = await openDb();
+	const {id} = req.body;
+	const idNumerico = Number(id);
+
+	if (!Number.isInteger(idNumerico) || idNumerico <= 0) {
+		return res.status(400).json({error: "ID inválido"});
+	}
+
+	const result = await db.run(`DELETE FROM contratos WHERE id = ?`, idNumerico);
+	if (result.changes === 0) {
+		return res.status(404).json({error: "Contrato não encontrado"})
+	}
+	res.status(204).send();
+
+  } catch (error) {
+	console.error(error);
+	res.status(500).json({ error: 'Erro ao deletar contrato' });
+  }
+});
+
 
 app.get('/api/status', (req, res) => {
 	res.json({message: 'O backend está rodando perfeitamente!'});

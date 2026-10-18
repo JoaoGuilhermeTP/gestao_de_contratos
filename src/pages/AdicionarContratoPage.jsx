@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CurrencyInput from "react-currency-input-field";
+import { useContractStore } from "../store/useContractStore.js";
 
-export default function AddContratoForm({
-  contratos,
-  setContratos,
-  fornecedores,
-}) {
+export default function AddContratoForm() {
   // Navigate hook to navigate to main contratos page after adding new contract
   const navigate = useNavigate();
+
+  const fornecedores = useContractStore((state) => state.fornecedores);
+  const addContrato = useContractStore((state) => state.addContrato);
 
   // Initial state for contrato
   const initialContrato = {
@@ -70,10 +70,7 @@ export default function AddContratoForm({
     // Check contrato "prorrogavel"
     if (!novoContrato.prorrogavel) {
       newErrors.prorrogavel = "Informe se o contrato é prorrogável.";
-    } else if (
-      novoContrato.prorrogavel !== "Sim" &&
-      novoContrato.prorrogavel !== "Não"
-    ) {
+    } else if (novoContrato.prorrogavel !== "Sim" && novoContrato.prorrogavel !== "Não") {
       newErrors.prorrogavel = "Valores válidos: Sim ou Não.";
     }
     // Check contrato signing date
@@ -85,13 +82,8 @@ export default function AddContratoForm({
       newErrors.data_de_termino = "Data de término é obrigatória.";
     }
     // Check if due date comes after signing date
-    if (
-      novoContrato.data_de_assinatura &&
-      novoContrato.data_de_termino &&
-      novoContrato.data_de_termino < novoContrato.data_de_assinatura
-    ) {
-      newErrors.data_de_termino =
-        "A data de término não pode ser anterior à data da assinatura.";
+    if (novoContrato.data_de_assinatura && novoContrato.data_de_termino && novoContrato.data_de_termino < novoContrato.data_de_assinatura) {
+      newErrors.data_de_termino = "A data de término não pode ser anterior à data da assinatura.";
     }
     setErrors(newErrors);
 
@@ -102,39 +94,7 @@ export default function AddContratoForm({
   async function handleSubmit(e) {
     e.preventDefault();
     if (validateForm()) {
-      try {
-        // SQLite stores booleans as 1 or 0
-        const isProrrogavel = novoContrato.prorrogavel === "Sim" ? 1 : 0;
-
-        const response = await fetch("/api/contratos", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ...novoContrato,
-            prorrogavel: isProrrogavel,
-          }),
-        });
-
-        if (response.ok) {
-          const contratoCriado = await response.json();
-
-          // Format back to string so the frontend displays it properly
-          contratoCriado.prorrogavel = contratoCriado.prorrogavel
-            ? "Sim"
-            : "Não";
-
-          // Update React state with the database-confirmed contract
-          setContratos([...contratos, contratoCriado]);
-          setNovoContrato(initialContrato);
-          navigate("/contratos");
-        } else {
-          console.error("Falha ao salvar o contrato no banco de dados.");
-        }
-      } catch (error) {
-        console.error("Erro de rede:", error);
-      }
+      addContrato(novoContrato);
     }
   }
 
@@ -144,9 +104,7 @@ export default function AddContratoForm({
         <div>
           <p className="eyebrow">Cadastro de contratos</p>
           <h1>Novo contrato</h1>
-          <p>
-            Preencha os dados abaixo para registrar um novo contrato no sistema.
-          </p>
+          <p>Preencha os dados abaixo para registrar um novo contrato no sistema.</p>
         </div>
         <div className="import-action">
           <button type="button" className="button-secondary">
@@ -248,9 +206,7 @@ export default function AddContratoForm({
               </option>
             ))}
           </select>
-          {errors.fornecedor_id && (
-            <span className="form-error">{errors.fornecedor_id}</span>
-          )}
+          {errors.fornecedor_id && <span className="form-error">{errors.fornecedor_id}</span>}
         </label>
 
         <label>
@@ -265,9 +221,7 @@ export default function AddContratoForm({
               })
             }
           />
-          {errors.procedimento_id && (
-            <span className="form-error">{errors.procedimento_id}</span>
-          )}
+          {errors.procedimento_id && <span className="form-error">{errors.procedimento_id}</span>}
         </label>
 
         <label>
@@ -302,9 +256,7 @@ export default function AddContratoForm({
               })
             }
           />
-          {errors.valor_global && (
-            <span className="form-error">{errors.valor_global}</span>
-          )}
+          {errors.valor_global && <span className="form-error">{errors.valor_global}</span>}
         </label>
 
         <label>
@@ -319,9 +271,7 @@ export default function AddContratoForm({
               })
             }
           />
-          {errors.prorrogavel && (
-            <span className="form-error">{errors.prorrogavel}</span>
-          )}
+          {errors.prorrogavel && <span className="form-error">{errors.prorrogavel}</span>}
         </label>
 
         <div className="form-section-heading form-section-heading-spaced">
@@ -341,9 +291,7 @@ export default function AddContratoForm({
               })
             }
           />
-          {errors.data_de_assinatura && (
-            <span className="form-error">{errors.data_de_assinatura}</span>
-          )}
+          {errors.data_de_assinatura && <span className="form-error">{errors.data_de_assinatura}</span>}
         </label>
 
         <label>
@@ -358,9 +306,7 @@ export default function AddContratoForm({
               })
             }
           />
-          {errors.data_de_termino && (
-            <span className="form-error">{errors.data_de_termino}</span>
-          )}
+          {errors.data_de_termino && <span className="form-error">{errors.data_de_termino}</span>}
         </label>
 
         <div className="form-actions">
