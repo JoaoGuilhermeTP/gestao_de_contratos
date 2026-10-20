@@ -1,8 +1,11 @@
 import { useContractStore } from "../store/useContractStore.js";
-import { useParams, Link, Navigate } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 export default function EditarContratoPage() {
+
+	const navigate = useNavigate()
+
 	// Id from parameter variable
 	const { id } = useParams();
 	const contratos = useContractStore((state) => state.contratos);
@@ -14,7 +17,7 @@ export default function EditarContratoPage() {
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		editarContrato(Number(id), edited);
-		setIsEditing(false);
+		navigate('/contratos')
 	};
 
 	return (

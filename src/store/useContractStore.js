@@ -56,7 +56,7 @@ export const useContractStore = create((set) => ({
         set({ loading: true })
         try {
             // Send PUT request
-            const response = await fetch("/api/contratos", {
+            const response = await fetch(`/api/contratos/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
