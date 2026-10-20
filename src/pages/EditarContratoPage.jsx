@@ -142,7 +142,7 @@ export default function EditarContratoPage() {
 					<div className="detail-form-actions">
 						<Link to={`/contratos/${contrato.id}`}>
 							<button className="button-secondary">
-								Editar contrato
+								Cancelar
 							</button>
 						</Link>
 						<button type="submit" className="button-primary">
