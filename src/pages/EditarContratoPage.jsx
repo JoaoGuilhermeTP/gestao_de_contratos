@@ -38,7 +38,7 @@ export default function EditarContratoPage() {
 					<label>
 						Número
 						<input
-							type="number"
+							type="text"
 							value={edited.numero}
 							onChange={(e) =>
 								setEdited({ ...edited, numero: e.target.value })
