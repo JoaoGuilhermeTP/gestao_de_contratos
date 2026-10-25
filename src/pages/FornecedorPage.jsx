@@ -3,7 +3,7 @@ import TabelaContratos from "../components/TabelaContratos";
 import { useContratoStore } from "../store/useContratoStore.js";
 import { useFornecedorStore } from "../store/useFornecedorStore.js";
 
-export default function FornecedorPage({ setContratos }) {
+export default function FornecedorPage() {
   const { id } = useParams();
 
   const fornecedores = useFornecedorStore((status) => status.fornecedores);
