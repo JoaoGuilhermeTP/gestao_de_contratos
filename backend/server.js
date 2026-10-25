@@ -85,6 +85,89 @@ app.post("/api/documentos", async (req, res) => {
   }
 });
 
+// GET: Buscar os documentos vinculados a um fornecedor
+app.get("/api/fornecedores/:fornecedorId/documentos", async (req, res) => {
+  try {
+    const db = await openDb();
+    const fornecedorId = Number(req.params.fornecedorId);
+    const documentos = await db.all(
+      `
+      SELECT df.*, d.nome_documento, d.categoria, d.esfera
+      FROM documentos_fornecedores df
+      INNER JOIN documentos d ON d.id = df.documento_id
+      WHERE df.fornecedor_id = ?
+      ORDER BY df.validade ASC
+      `,
+      fornecedorId,
+    );
+    res.json(documentos);
+  } catch (error) {
+    console.error("Erro na rota GET /api/fornecedores/:fornecedorId/documentos:", error);
+    res.status(500).json({ error: "Erro ao buscar documentos do fornecedor" });
+  }
+});
+
+// POST: Vincular um documento a um fornecedor
+app.post("/api/fornecedores/:fornecedorId/documentos", async (req, res) => {
+  try {
+    const db = await openDb();
+    const fornecedorId = Number(req.params.fornecedorId);
+    const { documento_id, emissao, validade, arquivo_url, status } = req.body;
+    const documento = await db.get(
+      `
+      SELECT d.*, f.estado AS fornecedor_estado, f.cidade AS fornecedor_cidade
+      FROM documentos d
+      CROSS JOIN fornecedores f
+      WHERE d.id = ? AND f.id = ?
+      `,
+      documento_id,
+      fornecedorId,
+    );
+
+    if (!documento) {
+      return res.status(404).json({ error: "Fornecedor ou documento não encontrado" });
+    }
+
+    const mesmaLocalidade =
+      documento.esfera === "Federal" ||
+      documento.esfera === "Trabalhista" ||
+      (documento.esfera === "Estadual" &&
+        documento.estado?.toUpperCase() === documento.fornecedor_estado?.toUpperCase()) ||
+      (documento.esfera === "Municipal" &&
+        documento.estado?.toUpperCase() === documento.fornecedor_estado?.toUpperCase() &&
+        documento.cidade?.toLowerCase() === documento.fornecedor_cidade?.toLowerCase());
+
+    if (!mesmaLocalidade) {
+      return res.status(400).json({
+        error: "O documento não corresponde à esfera ou à localidade do fornecedor",
+      });
+    }
+
+    const result = await db.run(
+      `
+      INSERT INTO documentos_fornecedores (
+        documento_id, fornecedor_id, emissao, validade, arquivo_url, status
+      ) VALUES (?, ?, ?, ?, ?, ?)
+      `,
+      [documento_id, fornecedorId, emissao, validade, arquivo_url || null, status || "Válido"],
+    );
+
+    const documentoVinculado = await db.get(
+      `
+      SELECT df.*, d.nome_documento, d.categoria, d.esfera
+      FROM documentos_fornecedores df
+      INNER JOIN documentos d ON d.id = df.documento_id
+      WHERE df.id = ?
+      `,
+      result.lastID,
+    );
+    res.status(201).json(documentoVinculado);
+  } catch (error) {
+    console.error("Erro na rota POST /api/fornecedores/:fornecedorId/documentos:", error);
+    res.status(500).json({ error: "Erro ao vincular documento ao fornecedor" });
+  }
+});
+
 // GET: Buscar todos os contratos
 app.get("/api/contratos", async (req, res) => {
   try {

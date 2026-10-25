@@ -12,6 +12,7 @@ import AdicionarFornecedorPage from "./pages/AdicionarFornecedorPage";
 import EditarFornecedorPage from "./pages/EditarFornecedorPage";
 import DocumentosPage from "./pages/DocumentosPage";
 import AdicionarDocumentoPage from "./pages/AdicionarDocumentoPage";
+import AdicionarDocumentoFornecedorPage from "./pages/AdicionarDocumentoFornecedorPage";
 import { useContratoStore } from "./store/useContratoStore";
 import { useFornecedorStore } from "./store/useFornecedorStore";
 import { useIbgeStore } from "./store/useIbgeStore.js";
@@ -48,6 +49,7 @@ function App() {
         <Route path={"/adicionar_contrato"} element={<AdicionarContratoPage />} />
         <Route path={"/adicionar_fornecedor"} element={<AdicionarFornecedorPage />} />
         <Route path={"/adicionar_documento"} element={<AdicionarDocumentoPage />} />
+        <Route path={"/fornecedor/:id/adicionar-documento"} element={<AdicionarDocumentoFornecedorPage />} />
         <Route path={`/fornecedor/:id`} element={<FornecedorPage />} />
         <Route path={`/fornecedor/editar/:id`} element={<EditarFornecedorPage />} />
       </Routes>

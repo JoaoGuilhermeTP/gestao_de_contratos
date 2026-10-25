@@ -49,4 +49,27 @@ export const useDocumentoStore = create((set) => ({
       set({ loading: false });
     }
   },
+
+  fetchDocumentosDoFornecedor: async (fornecedorId) => {
+    const response = await fetch(`/api/fornecedores/${fornecedorId}/documentos`);
+    if (!response.ok) {
+      throw new Error("Não foi possível buscar os documentos do fornecedor.");
+    }
+    return response.json();
+  },
+
+  addDocumentoAoFornecedor: async (fornecedorId, documentoFornecedor) => {
+    const response = await fetch(`/api/fornecedores/${fornecedorId}/documentos`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(documentoFornecedor),
+    });
+
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({}));
+      throw new Error(data.error || "Erro ao vincular documento ao fornecedor.");
+    }
+
+    return response.json();
+  },
 }));

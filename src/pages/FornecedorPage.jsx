@@ -2,6 +2,7 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import TabelaContratos from "../components/TabelaContratos";
 import { useContratoStore } from "../store/useContratoStore.js";
 import { useFornecedorStore } from "../store/useFornecedorStore.js";
+import DocumentosFornecedor from "../components/DocumentosFornecedor.jsx";
 
 export default function FornecedorPage() {
   const { id } = useParams();
@@ -46,7 +47,7 @@ export default function FornecedorPage() {
           <div><dt>Localização</dt><dd>{fornecedor.cidade}/{fornecedor.estado}</dd></div>
         </dl>
       </div>
-
+      <DocumentosFornecedor fornecedorId={id} />
       <TabelaContratos fornecedorId={id}/>
     </section>
   );
