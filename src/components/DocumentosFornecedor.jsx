@@ -64,9 +64,15 @@ export default function DocumentosFornecedor({ fornecedorId }) {
                   <td>{documento.emissao}</td>
                   <td>{documento.validade}</td>
                   <td>
-                    <span className="status-badge">
-                      {getDocumentStatus(documento.validade)}
-                    </span>
+                    {(() => {
+                      const status = getDocumentStatus(documento.validade);
+
+                      return (
+                        <span className={`status-badge ${status === "Vencido" ? "status-badge-expired" : ""}`}>
+                          {status}
+                        </span>
+                      );
+                    })()}
                   </td>
                   <td>{documento.arquivo_url ? <a href={documento.arquivo_url} target="_blank" rel="noreferrer">Abrir</a> : "Não informado"}</td>
                 </tr>

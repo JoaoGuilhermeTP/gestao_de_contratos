@@ -478,6 +478,12 @@ dd {
   white-space: nowrap;
 }
 
+.status-badge-expired {
+  border-color: #f0c7c7;
+  color: var(--red);
+  background: var(--red-soft);
+}
+
 .type-badge {
   border-color: #c7e5df;
   color: var(--teal);
