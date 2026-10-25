@@ -1,4 +1,4 @@
-import { useIbgeStore } from "../store/useIbgeStore.jsx";
+import { useIbgeStore } from "../store/useIbgeStore.js";
 
 export default function EstadoSelect({ value, onChange, error }) {
   const estados = useIbgeStore((state) => state.estados);

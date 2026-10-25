@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useIbgeStore } from "../store/useIbgeStore.jsx";
+import { useIbgeStore } from "../store/useIbgeStore.js";
 
 export default function MunicipioSelect({ uf, value, onChange, error }) {
   const municipios = useIbgeStore((state) => state.municipiosDoEstado);

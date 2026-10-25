@@ -12,7 +12,7 @@ import AdicionarFornecedorPage from "./pages/AdicionarFornecedorPage";
 import EditarFornecedorPage from "./pages/EditarFornecedorPage";
 import { useContratoStore } from "./store/useContratoStore";
 import { useFornecedorStore } from "./store/useFornecedorStore";
-import { useIbgeStore } from "./store/useIbgeStore";
+import { useIbgeStore } from "./store/useIbgeStore.js";
 
 function App() {
   const loading = useContratoStore((state) => state.loading);
