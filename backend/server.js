@@ -45,6 +45,45 @@ app.get("/api/contratos", async (req, res) => {
   }
 });
 
+// POST: Criar um novo fornecedor
+app.post("/api/fornecedores", async (req, res) => {
+  try {
+    const db = await openDb();
+    const { tipo, razao_social, nome_fantasia, cpf_cnpj, inscricao_estadual, inscricao_municipal, cep, logradouro, numero, bairro, cidade, estado, email, telefone, representante_legal, status } =
+      req.body;
+    const result = await db.run(
+      `
+      INSERT INTO fornecedores (
+      tipo, razao_social, nome_fantasia, cpf_cnpj, inscricao_estadual, inscricao_municipal, cep, logradouro, numero, bairro, cidade, estado, email, telefone, representante_legal, status
+      ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+      `,
+      [
+        tipo,
+        razao_social,
+        nome_fantasia || null,
+        cpf_cnpj,
+        inscricao_estadual || null,
+        inscricao_municipal || null,
+        cep || null,
+        logradouro || null,
+        numero || null,
+        bairro || null,
+        cidade,
+        estado,
+        email || null,
+        telefone || null,
+        representante_legal || null,
+        status,
+      ],
+    );
+    const novoFornecedor = await db.get("SELECT * FROM fornecedores WHERE id = ?", result.lastID);
+    res.status(201).json(novoFornecedor);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erro ao criar fornecedor" });
+  }
+});
+
 // POST: Criar um novo contrato
 app.post("/api/contratos", async (req, res) => {
   try {

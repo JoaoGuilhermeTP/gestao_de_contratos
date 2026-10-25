@@ -17,6 +17,9 @@ export default function FornecedoresPage() {
           </div>
           <p>Encontre rapidamente empresas e responsáveis vinculados à gestão contratual.</p>
         </div>
+        <Link className="button-primary listing-action" to="/adicionar_fornecedor">
+          Adicionar fornecedor
+        </Link>
       </header>
       <TabelaFornecedores />
     </section>

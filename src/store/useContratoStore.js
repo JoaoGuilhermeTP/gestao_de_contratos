@@ -43,7 +43,7 @@ export const useContratoStore = create((set) => ({
                 set((state) => ({
                     contratos: [...state.contratos, contratoCriado],
                 }));
-                return novoContrato;
+                return contratoCriado;
             }
         } catch (error) {
             console.error("Erro ao adicionar contrato: ", error);
