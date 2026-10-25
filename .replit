@@ -54,4 +54,4 @@ waitForPort = 5000
 [deployment]
 deploymentTarget = "cloudrun"
 build = "npm run build"
-run = "npm run preview -- --host 0.0.0.0 --port 5173"
+run = "npm run preview:full"

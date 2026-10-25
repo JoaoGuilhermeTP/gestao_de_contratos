@@ -2,12 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CurrencyInput from "react-currency-input-field";
 import { useContratoStore } from "../store/useContratoStore.js";
+import { useFornecedorStore } from "../store/useFornecedorStore.js";
 
 export default function AddContratoForm() {
   // Navigate hook to navigate to main contratos page after adding new contract
   const navigate = useNavigate();
 
-  const fornecedores = useContratoStore((state) => state.fornecedores);
+  const fornecedores = useFornecedorStore((state) => state.fornecedores);
   const addContrato = useContratoStore((state) => state.addContrato);
 
   // Initial state for contrato
@@ -94,7 +95,18 @@ export default function AddContratoForm() {
   async function handleSubmit(e) {
     e.preventDefault();
     if (validateForm()) {
-      addContrato(novoContrato);
+      const contratoCriado = await addContrato({
+        ...novoContrato,
+        ata_id: novoContrato.ata_id ? Number(novoContrato.ata_id) : null,
+        ano: Number(novoContrato.ano),
+        fornecedor_id: Number(novoContrato.fornecedor_id),
+        procedimento_id: Number(novoContrato.procedimento_id),
+        valor_global: Number(String(novoContrato.valor_global).replace(",", ".")),
+      });
+
+      if (contratoCriado) {
+        navigate("/contratos");
+      }
     }
   }
 
