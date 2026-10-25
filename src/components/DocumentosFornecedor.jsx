@@ -5,27 +5,20 @@ import { useDocumentoStore } from "../store/useDocumentoStore.js";
 // Verifica se documento está dentro da validade
 function getDocumentStatus(validade) {
   const hoje = new Date();
-  const dataAtual = [
-    hoje.getFullYear(),
-    String(hoje.getMonth() + 1).padStart(2, "0"),
-    String(hoje.getDate()).padStart(2, "0"),
-  ].join("-");
-
+  const dataAtual = [hoje.getFullYear(), String(hoje.getMonth() + 1).padStart(2, "0"), String(hoje.getDate()).padStart(2, "0")].join("-");
   return validade >= dataAtual ? "Válido" : "Vencido";
 }
 
-
 export default function DocumentosFornecedor({ fornecedorId }) {
-
-  // Obter lista de todos os documentos
+  // Variáveis de estado do store
   const documentosGerais = useDocumentoStore((state) => state.documentos);
+  const fetchDocumentosDoFornecedor = useDocumentoStore((state) => state.fetchDocumentosDoFornecedor);
 
-  // Obter documentos do fornecedor
-  const fetchDocumentosDoFornecedor = useDocumentoStore(
-    (state) => state.fetchDocumentosDoFornecedor,
-  );
+  // Variáveis de estado locais
   const [documentos, setDocumentos] = useState([]);
   const [error, setError] = useState("");
+
+  // Obter documentos do fornecedor
   useEffect(() => {
     fetchDocumentosDoFornecedor(fornecedorId)
       .then(setDocumentos)
@@ -34,13 +27,16 @@ export default function DocumentosFornecedor({ fornecedorId }) {
 
   return (
     <section className="data-section">
-      <div className="detail-card-heading">
+      <div className="data-section-heading">
         <h2>Documentos vinculados</h2>
         <Link to={`/fornecedor/${fornecedorId}/adicionar-documento`}>
           <button className="button-primary">Adicionar documento</button>
         </Link>
       </div>
+
+      {/* If there is an error, display error */}
       {error && <p className="form-error">{error}</p>}
+      {/* If there are documents, display them */}
       {documentos.length > 0 ? (
         <div className="table-scroll">
           <table className="supplier-documents-table">
@@ -67,14 +63,18 @@ export default function DocumentosFornecedor({ fornecedorId }) {
                     {(() => {
                       const status = getDocumentStatus(documento.validade);
 
-                      return (
-                        <span className={`status-badge ${status === "Vencido" ? "status-badge-expired" : ""}`}>
-                          {status}
-                        </span>
-                      );
+                      return <span className={`status-badge ${status === "Vencido" ? "status-badge-expired" : ""}`}>{status}</span>;
                     })()}
                   </td>
-                  <td>{documento.arquivo_url ? <a href={documento.arquivo_url} target="_blank" rel="noreferrer">Abrir</a> : "Não informado"}</td>
+                  <td>
+                    {documento.arquivo_url ? (
+                      <a href={documento.arquivo_url} target="_blank" rel="noreferrer">
+                        Abrir
+                      </a>
+                    ) : (
+                      "Não informado"
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>
