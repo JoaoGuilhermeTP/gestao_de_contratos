@@ -51,13 +51,14 @@ async function seedDatabase() {
     `);
 
     // 2. Documentos (Catálogo de certidões exigidas)
+    // As fontes apontam para os portais oficiais usados para emitir ou consultar cada documento.
     await db.exec(`
       INSERT INTO documentos (
         nome_documento, categoria, esfera, cidade, estado, fonte_website
       ) VALUES
       (
         'Certidão Negativa de Débitos Trabalhistas (CNDT)', 'Regularidade Trabalhista', 'Trabalhista',
-        NULL, NULL, 'https://www.tst.jus.br/certidao1'
+        NULL, NULL, 'https://cndt-certidao.tst.jus.br/consultarCertidao.faces'
       ),
       (
         'Certidão de Débitos Relativos a Créditos Tributários Federais e à Dívida Ativa da União',
@@ -66,6 +67,40 @@ async function seedDatabase() {
       (
         'Certidão Negativa de Tributos Municipais', 'Regularidade Fiscal', 'Municipal',
         'São Paulo', 'SP', 'https://duc.prefeitura.sp.gov.br/'
+      ),
+      (
+        'Certificado de Regularidade do FGTS (CRF)', 'Regularidade Fiscal', 'Federal',
+        NULL, NULL, 'https://consulta-crf.caixa.gov.br/consultacrf/pages/consultaEmpregador.jsf'
+      ),
+      (
+        'Certidão Negativa de Débitos Tributários Estaduais de São Paulo',
+        'Regularidade Fiscal', 'Estadual', NULL, 'SP',
+        'https://www10.fazenda.sp.gov.br/CertidaoNegativaDeb/Pages/EmissaoCertidaoNegativa.aspx'
+      ),
+      (
+        'Certidão Negativa de Débitos Tributários Estaduais de Minas Gerais',
+        'Regularidade Fiscal', 'Estadual', NULL, 'MG',
+        'https://www.fazenda.mg.gov.br/empresas/certidao-debitos/'
+      ),
+      (
+        'Certidão Negativa de Tributos Municipais de Curitiba',
+        'Regularidade Fiscal', 'Municipal', 'Curitiba', 'PR',
+        'https://www.curitiba.pr.gov.br/servicos/certidao-negativa-de-debitos/34'
+      ),
+      (
+        'Certidão Negativa de Tributos Municipais de Belo Horizonte',
+        'Regularidade Fiscal', 'Municipal', 'Belo Horizonte', 'MG',
+        'https://prefeitura.pbh.gov.br/fazenda/certidoes'
+      ),
+      (
+        'Certidão de Regularidade perante a Fazenda Estadual do Paraná',
+        'Regularidade Fiscal', 'Estadual', NULL, 'PR',
+        'https://www.fazenda.pr.gov.br/Pagina/Certidao-de-Debitos-Tributarios'
+      ),
+      (
+        'Certidão Negativa de Débitos de Imóvel Rural (CND Rural)',
+        'Regularidade Fiscal', 'Federal', NULL, NULL,
+        'https://solucoes.receita.fazenda.gov.br/Servicos/certidaointernet/ITR/Emitir'
       );
     `);
 
@@ -74,10 +109,10 @@ async function seedDatabase() {
       INSERT INTO documentos_fornecedores (
         documento_id, fornecedor_id, emissao, validade, arquivo_url, status
       ) VALUES
-      (1, 1, '2026-01-10', '2026-07-09', '/uploads/certidoes/cndt_techgov.pdf', 'Válido'),
-      (2, 1, '2026-01-15', '2026-07-14', '/uploads/certidoes/cnd_federal_techgov.pdf', 'Válido'),
-      (1, 2, '2026-02-01', '2026-07-31', '/uploads/certidoes/cndt_horizonte.pdf', 'Válido'),
-      (3, 3, '2025-06-01', '2025-12-01', '/uploads/certidoes/cnd_municipal_supribrasil.pdf', 'Vencido');
+      (1, 1, '2026-08-10', '2027-02-06', '/uploads/certidoes/cndt_techgov.pdf', 'Válido'),
+      (2, 1, '2026-08-15', '2027-02-11', '/uploads/certidoes/cnd_federal_techgov.pdf', 'Válido'),
+      (1, 2, '2026-08-01', '2027-01-29', '/uploads/certidoes/cndt_horizonte.pdf', 'Válido'),
+      (7, 3, '2025-06-01', '2025-12-01', '/uploads/certidoes/cnd_municipal_supribrasil.pdf', 'Vencido');
     `);
 
     // 4. Secretarias (Inseridas inicialmente com secretario_titular_id NULL)

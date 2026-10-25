@@ -50,8 +50,9 @@ export default function TabelaFornecedores() {
             </div>
           </div>
 
-          <table>
-            <tbody>
+          <div className="table-scroll">
+            <table className="supplier-table">
+              <thead>
               <tr>
                 <th>Tipo</th>
                 <th>Razão Social</th>
@@ -62,22 +63,25 @@ export default function TabelaFornecedores() {
                 <th>Representante</th>
                 <th>Status</th>
               </tr>
+              </thead>
+              <tbody>
               {fornecedoresFiltrados.map((fornecedor) => (
                 <tr key={fornecedor.id}>
-                  <td>{fornecedor.tipo}</td>
-                  <td>
+                  <td className="supplier-text-cell">{fornecedor.tipo}</td>
+                  <td className="supplier-text-cell">
                     <Link to={`/fornecedor/${fornecedor.id}`}>{fornecedor.razao_social}</Link>
                   </td>
-                  <td>{fornecedor.nome_fantasia}</td>
-                  <td>{fornecedor.cpf_cnpj}</td>
-                  <td>{fornecedor.cidade}</td>
-                  <td>{fornecedor.estado}</td>
-                  <td>{fornecedor.representante_legal}</td>
-                  <td>{fornecedor.status}</td>
+                  <td className="supplier-text-cell">{fornecedor.nome_fantasia}</td>
+                  <td className="supplier-text-cell">{fornecedor.cpf_cnpj}</td>
+                  <td className="supplier-text-cell">{fornecedor.cidade}</td>
+                  <td className="supplier-text-cell">{fornecedor.estado}</td>
+                  <td className="supplier-text-cell">{fornecedor.representante_legal}</td>
+                  <td className="supplier-text-cell">{fornecedor.status}</td>
                 </tr>
               ))}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
         </>
       ) : (
         <p>Nenhum fornecedor cadastrato</p>

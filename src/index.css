@@ -780,10 +780,9 @@ td button:hover {
 }
 
 table {
-  display: block;
+  display: table;
   width: 100%;
   margin-top: 14px;
-  overflow-x: auto;
   border: 1px solid var(--line);
   border-radius: 10px;
   border-spacing: 0;
@@ -791,19 +790,15 @@ table {
   box-shadow: var(--shadow-small);
 }
 
-tbody {
-  display: table;
-  width: 100%;
-  min-width: 1080px;
-  table-layout: fixed;
-  border-collapse: collapse;
+table {
+ min-width: 1080px;
+ table-layout: fixed;
+ border-collapse: collapse;
 }
 
-thead {
-  display: table;
-  width: 100%;
-  min-width: 1080px;
-  table-layout: fixed;
+.table-scroll {
+ width: 100%;
+ overflow-x: auto;
 }
 
 th,
@@ -830,6 +825,41 @@ td {
   font-size: 0.8rem;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.supplier-documents-table {
+  display: table;
+  min-width: 1080px;
+  table-layout: fixed;
+}
+
+.supplier-documents-table th:nth-child(1),
+.supplier-documents-table td:nth-child(1) {
+  width: 320px;
+}
+
+.supplier-documents-table td.document-name-cell {
+  overflow: visible;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.contract-table td.contract-text-cell {
+  overflow: visible;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.supplier-table td.supplier-text-cell {
+  overflow: visible;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.document-table td.document-text-cell {
+  overflow: visible;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 th:nth-child(1),

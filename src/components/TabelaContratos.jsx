@@ -115,8 +115,9 @@ export default function TabelaContratos({ fornecedorId }) {
               />
             </div>
           </div>
-          <table>
-            <tbody>
+          <div className="table-scroll">
+            <table className="contract-table">
+              <thead>
               <tr>
                 <th>Número/Ano</th>
                 <th>Objeto</th>
@@ -129,6 +130,8 @@ export default function TabelaContratos({ fornecedorId }) {
                 <th>Data de término</th>
                 <th>Ações</th>
               </tr>
+              </thead>
+              <tbody>
               {contratosFiltrados.map((contrato) => (
                 <tr key={contrato.id}>
                   <td>
@@ -136,8 +139,8 @@ export default function TabelaContratos({ fornecedorId }) {
                       {contrato.numero}
                     </Link>
                   </td>
-                  <td>{contrato.objeto}</td>
-                  <td>
+                  <td className="contract-text-cell">{contrato.objeto}</td>
+                  <td className="contract-text-cell">
                     <Link to={`/fornecedor/${contrato.fornecedor_id}`}>
                       {
                         fornecedores.find(
@@ -147,8 +150,8 @@ export default function TabelaContratos({ fornecedorId }) {
                       }
                     </Link>
                   </td>
-                  <td>{contrato.procedimento_id}</td>
-                  <td>{contrato.status}</td>
+                  <td className="contract-text-cell">{contrato.procedimento_id}</td>
+                  <td className="contract-text-cell">{contrato.status}</td>
                   <td>{contrato.valor_global}</td>
                   <td>{contrato.prorrogavel}</td>
                   <td>{contrato.data_de_assinatura}</td>
@@ -160,8 +163,9 @@ export default function TabelaContratos({ fornecedorId }) {
                   </td>
                 </tr>
               ))}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
         </>
       ) : (
         <p>Nenhum contrato cadastrato</p>

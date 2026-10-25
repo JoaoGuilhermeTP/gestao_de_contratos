@@ -88,7 +88,8 @@ export default function DocumentosPage() {
 
           {/* A separate empty state makes an active filter with no matches clear to the user. */}
           {documentosFiltrados.length > 0 ? (
-            <table>
+            <div className="table-scroll">
+              <table className="document-table">
               <thead>
                 <tr>
                   <th>Documento</th>
@@ -101,10 +102,10 @@ export default function DocumentosPage() {
               <tbody>
                 {documentosFiltrados.map((documento) => (
                   <tr key={documento.id}>
-                    <td>{documento.nome_documento}</td>
-                    <td>{documento.categoria}</td>
-                    <td>{documento.esfera}</td>
-                    <td>
+                    <td className="document-text-cell">{documento.nome_documento}</td>
+                    <td className="document-text-cell">{documento.categoria}</td>
+                    <td className="document-text-cell">{documento.esfera}</td>
+                    <td className="document-text-cell">
                       {/* Documents without a city or state are treated as national. */}
                       {[documento.cidade, documento.estado].filter(Boolean).join("/") || "Nacional"}
                     </td>
@@ -121,7 +122,8 @@ export default function DocumentosPage() {
                   </tr>
                 ))}
               </tbody>
-            </table>
+              </table>
+            </div>
           ) : (
             <p>Nenhum documento corresponde aos filtros selecionados.</p>
           )}
