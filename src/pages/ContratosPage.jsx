@@ -1,10 +1,10 @@
 import TabelaContratos from "../components/TabelaContratos";
 import { Link } from "react-router-dom";
-import { useContractStore } from "../store/useContractStore";
+import { useContratoStore } from "../store/useContratoStore";
 
 export default function ContratosPage() {
 
-  const contratos = useContractStore((state) => state.contratos);
+  const contratos = useContratoStore((state) => state.contratos);
 
   return (
     <section className="listing-page">

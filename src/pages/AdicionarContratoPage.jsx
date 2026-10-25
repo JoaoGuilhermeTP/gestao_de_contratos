@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CurrencyInput from "react-currency-input-field";
-import { useContractStore } from "../store/useContractStore.js";
+import { useContratoStore } from "../store/useContratoStore.js";
 
 export default function AddContratoForm() {
   // Navigate hook to navigate to main contratos page after adding new contract
   const navigate = useNavigate();
 
-  const fornecedores = useContractStore((state) => state.fornecedores);
-  const addContrato = useContractStore((state) => state.addContrato);
+  const fornecedores = useContratoStore((state) => state.fornecedores);
+  const addContrato = useContratoStore((state) => state.addContrato);
 
   // Initial state for contrato
   const initialContrato = {

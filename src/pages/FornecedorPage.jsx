@@ -1,12 +1,13 @@
 import { useParams } from "react-router-dom";
 import TabelaContratos from "../components/TabelaContratos";
-import { useContractStore } from "../store/useContractStore.js";
+import { useContratoStore } from "../store/useContratoStore.js";
+import { useFornecedorStore } from "../store/useFornecedorStore.js";
 
 export default function FornecedorPage({ setContratos }) {
   const { id } = useParams();
 
-  const fornecedores = useContractStore((status) => status.fornecedores);
-  const contratos = useContractStore((status) => status.contratos);
+  const fornecedores = useFornecedorStore((status) => status.fornecedores);
+  const contratos = useContratoStore((status) => status.contratos);
 
   const fornecedor = fornecedores.find((fornecedor) => fornecedor.id === Number(id));
 

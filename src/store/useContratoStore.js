@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export const useContractStore = create((set) => ({
+export const useContratoStore = create((set) => ({
     // 1. Initial State
     contratos: [],
     fornecedores: [],
@@ -107,20 +107,6 @@ export const useContractStore = create((set) => ({
             console.error("Erro ao deletar contrato: ", error)
         } finally {
             set({ loading: false })
-        }
-    },
-
-    // Buscar fornecedores
-    fetchFornecedores: async () => {
-        set({ loading: true });
-        try {
-            const res = await fetch("/api/fornecedores");
-            const data = await res.json();
-            set({ fornecedores: data });
-        } catch (error) {
-            console.error("Erro ao buscar fornecedores: ", error);
-        } finally {
-            set({ loading: false });
         }
     },
 }));

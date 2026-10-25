@@ -1,5 +1,6 @@
 import { useParams, Link, Navigate } from "react-router-dom";
-import { useContractStore } from "../store/useContractStore.js";
+import { useContratoStore } from "../store/useContratoStore.js";
+import { useFornecedorStore } from "../store/useFornecedorStore.js";
 
 // Helpr functions
 function formatDate(value) {
@@ -23,10 +24,10 @@ export default function ContratoPage() {
   const { id } = useParams();
 
   // Get state variables from store
-  const contratos = useContractStore((state) => state.contratos);
-  const fornecedores = useContractStore((state) => state.fornecedores);
+  const contratos = useContratoStore((state) => state.contratos);
+  const fornecedores = useFornecedorStore((state) => state.fornecedores);
 
-  const deletarContrato = useContractStore((state) => state.deletarContrato);
+  const deletarContrato = useContratoStore((state) => state.deletarContrato);
 
   // Get this contract and fornecedor
   const contrato = contratos.find((contrato) => contrato.id === Number(id));

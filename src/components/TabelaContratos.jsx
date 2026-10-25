@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useContractStore } from "../store/useContractStore";
+import { useContratoStore } from "../store/useContratoStore";
+import { useFornecedorStore } from "../store/useFornecedorStore";
 
 export default function TabelaContratos({ fornecedorId }) {
-  const todosContratos = useContractStore((state) => state.contratos);
-  const fornecedores = useContractStore((state) => state.fornecedores);
-  const deletarContrato = useContractStore((state) => state.deletarContrato);
+  const todosContratos = useContratoStore((state) => state.contratos);
+  const fornecedores = useFornecedorStore((state) => state.fornecedores);
+  const deletarContrato = useContratoStore((state) => state.deletarContrato);
 
   const contratos = fornecedorId
     ? todosContratos.filter(

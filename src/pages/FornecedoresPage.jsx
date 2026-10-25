@@ -1,10 +1,10 @@
 import TabelaFornecedores from "../components/TabelaFornecedores";
 import { Link } from "react-router-dom";
-import { useContractStore } from "../store/useContractStore.js";
+import { useContratoStore } from "../store/useContratoStore.js";
 
 export default function FornecedoresPage() {
 
-  const fornecedores = useContractStore((state) => state.fornecedores);
+  const fornecedores = useContratoStore((state) => state.fornecedores);
 
   return (
     <section className="listing-page">

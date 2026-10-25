@@ -8,14 +8,13 @@ import ContratoPage from "./pages/ContratoPage";
 import AdicionarContratoPage from "./pages/AdicionarContratoPage";
 import EditarContratoPage from "./pages/EditarContratoPage";
 import FornecedorPage from "./pages/FornecedorPage";
-import { useContractStore } from "./store/useContractStore";
+import { useContratoStore } from "./store/useContratoStore";
+import { useFornecedorStore } from "./store/useFornecedorStore";
 
 function App() {
-  const loading = useContractStore((state) => state.loading);
-  const fetchContratos = useContractStore((state) => state.fetchContratos);
-  const fetchFornecedores = useContractStore(
-    (state) => state.fetchFornecedores,
-  );
+  const loading = useContratoStore((state) => state.loading);
+  const fetchContratos = useContratoStore((state) => state.fetchContratos);
+  const fetchFornecedores = useFornecedorStore((state) => state.fetchFornecedores);
 
   useEffect(() => {
     fetchContratos();
@@ -23,13 +22,7 @@ function App() {
   }, []);
 
   if (loading) {
-    return (
-      <div
-        style={{ padding: "40px", textAlign: "center", fontFamily: "DM Sans" }}
-      >
-        Conectando ao banco de dados...
-      </div>
-    );
+    return <div style={{ padding: "40px", textAlign: "center", fontFamily: "DM Sans" }}>Conectando ao banco de dados...</div>;
   }
 
   return (
@@ -40,14 +33,8 @@ function App() {
         <Route path="/contratos" element={<ContratosPage />} />
         <Route path="/fornecedores" element={<FornecedoresPage />} />
         <Route path={`/contratos/:id`} element={<ContratoPage />} />
-        <Route
-          path={`/contratos/editar/:id`}
-          element={<EditarContratoPage />}
-        />
-        <Route
-          path={"/adicionar_contrato"}
-          element={<AdicionarContratoPage />}
-        />
+        <Route path={`/contratos/editar/:id`} element={<EditarContratoPage />} />
+        <Route path={"/adicionar_contrato"} element={<AdicionarContratoPage />} />
         <Route path={`/fornecedor/:id`} element={<FornecedorPage />} />
       </Routes>
     </BrowserRouter>
