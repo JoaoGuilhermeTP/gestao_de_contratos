@@ -9,6 +9,7 @@ import AdicionarContratoPage from "./pages/AdicionarContratoPage";
 import EditarContratoPage from "./pages/EditarContratoPage";
 import FornecedorPage from "./pages/FornecedorPage";
 import AdicionarFornecedorPage from "./pages/AdicionarFornecedorPage";
+import EditarFornecedorPage from "./pages/EditarFornecedorPage";
 import { useContratoStore } from "./store/useContratoStore";
 import { useFornecedorStore } from "./store/useFornecedorStore";
 
@@ -38,6 +39,7 @@ function App() {
         <Route path={"/adicionar_contrato"} element={<AdicionarContratoPage />} />
         <Route path={"/adicionar_fornecedor"} element={<AdicionarFornecedorPage />} />
         <Route path={`/fornecedor/:id`} element={<FornecedorPage />} />
+        <Route path={`/fornecedor/editar/:id`} element={<EditarFornecedorPage />} />
       </Routes>
     </BrowserRouter>
   );

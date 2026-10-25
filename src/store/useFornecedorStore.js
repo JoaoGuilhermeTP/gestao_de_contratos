@@ -48,4 +48,35 @@ export const useFornecedorStore = create((set) => ({
       set({ loading: false });
     }
   },
+
+  editarFornecedor: async (id, fornecedorAtualizado) => {
+    set({ loading: true });
+    try {
+      const response = await fetch(`/api/fornecedores/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(fornecedorAtualizado),
+      });
+
+      if (response.ok) {
+        const fornecedorSalvo = await response.json();
+        set((state) => ({
+          fornecedores: state.fornecedores.map((fornecedor) =>
+            fornecedor.id === id ? fornecedorSalvo : fornecedor,
+          ),
+        }));
+        return fornecedorSalvo;
+      }
+
+      const data = await response.json().catch(() => ({}));
+      throw new Error(data.error || "Erro ao editar fornecedor.");
+    } catch (error) {
+      console.error("Erro ao editar fornecedor: ", error);
+      throw error;
+    } finally {
+      set({ loading: false });
+    }
+  },
 }));

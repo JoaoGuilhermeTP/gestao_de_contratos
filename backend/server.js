@@ -84,6 +84,73 @@ app.post("/api/fornecedores", async (req, res) => {
   }
 });
 
+// PUT: Editar um fornecedor
+app.put("/api/fornecedores/:id", async (req, res) => {
+  try {
+    const db = await openDb();
+    const id = Number(req.params.id);
+    const {
+      tipo,
+      razao_social,
+      nome_fantasia,
+      cpf_cnpj,
+      inscricao_estadual,
+      inscricao_municipal,
+      cep,
+      logradouro,
+      numero,
+      bairro,
+      cidade,
+      estado,
+      email,
+      telefone,
+      representante_legal,
+      status,
+    } = req.body;
+
+    const result = await db.run(
+      `
+      UPDATE fornecedores
+      SET tipo = ?, razao_social = ?, nome_fantasia = ?, cpf_cnpj = ?,
+          inscricao_estadual = ?, inscricao_municipal = ?, cep = ?,
+          logradouro = ?, numero = ?, bairro = ?, cidade = ?, estado = ?,
+          email = ?, telefone = ?, representante_legal = ?, status = ?,
+          atualizado_em = CURRENT_TIMESTAMP
+      WHERE id = ?
+      `,
+      [
+        tipo,
+        razao_social,
+        nome_fantasia || null,
+        cpf_cnpj,
+        inscricao_estadual || null,
+        inscricao_municipal || null,
+        cep || null,
+        logradouro || null,
+        numero || null,
+        bairro || null,
+        cidade,
+        estado,
+        email || null,
+        telefone || null,
+        representante_legal || null,
+        status,
+        id,
+      ],
+    );
+
+    if (result.changes === 0) {
+      return res.status(404).json({ error: "Fornecedor não encontrado" });
+    }
+
+    const fornecedorAtualizado = await db.get("SELECT * FROM fornecedores WHERE id = ?", id);
+    res.json(fornecedorAtualizado);
+  } catch (error) {
+    console.error("Erro na rota PUT /api/fornecedores/:id:", error);
+    res.status(500).json({ error: "Erro ao atualizar fornecedor" });
+  }
+});
+
 // POST: Criar um novo contrato
 app.post("/api/contratos", async (req, res) => {
   try {
