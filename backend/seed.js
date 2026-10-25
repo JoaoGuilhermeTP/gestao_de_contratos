@@ -50,6 +50,49 @@ async function seedDatabase() {
       );
     `);
 
+    const localidades = [
+      ['Rio Branco', 'AC'], ['Maceió', 'AL'], ['Macapá', 'AP'], ['Manaus', 'AM'],
+      ['Salvador', 'BA'], ['Fortaleza', 'CE'], ['Brasília', 'DF'], ['Vitória', 'ES'],
+      ['Goiânia', 'GO'], ['São Luís', 'MA'], ['Cuiabá', 'MT'], ['Campo Grande', 'MS'],
+      ['Belo Horizonte', 'MG'], ['Belém', 'PA'], ['João Pessoa', 'PB'], ['Curitiba', 'PR'],
+      ['Recife', 'PE'], ['Teresina', 'PI'], ['Rio de Janeiro', 'RJ'], ['Natal', 'RN'],
+      ['Porto Alegre', 'RS'], ['Porto Velho', 'RO'], ['Boa Vista', 'RR'], ['Florianópolis', 'SC'],
+      ['São Paulo', 'SP'], ['Aracaju', 'SE'], ['Palmas', 'TO'],
+    ];
+
+    // Completa o catálogo com fornecedores distribuídos pelas 27 unidades federativas.
+    for (let index = 0; index < 47; index += 1) {
+      const [cidade, estado] = localidades[index % localidades.length];
+      const numero = String(index + 4).padStart(2, '0');
+      await db.run(
+        `
+        INSERT INTO fornecedores (
+          tipo, razao_social, nome_fantasia, cpf_cnpj, inscricao_estadual,
+          inscricao_municipal, cep, logradouro, numero, bairro, cidade, estado,
+          email, telefone, representante_legal, status
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `,
+        [
+          'Pessoa Jurídica',
+          `Fornecedor Regional ${numero} Serviços Ltda`,
+          `Regional ${numero}`,
+          `10.000.000/0001-${numero}`,
+          `${estado}000000${numero}`,
+          `IM-${numero}`,
+          '70000-000',
+          'Avenida das Licitações',
+          String(100 + index),
+          'Centro',
+          cidade,
+          estado,
+          `contato${numero}@fornecedorregional.com.br`,
+          `(00) 90000-${numero}`,
+          `Representante Regional ${numero}`,
+          index % 9 === 0 ? 'Suspenso' : 'Ativo',
+        ],
+      );
+    }
+
     // 2. Documentos (Catálogo de certidões exigidas)
     // As fontes apontam para os portais oficiais usados para emitir ou consultar cada documento.
     await db.exec(`
@@ -103,6 +146,75 @@ async function seedDatabase() {
         'https://solucoes.receita.fazenda.gov.br/Servicos/certidaointernet/ITR/Emitir'
       );
     `);
+
+    const documentosEstaduais = [
+      ['AC', 'Acre'], ['AL', 'Alagoas'], ['AP', 'Amapá'], ['AM', 'Amazonas'],
+      ['BA', 'Bahia'], ['CE', 'Ceará'], ['DF', 'Distrito Federal'], ['ES', 'Espírito Santo'],
+      ['GO', 'Goiás'], ['MA', 'Maranhão'], ['MT', 'Mato Grosso'], ['MS', 'Mato Grosso do Sul'],
+      ['MG', 'Minas Gerais'], ['PA', 'Pará'], ['PB', 'Paraíba'], ['PR', 'Paraná'],
+      ['PE', 'Pernambuco'], ['PI', 'Piauí'], ['RJ', 'Rio de Janeiro'], ['RN', 'Rio Grande do Norte'],
+      ['RS', 'Rio Grande do Sul'], ['RO', 'Rondônia'], ['RR', 'Roraima'], ['SC', 'Santa Catarina'],
+      ['SP', 'São Paulo'], ['SE', 'Sergipe'], ['TO', 'Tocantins'],
+    ];
+
+    // Cada UF recebe um documento estadual para que o filtro por localização seja demonstrável.
+    for (const [sigla, nome] of documentosEstaduais) {
+      await db.run(
+        `
+        INSERT INTO documentos (
+          nome_documento, categoria, esfera, cidade, estado, fonte_website
+        ) VALUES (?, ?, 'Estadual', NULL, ?, ?)
+        `,
+        [
+          `Certidão Negativa de Débitos Estaduais - ${nome}`,
+          'Regularidade Fiscal',
+          sigla,
+          `https://www.gov.br/pt-br/servicos/emitir-certidao-de-regularidade-fiscal-${sigla.toLowerCase()}`,
+        ],
+      );
+    }
+
+    const documentosFederais = [
+      ['Certidão Negativa de Débitos Federais - Pessoa Jurídica', 'Regularidade Fiscal', 'https://solucoes.receita.fazenda.gov.br/Servicos/certidaointernet/PJ/Emitir'],
+      ['Certificado de Regularidade do FGTS - CRF', 'Regularidade Fiscal', 'https://consulta-crf.caixa.gov.br/consultacrf/pages/consultaEmpregador.jsf'],
+      ['Certidão Negativa de Débitos do INSS', 'Regularidade Previdenciária', 'https://solucoes.receita.fazenda.gov.br/Servicos/certidaointernet/PJ/Emitir'],
+      ['Certidão Negativa de Débitos Trabalhistas - CNDT', 'Regularidade Trabalhista', 'https://cndt-certidao.tst.jus.br/consultarCertidao.faces'],
+      ['Certidão de Regularidade do SICAF', 'Habilitação', 'https://www.gov.br/compras/pt-br/sistemas/conheca-o-compras/sicaf-digital'],
+      ['Certidão Negativa de Débitos de Imóvel Rural', 'Regularidade Fiscal', 'https://solucoes.receita.fazenda.gov.br/Servicos/certidaointernet/ITR/Emitir'],
+      ['Certidão de Distribuição de Ações e Execuções Federais', 'Regularidade Jurídica', 'https://www.cjf.jus.br/cjf/certidao-negativa'],
+      ['Comprovante de Inscrição e Situação Cadastral no CNPJ', 'Regularidade Cadastral', 'https://solucoes.receita.fazenda.gov.br/Servicos/cnpjreva/Cnpjreva_Solicitacao.asp'],
+      ['Certidão Negativa de Débitos perante o IBAMA', 'Regularidade Ambiental', 'https://www.gov.br/ibama/pt-br/servicos/certidoes'],
+      ['Certidão de Quitação Eleitoral da Pessoa Jurídica', 'Regularidade Jurídica', 'https://www.tse.jus.br/servicos-eleitorais/certidoes'],
+    ];
+
+    for (const [nome, categoria, fonte] of documentosFederais) {
+      await db.run(
+        `
+        INSERT INTO documentos (
+          nome_documento, categoria, esfera, cidade, estado, fonte_website
+        ) VALUES (?, ?, 'Federal', NULL, NULL, ?)
+        `,
+        [nome, categoria, fonte],
+      );
+    }
+
+    // Documentos municipais das cidades usadas pelos fornecedores iniciais.
+    const documentosMunicipais = [
+      ['Certidão Negativa de Tributos Municipais de São Paulo', 'São Paulo', 'SP', 'https://duc.prefeitura.sp.gov.br/'],
+      ['Certidão Negativa de Tributos Municipais de Belo Horizonte', 'Belo Horizonte', 'MG', 'https://prefeitura.pbh.gov.br/fazenda/certidoes'],
+      ['Certidão Negativa de Tributos Municipais de Curitiba', 'Curitiba', 'PR', 'https://www.curitiba.pr.gov.br/servicos/certidao-negativa-de-debitos/34'],
+    ];
+
+    for (const [nome, cidade, estado, fonte] of documentosMunicipais) {
+      await db.run(
+        `
+        INSERT INTO documentos (
+          nome_documento, categoria, esfera, cidade, estado, fonte_website
+        ) VALUES (?, 'Regularidade Fiscal', 'Municipal', ?, ?, ?)
+        `,
+        [nome, cidade, estado, fonte],
+      );
+    }
 
     // 3. Documentos dos Fornecedores
     await db.exec(`
@@ -216,6 +328,38 @@ async function seedDatabase() {
         2, 2, 'Ativo', 840000.00, 1, '2026-03-10 14:30:00', '2026-11-10 23:59:59'
       );
     `);
+
+    // Completa a listagem de contratos usando procedimentos e fornecedores existentes.
+    for (let index = 0; index < 50; index += 1) {
+      const fornecedorId = (index % 50) + 1;
+      const procedimentoId = (index % 3) + 1;
+      const contratoNumero = String(index + 33).padStart(3, '0');
+      const mes = String((index % 12) + 1).padStart(2, '0');
+      const dia = String((index % 26) + 1).padStart(2, '0');
+      const status = index % 8 === 0 ? 'Encerrado' : 'Ativo';
+
+      await db.run(
+        `
+        INSERT INTO contratos (
+          ata_id, numero, ano, objeto, fornecedor_id, procedimento_id,
+          status, valor_global, prorrogavel, data_de_assinatura, data_de_termino
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `,
+        [
+          null,
+          contratoNumero,
+          2026,
+          `Prestação de serviços e fornecimento de materiais para a administração pública - lote ${index + 1}.`,
+          fornecedorId,
+          procedimentoId,
+          status,
+          45000 + (index * 12750),
+          index % 2,
+          `2026-${mes}-${dia} 09:00:00`,
+          `2027-${mes}-${dia} 23:59:59`,
+        ],
+      );
+    }
 
     // 10. Alterações Contratuais
     await db.exec(`
