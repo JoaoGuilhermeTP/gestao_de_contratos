@@ -1,4 +1,5 @@
 import { useContratoStore } from "../store/useContratoStore.js";
+import { useFornecedorStore } from "../store/useFornecedorStore.js";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -9,7 +10,7 @@ export default function EditarContratoPage() {
 	// Id from parameter variable
 	const { id } = useParams();
 	const contratos = useContratoStore((state) => state.contratos);
-	const fornecedores = useContratoStore((state) => state.fornecedores);
+	const fornecedores = useFornecedorStore((state) => state.fornecedores);
 	const contrato = contratos.find((contrato) => contrato.id === Number(id));
 	const editarContrato = useContratoStore((state) => state.editarContrato);
 	const [edited, setEdited] = useState(contrato);
