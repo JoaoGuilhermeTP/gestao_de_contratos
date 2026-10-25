@@ -12,15 +12,18 @@ import AdicionarFornecedorPage from "./pages/AdicionarFornecedorPage";
 import EditarFornecedorPage from "./pages/EditarFornecedorPage";
 import { useContratoStore } from "./store/useContratoStore";
 import { useFornecedorStore } from "./store/useFornecedorStore";
+import { useIbgeStore } from "./store/useIbgeStore";
 
 function App() {
   const loading = useContratoStore((state) => state.loading);
   const fetchContratos = useContratoStore((state) => state.fetchContratos);
   const fetchFornecedores = useFornecedorStore((state) => state.fetchFornecedores);
+  const fetchEstados = useIbgeStore((state) => state.fetchEstados);
 
   useEffect(() => {
     fetchContratos();
     fetchFornecedores();
+    fetchEstados();
   }, []);
 
   if (loading) {

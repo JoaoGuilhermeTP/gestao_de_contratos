@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { useFornecedorStore } from "../store/useFornecedorStore.js";
+import EstadoSelect from "../components/EstadoSelect.jsx";
+import MunicipioSelect from "../components/MunicipioSelect.jsx";
 
 const emptyFornecedor = {
   tipo: "",
@@ -158,17 +160,21 @@ export default function EditarFornecedorPage() {
           <input type="text" value={edited.bairro || ""} onChange={(event) => updateField("bairro", event.target.value)} />
         </label>
 
-        <label>
-          Cidade
-          <input type="text" value={edited.cidade || ""} onChange={(event) => updateField("cidade", event.target.value)} />
-          {errors.cidade && <span className="form-error">{errors.cidade}</span>}
-        </label>
+        <MunicipioSelect
+          uf={edited.estado || ""}
+          value={edited.cidade || ""}
+          onChange={(value) => updateField("cidade", value)}
+          error={errors.cidade}
+        />
 
-        <label>
-          Estado
-          <input type="text" maxLength="2" value={edited.estado || ""} onChange={(event) => updateField("estado", event.target.value.toUpperCase())} />
-          {errors.estado && <span className="form-error">{errors.estado}</span>}
-        </label>
+        <EstadoSelect
+          value={edited.estado || ""}
+          onChange={(value) => {
+            updateField("estado", value);
+            updateField("cidade", "");
+          }}
+          error={errors.estado}
+        />
 
         <label>
           E-mail

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFornecedorStore } from "../store/useFornecedorStore.js";
+import EstadoSelect from "../components/EstadoSelect.jsx";
+import MunicipioSelect from "../components/MunicipioSelect.jsx";
 
 const initialFornecedor = {
   tipo: "",
@@ -141,6 +143,22 @@ export default function AdicionarFornecedorPage() {
           <input type="text" value={novoFornecedor.cep} onChange={(event) => updateField("cep", event.target.value)} />
         </label>
 
+        <EstadoSelect
+          value={novoFornecedor.estado}
+          onChange={(value) => {
+            updateField("estado", value);
+            updateField("cidade", "");
+          }}
+          error={errors.estado}
+        />
+
+        <MunicipioSelect
+          uf={novoFornecedor.estado}
+          value={novoFornecedor.cidade}
+          onChange={(value) => updateField("cidade", value)}
+          error={errors.cidade}
+        />
+
         <label>
           Logradouro
           <input type="text" value={novoFornecedor.logradouro} onChange={(event) => updateField("logradouro", event.target.value)} />
@@ -156,17 +174,6 @@ export default function AdicionarFornecedorPage() {
           <input type="text" value={novoFornecedor.bairro} onChange={(event) => updateField("bairro", event.target.value)} />
         </label>
 
-        <label>
-          Cidade
-          <input type="text" value={novoFornecedor.cidade} onChange={(event) => updateField("cidade", event.target.value)} />
-          {errors.cidade && <span className="form-error">{errors.cidade}</span>}
-        </label>
-
-        <label>
-          Estado
-          <input type="text" maxLength="2" value={novoFornecedor.estado} onChange={(event) => updateField("estado", event.target.value.toUpperCase())} />
-          {errors.estado && <span className="form-error">{errors.estado}</span>}
-        </label>
 
         <label>
           E-mail
