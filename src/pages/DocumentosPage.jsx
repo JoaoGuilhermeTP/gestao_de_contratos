@@ -4,6 +4,7 @@ import { useDocumentoStore } from "../store/useDocumentoStore.js";
 
 export default function DocumentosPage() {
   const documentos = useDocumentoStore((state) => state.documentos);
+  // Keep all filter values together so each change triggers a new filtered list.
   const [filtros, setFiltros] = useState({
     nome: "",
     categoria: "",
@@ -12,10 +13,22 @@ export default function DocumentosPage() {
     estado: "",
   });
 
-  const categorias = [...new Set(documentos.map((documento) => documento.categoria).filter(Boolean))].sort();
-  const esferas = [...new Set(documentos.map((documento) => documento.esfera).filter(Boolean))].sort();
+  // Build filter options from the records currently loaded in the store.
+  const categorias = documentos
+    .map((documento) => documento.categoria)
+    .filter(Boolean)
+    .filter((categoria, index, valores) => valores.indexOf(categoria) === index)
+    .sort();
 
+  const esferas = documentos
+    .map((documento) => documento.esfera)
+    .filter(Boolean)
+    .filter((esfera, index, valores) => valores.indexOf(esfera) === index)
+    .sort();
+
+  // Every active filter must match. Empty filters are ignored.
   const documentosFiltrados = documentos.filter((documento) => {
+    // Optional chaining keeps filtering safe when an optional database field is null.
     const nomeDocumento = documento.nome_documento?.toLowerCase() || "";
     const cidade = documento.cidade?.toLowerCase() || "";
     const estado = documento.estado?.toLowerCase() || "";
@@ -45,51 +58,35 @@ export default function DocumentosPage() {
         </Link>
       </header>
 
+      {/* Show filters only when there are records to search. */}
       {documentos.length > 0 ? (
         <>
           <div className="filter-panel">
             <h3>Filtrar documentos</h3>
             <div className="filter-grid supplier-filter-grid">
-              <input
-                type="text"
-                placeholder="Nome do documento"
-                value={filtros.nome}
-                onChange={(event) => setFiltros({ ...filtros, nome: event.target.value })}
-              />
-              <select
-                value={filtros.categoria}
-                onChange={(event) => setFiltros({ ...filtros, categoria: event.target.value })}
-              >
+              <input type="text" placeholder="Nome do documento" value={filtros.nome} onChange={(event) => setFiltros({ ...filtros, nome: event.target.value })} />
+              <select value={filtros.categoria} onChange={(event) => setFiltros({ ...filtros, categoria: event.target.value })}>
                 <option value="">Todas as categorias</option>
                 {categorias.map((categoria) => (
-                  <option key={categoria} value={categoria}>{categoria}</option>
+                  <option key={categoria} value={categoria}>
+                    {categoria}
+                  </option>
                 ))}
               </select>
-              <select
-                value={filtros.esfera}
-                onChange={(event) => setFiltros({ ...filtros, esfera: event.target.value })}
-              >
+              <select value={filtros.esfera} onChange={(event) => setFiltros({ ...filtros, esfera: event.target.value })}>
                 <option value="">Todas as esferas</option>
                 {esferas.map((esfera) => (
-                  <option key={esfera} value={esfera}>{esfera}</option>
+                  <option key={esfera} value={esfera}>
+                    {esfera}
+                  </option>
                 ))}
               </select>
-              <input
-                type="text"
-                placeholder="Cidade"
-                value={filtros.cidade}
-                onChange={(event) => setFiltros({ ...filtros, cidade: event.target.value })}
-              />
-              <input
-                type="text"
-                maxLength="2"
-                placeholder="Estado (UF)"
-                value={filtros.estado}
-                onChange={(event) => setFiltros({ ...filtros, estado: event.target.value.toUpperCase() })}
-              />
+              <input type="text" placeholder="Cidade" value={filtros.cidade} onChange={(event) => setFiltros({ ...filtros, cidade: event.target.value })} />
+              <input type="text" maxLength="2" placeholder="Estado (UF)" value={filtros.estado} onChange={(event) => setFiltros({ ...filtros, estado: event.target.value.toUpperCase() })} />
             </div>
           </div>
 
+          {/* A separate empty state makes an active filter with no matches clear to the user. */}
           {documentosFiltrados.length > 0 ? (
             <table>
               <thead>
@@ -108,9 +105,11 @@ export default function DocumentosPage() {
                     <td>{documento.categoria}</td>
                     <td>{documento.esfera}</td>
                     <td>
+                      {/* Documents without a city or state are treated as national. */}
                       {[documento.cidade, documento.estado].filter(Boolean).join("/") || "Nacional"}
                     </td>
                     <td>
+                      {/* External sources open in a new tab without passing referrer information. */}
                       {documento.fonte_website ? (
                         <a href={documento.fonte_website} target="_blank" rel="noreferrer">
                           Acessar fonte
