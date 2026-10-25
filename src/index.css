@@ -799,6 +799,13 @@ tbody {
   border-collapse: collapse;
 }
 
+thead {
+  display: table;
+  width: 100%;
+  min-width: 1080px;
+  table-layout: fixed;
+}
+
 th,
 td {
   padding: 10px 12px;

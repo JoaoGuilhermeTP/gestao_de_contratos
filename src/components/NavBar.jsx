@@ -6,6 +6,7 @@ export default function Navbar() {
       <Link to="/">Home</Link>
       <Link to="/contratos">Contratos</Link>
       <Link to="/fornecedores">Fornecedores</Link>
+      <Link to="/documentos">Documentos</Link>
     </nav>
   );
 }

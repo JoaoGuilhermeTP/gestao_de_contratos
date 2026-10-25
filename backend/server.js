@@ -33,6 +33,58 @@ app.get("/api/fornecedores", async (req, res) => {
 // ROTAS DE CONTRATOS
 // ==========================================
 
+// GET: Buscar todos os documentos
+app.get("/api/documentos", async (req, res) => {
+  try {
+    const db = await openDb();
+    const documentos = await db.all("SELECT * FROM documentos ORDER BY nome_documento");
+    res.json(documentos);
+  } catch (error) {
+    console.error("Erro na rota GET /api/documentos:", error);
+    res.status(500).json({ error: "Erro ao buscar documentos" });
+  }
+});
+
+// POST: Criar um novo documento
+app.post("/api/documentos", async (req, res) => {
+  try {
+    const db = await openDb();
+    const {
+      nome_documento,
+      categoria,
+      esfera,
+      cidade,
+      estado,
+      fonte_website,
+    } = req.body;
+
+    const result = await db.run(
+      `
+      INSERT INTO documentos (
+        nome_documento, categoria, esfera, cidade, estado, fonte_website
+      ) VALUES (?, ?, ?, ?, ?, ?)
+      `,
+      [
+        nome_documento,
+        categoria,
+        esfera,
+        cidade || null,
+        estado || null,
+        fonte_website || null,
+      ],
+    );
+
+    const novoDocumento = await db.get(
+      "SELECT * FROM documentos WHERE id = ?",
+      result.lastID,
+    );
+    res.status(201).json(novoDocumento);
+  } catch (error) {
+    console.error("Erro na rota POST /api/documentos:", error);
+    res.status(500).json({ error: "Erro ao criar documento" });
+  }
+});
+
 // GET: Buscar todos os contratos
 app.get("/api/contratos", async (req, res) => {
   try {

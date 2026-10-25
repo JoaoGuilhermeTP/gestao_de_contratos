@@ -10,20 +10,25 @@ import EditarContratoPage from "./pages/EditarContratoPage";
 import FornecedorPage from "./pages/FornecedorPage";
 import AdicionarFornecedorPage from "./pages/AdicionarFornecedorPage";
 import EditarFornecedorPage from "./pages/EditarFornecedorPage";
+import DocumentosPage from "./pages/DocumentosPage";
+import AdicionarDocumentoPage from "./pages/AdicionarDocumentoPage";
 import { useContratoStore } from "./store/useContratoStore";
 import { useFornecedorStore } from "./store/useFornecedorStore";
 import { useIbgeStore } from "./store/useIbgeStore.js";
+import { useDocumentoStore } from "./store/useDocumentoStore.js";
 
 function App() {
   const loading = useContratoStore((state) => state.loading);
   const fetchContratos = useContratoStore((state) => state.fetchContratos);
   const fetchFornecedores = useFornecedorStore((state) => state.fetchFornecedores);
   const fetchEstados = useIbgeStore((state) => state.fetchEstados);
+  const fetchDocumentos = useDocumentoStore((state) => state.fetchDocumentos);
 
   useEffect(() => {
     fetchContratos();
     fetchFornecedores();
     fetchEstados();
+    fetchDocumentos();
   }, []);
 
   if (loading) {
@@ -37,10 +42,12 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/contratos" element={<ContratosPage />} />
         <Route path="/fornecedores" element={<FornecedoresPage />} />
+        <Route path="/documentos" element={<DocumentosPage />} />
         <Route path={`/contratos/:id`} element={<ContratoPage />} />
         <Route path={`/contratos/editar/:id`} element={<EditarContratoPage />} />
         <Route path={"/adicionar_contrato"} element={<AdicionarContratoPage />} />
         <Route path={"/adicionar_fornecedor"} element={<AdicionarFornecedorPage />} />
+        <Route path={"/adicionar_documento"} element={<AdicionarDocumentoPage />} />
         <Route path={`/fornecedor/:id`} element={<FornecedorPage />} />
         <Route path={`/fornecedor/editar/:id`} element={<EditarFornecedorPage />} />
       </Routes>
