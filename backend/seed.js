@@ -1,34 +1,34 @@
-import { openDb, setupDatabase } from './database.js'; // Ajuste o nome do arquivo se necessário
+import { pool, setupDatabase } from './database.js';
 
 async function seedDatabase() {
   // Garante que as tabelas existem antes de inserir os dados
   await setupDatabase();
-  const db = await openDb();
+  const client = await pool.connect();
 
   try {
-    await db.exec('BEGIN TRANSACTION;');
+    await client.query('BEGIN;');
 
-    // Limpa os dados existentes (na ordem inversa das dependências) para permitir rodar o seed múltiplas vezes
-    await db.exec(`
-      UPDATE secretarias SET secretario_titular_id = NULL;
-      DELETE FROM ocorrencias_contrato;
-      DELETE FROM gestao;
-      DELETE FROM autorizacoes_de_fornecimento;
-      DELETE FROM alteracoes_contratuais;
-      DELETE FROM contratos;
-      DELETE FROM atas_registro_precos;
-      DELETE FROM procedimentos;
-      DELETE FROM processos;
-      DELETE FROM servidores;
-      DELETE FROM secretarias;
-      DELETE FROM documentos_fornecedores;
-      DELETE FROM documentos;
-      DELETE FROM fornecedores;
-      DELETE FROM sqlite_sequence;
+    // Limpa todos os dados existentes e reinicia a contagem dos IDs (SERIAL) para 1
+    await client.query(`
+      TRUNCATE TABLE
+        ocorrencias_contrato,
+        gestao,
+        autorizacoes_de_fornecimento,
+        alteracoes_contratuais,
+        contratos,
+        atas_registro_precos,
+        procedimentos,
+        processos,
+        servidores,
+        secretarias,
+        documentos_fornecedores,
+        documentos,
+        fornecedores
+      RESTART IDENTITY CASCADE;
     `);
 
     // 1. Fornecedores
-    await db.exec(`
+    await client.query(`
       INSERT INTO fornecedores (
         tipo, razao_social, nome_fantasia, cpf_cnpj, inscricao_estadual, inscricao_municipal,
         cep, logradouro, numero, bairro, cidade, estado, email, telefone, representante_legal, status
@@ -60,17 +60,17 @@ async function seedDatabase() {
       ['São Paulo', 'SP'], ['Aracaju', 'SE'], ['Palmas', 'TO'],
     ];
 
-    // Completa o catálogo com fornecedores distribuídos pelas 27 unidades federativas.
+    // Completa o catálogo com fornecedores distribuídos pelas 27 unidades federativas
     for (let index = 0; index < 47; index += 1) {
       const [cidade, estado] = localidades[index % localidades.length];
       const numero = String(index + 4).padStart(2, '0');
-      await db.run(
+      await client.query(
         `
         INSERT INTO fornecedores (
           tipo, razao_social, nome_fantasia, cpf_cnpj, inscricao_estadual,
           inscricao_municipal, cep, logradouro, numero, bairro, cidade, estado,
           email, telefone, representante_legal, status
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
         `,
         [
           'Pessoa Jurídica',
@@ -89,13 +89,12 @@ async function seedDatabase() {
           `(00) 90000-${numero}`,
           `Representante Regional ${numero}`,
           index % 9 === 0 ? 'Suspenso' : 'Ativo',
-        ],
+        ]
       );
     }
 
     // 2. Documentos (Catálogo de certidões exigidas)
-    // As fontes apontam para os portais oficiais usados para emitir ou consultar cada documento.
-    await db.exec(`
+    await client.query(`
       INSERT INTO documentos (
         nome_documento, categoria, esfera, cidade, estado, fonte_website
       ) VALUES
@@ -157,20 +156,19 @@ async function seedDatabase() {
       ['SP', 'São Paulo'], ['SE', 'Sergipe'], ['TO', 'Tocantins'],
     ];
 
-    // Cada UF recebe um documento estadual para que o filtro por localização seja demonstrável.
     for (const [sigla, nome] of documentosEstaduais) {
-      await db.run(
+      await client.query(
         `
         INSERT INTO documentos (
           nome_documento, categoria, esfera, cidade, estado, fonte_website
-        ) VALUES (?, ?, 'Estadual', NULL, ?, ?)
+        ) VALUES ($1, $2, 'Estadual', NULL, $3, $4)
         `,
         [
           `Certidão Negativa de Débitos Estaduais - ${nome}`,
           'Regularidade Fiscal',
           sigla,
           `https://www.gov.br/pt-br/servicos/emitir-certidao-de-regularidade-fiscal-${sigla.toLowerCase()}`,
-        ],
+        ]
       );
     }
 
@@ -188,17 +186,16 @@ async function seedDatabase() {
     ];
 
     for (const [nome, categoria, fonte] of documentosFederais) {
-      await db.run(
+      await client.query(
         `
         INSERT INTO documentos (
           nome_documento, categoria, esfera, cidade, estado, fonte_website
-        ) VALUES (?, ?, 'Federal', NULL, NULL, ?)
+        ) VALUES ($1, $2, 'Federal', NULL, NULL, $3)
         `,
-        [nome, categoria, fonte],
+        [nome, categoria, fonte]
       );
     }
 
-    // Documentos municipais das cidades usadas pelos fornecedores iniciais.
     const documentosMunicipais = [
       ['Certidão Negativa de Tributos Municipais de São Paulo', 'São Paulo', 'SP', 'https://duc.prefeitura.sp.gov.br/'],
       ['Certidão Negativa de Tributos Municipais de Belo Horizonte', 'Belo Horizonte', 'MG', 'https://prefeitura.pbh.gov.br/fazenda/certidoes'],
@@ -206,18 +203,18 @@ async function seedDatabase() {
     ];
 
     for (const [nome, cidade, estado, fonte] of documentosMunicipais) {
-      await db.run(
+      await client.query(
         `
         INSERT INTO documentos (
           nome_documento, categoria, esfera, cidade, estado, fonte_website
-        ) VALUES (?, 'Regularidade Fiscal', 'Municipal', ?, ?, ?)
+        ) VALUES ($1, 'Regularidade Fiscal', 'Municipal', $2, $3, $4)
         `,
-        [nome, cidade, estado, fonte],
+        [nome, cidade, estado, fonte]
       );
     }
 
     // 3. Documentos dos Fornecedores
-    await db.exec(`
+    await client.query(`
       INSERT INTO documentos_fornecedores (
         documento_id, fornecedor_id, emissao, validade, arquivo_url, status
       ) VALUES
@@ -227,8 +224,8 @@ async function seedDatabase() {
       (7, 3, '2025-06-01', '2025-12-01', '/uploads/certidoes/cnd_municipal_supribrasil.pdf', 'Vencido');
     `);
 
-    // 4. Secretarias (Inseridas inicialmente com secretario_titular_id NULL)
-    await db.exec(`
+    // 4. Secretarias
+    await client.query(`
       INSERT INTO secretarias (nome_secretaria, sigla_secretaria, secretario_titular_id) VALUES
       ('Secretaria Municipal de Administração', 'SEMAD', NULL),
       ('Secretaria Municipal de Educação', 'SEMED', NULL),
@@ -236,7 +233,7 @@ async function seedDatabase() {
     `);
 
     // 5. Servidores
-    await db.exec(`
+    await client.query(`
       INSERT INTO servidores (
         secretaria_id, nome, registro_funcional, cargo, email, telefone
       ) VALUES
@@ -249,14 +246,14 @@ async function seedDatabase() {
     `);
 
     // Atualiza os Secretários Titulares nas respectivas Secretarias
-    await db.exec(`
+    await client.query(`
       UPDATE secretarias SET secretario_titular_id = 1 WHERE id = 1;
       UPDATE secretarias SET secretario_titular_id = 4 WHERE id = 2;
       UPDATE secretarias SET secretario_titular_id = 5 WHERE id = 3;
     `);
 
     // 6. Processos Administrativos
-    await db.exec(`
+    await client.query(`
       INSERT INTO processos (
         numero, ano, secretaria_requisitante_id, assunto, data_abertura, status, link_sistema_eletronico
       ) VALUES
@@ -278,7 +275,7 @@ async function seedDatabase() {
     `);
 
     // 7. Procedimentos Licitatórios
-    await db.exec(`
+    await client.query(`
       INSERT INTO procedimentos (
         processo_id, numero, ano, modalidade, objeto, status, data_homologacao, link_pncp
       ) VALUES
@@ -300,7 +297,7 @@ async function seedDatabase() {
     `);
 
     // 8. Atas de Registro de Preços (ARP)
-    await db.exec(`
+    await client.query(`
       INSERT INTO atas_registro_precos (
         numero, ano, objeto, fornecedor_id, procedimento_id, data_assinatura, data_validade, status
       ) VALUES
@@ -312,7 +309,7 @@ async function seedDatabase() {
     `);
 
     // 9. Contratos
-    await db.exec(`
+    await client.query(`
       INSERT INTO contratos (
         ata_id, numero, ano, objeto, fornecedor_id, procedimento_id,
         status, valor_global, prorrogavel, data_de_assinatura, data_de_termino
@@ -329,7 +326,7 @@ async function seedDatabase() {
       );
     `);
 
-    // Completa a listagem de contratos usando procedimentos e fornecedores existentes.
+    // Completa a listagem de contratos usando procedimentos e fornecedores existentes
     for (let index = 0; index < 50; index += 1) {
       const fornecedorId = (index % 50) + 1;
       const procedimentoId = (index % 3) + 1;
@@ -338,12 +335,12 @@ async function seedDatabase() {
       const dia = String((index % 26) + 1).padStart(2, '0');
       const status = index % 8 === 0 ? 'Encerrado' : 'Ativo';
 
-      await db.run(
+      await client.query(
         `
         INSERT INTO contratos (
           ata_id, numero, ano, objeto, fornecedor_id, procedimento_id,
           status, valor_global, prorrogavel, data_de_assinatura, data_de_termino
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
         `,
         [
           null,
@@ -357,12 +354,12 @@ async function seedDatabase() {
           index % 2,
           `2026-${mes}-${dia} 09:00:00`,
           `2027-${mes}-${dia} 23:59:59`,
-        ],
+        ]
       );
     }
 
     // 10. Alterações Contratuais
-    await db.exec(`
+    await client.query(`
       INSERT INTO alteracoes_contratuais (
         contrato_id, tipo, data_assinatura, acrescimo_prazo_dias, valor_acrescimo, valor_supressao, justificativa
       ) VALUES
@@ -373,7 +370,7 @@ async function seedDatabase() {
     `);
 
     // 11. Autorizações de Fornecimento (AF)
-    await db.exec(`
+    await client.query(`
       INSERT INTO autorizacoes_de_fornecimento (
         ata_id, contrato_id, procedimento_id, numero, ano, fornecedor_id,
         objeto, valor_total, data_emissao, prazo_entrega_dias, status
@@ -396,7 +393,7 @@ async function seedDatabase() {
     `);
 
     // 12. Gestão e Fiscalização Contratual
-    await db.exec(`
+    await client.query(`
       INSERT INTO gestao (
         servidor_id, contrato_id, papel, titularidade, portaria_designacao, data_inicio, data_fim
       ) VALUES
@@ -406,7 +403,7 @@ async function seedDatabase() {
     `);
 
     // 13. Ocorrências de Contrato
-    await db.exec(`
+    await client.query(`
       INSERT INTO ocorrencias_contrato (
         contrato_id, servidor_id, data_ocorrencia, titulo_ocorrencia, descricao,
         gravidade, prazo_regularizacao, status, resposta_fornecedor, anexo_url
@@ -427,13 +424,14 @@ async function seedDatabase() {
       );
     `);
 
-    await db.exec('COMMIT;');
-    console.log('Seed executado com sucesso! Todas as 13 tabelas foram populadas.');
+    await client.query('COMMIT;');
+    console.log('Seed executado com sucesso! Todas as 13 tabelas foram populadas no Neon.');
   } catch (error) {
-    await db.exec('ROLLBACK;');
+    await client.query('ROLLBACK;');
     console.error('Erro ao executar o seed (transação revertida):', error);
   } finally {
-    await db.close();
+    client.release();
+    await pool.end();
   }
 }
 
