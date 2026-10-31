@@ -389,6 +389,17 @@ main > section {
   margin: 0;
 }
 
+.detail-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.detail-header-actions button {
+  margin: 0;
+}
+
 .detail-card {
   margin-top: 22px;
   padding: 24px 26px;

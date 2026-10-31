@@ -13,26 +13,36 @@ import EditarFornecedorPage from "./pages/EditarFornecedorPage";
 import DocumentosPage from "./pages/DocumentosPage";
 import AdicionarDocumentoPage from "./pages/AdicionarDocumentoPage";
 import AdicionarDocumentoFornecedorPage from "./pages/AdicionarDocumentoFornecedorPage";
+import ServidoresPage from "./pages/ServidoresPage.jsx";
+import AdicionarServidorPage from "./pages/AdicionarServidorPage.jsx";
+import ServidorPage from "./pages/ServidorPage.jsx";
+import EditarServidorPage from "./pages/EditarServidorPage.jsx";
 import { useContratoStore } from "./store/useContratoStore";
 import { useFornecedorStore } from "./store/useFornecedorStore";
 import { useIbgeStore } from "./store/useIbgeStore.js";
 import { useDocumentoStore } from "./store/useDocumentoStore.js";
+import { useServidorStore } from "./store/useServidorStore.js";
 
 function App() {
-  const loading = useContratoStore((state) => state.loading);
+  const loadingContratos = useContratoStore((state) => state.loading);
+  const loadingFornecedores = useFornecedorStore((state) => state.loading);
+  const loadingDocumentos = useDocumentoStore((state) => state.loading);
+  const loadingServidores = useServidorStore((state) => state.loading);
   const fetchContratos = useContratoStore((state) => state.fetchContratos);
   const fetchFornecedores = useFornecedorStore((state) => state.fetchFornecedores);
   const fetchEstados = useIbgeStore((state) => state.fetchEstados);
   const fetchDocumentos = useDocumentoStore((state) => state.fetchDocumentos);
+  const fetchServidores = useServidorStore((state) => state.fetchServidores);
 
   useEffect(() => {
     fetchContratos();
     fetchFornecedores();
     fetchEstados();
     fetchDocumentos();
+    fetchServidores();
   }, []);
 
-  if (loading) {
+  if (loadingContratos || loadingFornecedores || loadingDocumentos || loadingServidores) {
     return <div style={{ padding: "40px", textAlign: "center", fontFamily: "DM Sans" }}>Conectando ao banco de dados...</div>;
   }
 
@@ -44,10 +54,16 @@ function App() {
         <Route path="/contratos" element={<ContratosPage />} />
         <Route path="/fornecedores" element={<FornecedoresPage />} />
         <Route path="/documentos" element={<DocumentosPage />} />
+        <Route path="/servidores" element={<ServidoresPage />} />
+        <Route path="/servidor/:id" element={<ServidorPage />} />
+        <Route path="/servidor/editar/:id" element={<EditarServidorPage />} />
+
         <Route path={`/contratos/:id`} element={<ContratoPage />} />
         <Route path={`/contratos/editar/:id`} element={<EditarContratoPage />} />
         <Route path={"/adicionar_contrato"} element={<AdicionarContratoPage />} />
+
         <Route path={"/adicionar_fornecedor"} element={<AdicionarFornecedorPage />} />
+        <Route path={"/adicionar_servidor"} element={<AdicionarServidorPage />} />
         <Route path={"/adicionar_documento"} element={<AdicionarDocumentoPage />} />
         <Route path={"/fornecedor/:id/adicionar-documento"} element={<AdicionarDocumentoFornecedorPage />} />
         <Route path={`/fornecedor/:id`} element={<FornecedorPage />} />
