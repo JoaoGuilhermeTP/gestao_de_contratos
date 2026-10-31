@@ -63,6 +63,11 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const id = Number(req.params.id);
+
+    if (!Number.isInteger(id) || id <= 0) {
+      return res.status(400).json({ error: "ID do fornecedor inválido" });
+    }
+    
     const {
       tipo, razao_social, nome_fantasia, cpf_cnpj, inscricao_estadual,
       inscricao_municipal, cep, logradouro, numero, bairro, cidade,
