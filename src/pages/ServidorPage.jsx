@@ -1,14 +1,18 @@
 import { Link, Navigate, useParams } from "react-router-dom";
 import { useServidorStore } from "../store/useServidorStore.js";
+import { useSecretariaStore } from "../store/useSecretariaStore.js";
 
 export default function ServidorPage() {
   const { id } = useParams();
   const servidores = useServidorStore((state) => state.servidores);
+  const secretarias = useSecretariaStore((state) => state.secretarias);
   const servidor = servidores.find((item) => item.id === Number(id));
 
   if (!servidor) {
     return <Navigate to="/servidores" replace />;
   }
+
+  const secretaria = secretarias.find((secretaria) => Number(secretaria.id) === Number(servidor.secretaria_id));
 
   return (
     <section className="detail-page">
@@ -47,7 +51,7 @@ export default function ServidorPage() {
           </div>
           <div>
             <dt>Secretaria</dt>
-            <dd>{servidor.secretaria_id}</dd>
+            <dd>{secretaria.sigla_secretaria} - {secretaria.nome_secretaria}</dd>
           </div>
           <div>
             <dt>E-mail</dt>

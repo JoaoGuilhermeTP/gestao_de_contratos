@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useServidorStore } from "../store/useServidorStore.js";
+import { useSecretariaStore } from "../store/useSecretariaStore.js";
 
 const initialServidor = {
   secretaria_id: "",
@@ -21,6 +22,7 @@ const requiredFields = {
 export default function AdicionarServidorPage() {
   const navigate = useNavigate();
   const addServidor = useServidorStore((state) => state.addServidor);
+  const secretarias = useSecretariaStore((state) => state.secretarias);
   const [novoServidor, setNovoServidor] = useState(initialServidor);
   const [errors, setErrors] = useState({});
 
@@ -84,13 +86,26 @@ export default function AdicionarServidorPage() {
         </div>
 
         <label>
-          ID da secretaria
-          <input
-            type="number"
-            min="1"
+          Secretaria do servidor
+          <select
             value={novoServidor.secretaria_id}
-            onChange={(event) => updateField("secretaria_id", event.target.value)}
-          />
+            onChange={(e) =>
+              setNovoServidor({
+                ...novoServidor,
+                secretaria_id: Number(e.target.value),
+              })
+            }
+          >
+            <option value="" disabled>
+              Selecione uma secretaria
+            </option>
+
+            {secretarias.map((secretaria) => (
+              <option key={secretaria.id} value={secretaria.id}>
+                {secretaria.sigla_secretaria} - {secretaria.nome_secretaria}
+              </option>
+            ))}
+          </select>
           {errors.secretaria_id && <span className="form-error">{errors.secretaria_id}</span>}
         </label>
 

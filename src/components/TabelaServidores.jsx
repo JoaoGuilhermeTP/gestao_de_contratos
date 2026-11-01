@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useServidorStore } from "../store/useServidorStore.js";
+import { useSecretariaStore } from "../store/useSecretariaStore.js";
 
 export default function TabelaServidores() {
 
   const servidores = useServidorStore((state) => state.servidores);
+  const secretarias = useSecretariaStore((state) => state.secretarias);
 
   const [filtros, setFiltros] = useState({
     secretaria_id: "",
@@ -59,7 +61,7 @@ export default function TabelaServidores() {
               <tbody>
               {servidoresFiltrados.map((servidor) => (
                 <tr key={servidor.id}>
-                  <td className="supplier-text-cell">{servidor.secretaria_id}</td>
+                  <td className="supplier-text-cell">{secretarias.find((secretaria) => secretaria.id === servidor.secretaria_id).nome_secretaria}</td>
                   <td className="supplier-text-cell">
                     <Link to={`/servidor/${servidor.id}`}>{servidor.nome}</Link>
                   </td>

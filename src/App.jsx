@@ -22,17 +22,20 @@ import { useFornecedorStore } from "./store/useFornecedorStore";
 import { useIbgeStore } from "./store/useIbgeStore.js";
 import { useDocumentoStore } from "./store/useDocumentoStore.js";
 import { useServidorStore } from "./store/useServidorStore.js";
+import { useSecretariaStore } from "./store/useSecretariaStore.js";
 
 function App() {
   const loadingContratos = useContratoStore((state) => state.loading);
   const loadingFornecedores = useFornecedorStore((state) => state.loading);
   const loadingDocumentos = useDocumentoStore((state) => state.loading);
   const loadingServidores = useServidorStore((state) => state.loading);
+  const loadingSecretarias = useSecretariaStore((state) => state.loading);
   const fetchContratos = useContratoStore((state) => state.fetchContratos);
   const fetchFornecedores = useFornecedorStore((state) => state.fetchFornecedores);
   const fetchEstados = useIbgeStore((state) => state.fetchEstados);
   const fetchDocumentos = useDocumentoStore((state) => state.fetchDocumentos);
   const fetchServidores = useServidorStore((state) => state.fetchServidores);
+  const fetchSecretarias = useSecretariaStore((state) => state.fetchSecretarias);
 
   useEffect(() => {
     fetchContratos();
@@ -40,9 +43,10 @@ function App() {
     fetchEstados();
     fetchDocumentos();
     fetchServidores();
+    fetchSecretarias();
   }, []);
 
-  if (loadingContratos || loadingFornecedores || loadingDocumentos || loadingServidores) {
+  if (loadingContratos || loadingFornecedores || loadingDocumentos || loadingServidores || loadingSecretarias) {
     return <div style={{ padding: "40px", textAlign: "center", fontFamily: "DM Sans" }}>Conectando ao banco de dados...</div>;
   }
 
