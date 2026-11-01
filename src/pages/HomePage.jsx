@@ -9,9 +9,9 @@ function Home() {
         <h1>Gerenciador de Contratos</h1>
 
         <p>
-          Uma aplicação web para auxiliar no gerenciamento e acompanhamento de
-          contratos administrativos, centralizando informações importantes para
-          sua gestão e fiscalização.
+          Uma plataforma para centralizar contratos administrativos, fornecedores,
+          documentos e servidores, apoiando as rotinas de gestão, fiscalização e
+          acompanhamento contratual.
         </p>
 
         <nav>
@@ -23,15 +23,15 @@ function Home() {
         <h2>Sobre o projeto</h2>
 
         <p>
-          Este projeto está sendo desenvolvido como uma aplicação prática para
-          aplicar conhecimentos de desenvolvimento web, arquitetura de
-          aplicações e gerenciamento de dados em um problema do mundo real.
+          O sistema organiza informações essenciais da administração pública em
+          um único lugar, facilitando a consulta de contratos, o relacionamento
+          com fornecedores e o acompanhamento dos responsáveis pela gestão.
         </p>
 
         <p>
-          A ideia é evoluir o sistema progressivamente, adicionando novas
-          funcionalidades e aprimorando sua usabilidade, organização e qualidade
-          técnica.
+          A aplicação está em desenvolvimento contínuo, com foco em uma
+          experiência simples, dados centralizados e funcionalidades alinhadas
+          às necessidades da gestão contratual.
         </p>
       </section>
 
@@ -43,7 +43,9 @@ function Home() {
           <li>JavaScript</li>
           <li>Vite</li>
           <li>React Router</li>
-          <li>Git e GitHub</li>
+          <li>Zustand</li>
+          <li>Node.js e Express</li>
+          <li>PostgreSQL</li>
         </ul>
       </section>
 
@@ -51,14 +53,22 @@ function Home() {
         <h2>Principais funcionalidades</h2>
 
         <ul>
-          <li>Cadastro e consulta de contratos</li>
-          <li>Gerenciamento de fornecedores</li>
-          <li>Relacionamento entre contratos e fornecedores</li>
-          <li>Organização das informações para acompanhamento dos contratos</li>
+          <li>Cadastro, consulta, edição e exclusão de contratos</li>
+          <li>Cadastro e gerenciamento de fornecedores</li>
+          <li>Cadastro e consulta de documentos contratuais</li>
+          <li>Cadastro e gerenciamento de servidores públicos</li>
+          <li>Organização de servidores por secretaria</li>
+          <li>Filtros para localizar informações com mais rapidez</li>
         </ul>
 
         <p>
           <Link to="/contratos">Explorar contratos →</Link>
+          {" · "}
+          <Link to="/fornecedores">Ver fornecedores →</Link>
+          {" · "}
+          <Link to="/documentos">Consultar documentos →</Link>
+          {" · "}
+          <Link to="/servidores">Ver servidores →</Link>
         </p>
       </section>
 
@@ -74,7 +84,7 @@ function Home() {
         <p>
           Tenho interesse principalmente em desenvolvimento web, backend,
           automação de processos e criação de soluções que resolvam problemas
-          reais.
+          reais da administração e de outros contextos.
         </p>
 
         <p>
