@@ -8,50 +8,26 @@ export default function TabelaContratos({ fornecedorId }) {
   const fornecedores = useFornecedorStore((state) => state.fornecedores);
   const deletarContrato = useContratoStore((state) => state.deletarContrato);
 
-  const contratos = fornecedorId
-    ? todosContratos.filter(
-        (contrato) => contrato.fornecedor_id === Number(fornecedorId),
-      )
-    : todosContratos;
+  const contratos = fornecedorId ? todosContratos.filter((contrato) => contrato.fornecedor_id === Number(fornecedorId)) : todosContratos;
 
   const [filtros, setFiltros] = useState({
     numero: "",
     ano: "",
     objeto: "",
-    fornecedor: "",
+    fornecedor_id: "",
     procedimento: "",
     tipo: "",
   });
 
   const contratosFiltrados = contratos.filter((contrato) => {
-    const matchNumero =
-      !filtros.numero || String(contrato.numero) === filtros.numero;
+    const matchNumero = !filtros.numero || String(contrato.numero) === filtros.numero;
     const matchAno = !filtros.ano || String(contrato.ano) === filtros.ano;
-    const matchObjeto =
-      !filtros.objeto ||
-      contrato.objeto.toLowerCase().includes(filtros.objeto.toLowerCase());
-    const matchFornecedor =
-      !filtros.fornecedor ||
-      contrato.fornecedor
-        .toLowerCase()
-        .includes(filtros.fornecedor.toLowerCase());
-    const matchProcedimento =
-      !filtros.procedimento ||
-      contrato.procedimento
-        .toLowerCase()
-        .includes(filtros.procedimento.toLowerCase());
-    const matchTipo =
-      !filtros.tipo ||
-      contrato.tipo.toLowerCase().includes(filtros.tipo.toLowerCase());
+    const matchObjeto = !filtros.objeto || contrato.objeto.toLowerCase().includes(filtros.objeto.toLowerCase());
+    const matchFornecedor = !filtros.fornecedor_id || Number(contrato.fornecedor_id) === Number(filtros.fornecedor_id);
+    const matchProcedimento = !filtros.procedimento || contrato.procedimento.toLowerCase().includes(filtros.procedimento.toLowerCase());
+    const matchTipo = !filtros.tipo || contrato.tipo.toLowerCase().includes(filtros.tipo.toLowerCase());
     // Only keep the contract if ALL active filters match
-    return (
-      matchNumero &&
-      matchAno &&
-      matchObjeto &&
-      matchFornecedor &&
-      matchProcedimento &&
-      matchTipo
-    );
+    return matchNumero && matchAno && matchObjeto && matchFornecedor && matchProcedimento && matchTipo;
   });
 
   return (
@@ -62,38 +38,36 @@ export default function TabelaContratos({ fornecedorId }) {
           <div className="filter-panel">
             <h3>Filtrar contratos</h3>
             <div className="filter-grid">
-              <input
-                type="number"
-                placeholder="Número"
-                value={filtros.numero || ""}
-                onChange={(e) =>
-                  setFiltros({ ...filtros, numero: e.target.value })
-                }
-              />
-              <input
-                type="number"
-                placeholder="Ano"
-                value={filtros.ano || ""}
-                onChange={(e) =>
-                  setFiltros({ ...filtros, ano: e.target.value })
-                }
-              />
-              <input
-                type="text"
-                placeholder="Objeto"
-                value={filtros.objeto || ""}
-                onChange={(e) =>
-                  setFiltros({ ...filtros, objeto: e.target.value })
-                }
-              />
-              <input
+              <input type="number" placeholder="Número" value={filtros.numero || ""} onChange={(e) => setFiltros({ ...filtros, numero: e.target.value })} />
+              <input type="number" placeholder="Ano" value={filtros.ano || ""} onChange={(e) => setFiltros({ ...filtros, ano: e.target.value })} />
+              <input type="text" placeholder="Objeto" value={filtros.objeto || ""} onChange={(e) => setFiltros({ ...filtros, objeto: e.target.value })} />
+              {/* <input
                 type="text"
                 placeholder="Fornecedor"
                 value={filtros.fornecedor || ""}
                 onChange={(e) =>
                   setFiltros({ ...filtros, fornecedor: e.target.value })
                 }
-              />
+              /> */}
+              <select
+                value={filtros.fornecedor_id}
+                onChange={(e) =>
+                  setFiltros({
+                    ...filtros,
+                    fornecedor_id: Number(e.target.value),
+                  })
+                }
+              >
+                <option value="">
+                  Selecione um fornecedor
+                </option>
+
+                {fornecedores.map((fornecedor) => (
+                  <option key={fornecedor.id} value={fornecedor.id}>
+                    {fornecedor.razao_social} - {fornecedor.cpf_cnpj}
+                  </option>
+                ))}
+              </select>
               <input
                 type="text"
                 placeholder="Procedimento"
@@ -105,64 +79,46 @@ export default function TabelaContratos({ fornecedorId }) {
                   })
                 }
               />
-              <input
-                type="text"
-                placeholder="Tipo"
-                value={filtros.tipo || ""}
-                onChange={(e) =>
-                  setFiltros({ ...filtros, tipo: e.target.value })
-                }
-              />
+              <input type="text" placeholder="Tipo" value={filtros.tipo || ""} onChange={(e) => setFiltros({ ...filtros, tipo: e.target.value })} />
             </div>
           </div>
           <div className="table-scroll">
             <table className="contract-table">
               <thead>
-              <tr>
-                <th>Número/Ano</th>
-                <th>Objeto</th>
-                <th>Fornecedor</th>
-                <th>Procedimento</th>
-                <th>Status</th>
-                <th>Valor Global</th>
-                <th>Prorrogável</th>
-                <th>Data da assinatura</th>
-                <th>Data de término</th>
-                <th>Ações</th>
-              </tr>
+                <tr>
+                  <th>Número/Ano</th>
+                  <th>Objeto</th>
+                  <th>Fornecedor</th>
+                  <th>Procedimento</th>
+                  <th>Status</th>
+                  <th>Valor Global</th>
+                  <th>Prorrogável</th>
+                  <th>Data da assinatura</th>
+                  <th>Data de término</th>
+                  <th>Ações</th>
+                </tr>
               </thead>
               <tbody>
-              {contratosFiltrados.map((contrato) => (
-                <tr key={contrato.id}>
-                  <td>
-                    <Link to={`/contratos/${contrato.id}`}>
-                      {contrato.numero}
-                    </Link>
-                  </td>
-                  <td className="contract-text-cell">{contrato.objeto}</td>
-                  <td className="contract-text-cell">
-                    <Link to={`/fornecedor/${contrato.fornecedor_id}`}>
-                      {
-                        fornecedores.find(
-                          (fornecedor) =>
-                            fornecedor.id === contrato.fornecedor_id,
-                        ).razao_social
-                      }
-                    </Link>
-                  </td>
-                  <td className="contract-text-cell">{contrato.procedimento_id}</td>
-                  <td className="contract-text-cell">{contrato.status}</td>
-                  <td>{contrato.valor_global}</td>
-                  <td>{contrato.prorrogavel}</td>
-                  <td>{contrato.data_de_assinatura}</td>
-                  <td>{contrato.data_de_termino}</td>
-                  <td>
-                    <button onClick={() => deletarContrato(contrato.id)}>
-                      Deletar
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                {contratosFiltrados.map((contrato) => (
+                  <tr key={contrato.id}>
+                    <td>
+                      <Link to={`/contratos/${contrato.id}`}>{contrato.numero}</Link>
+                    </td>
+                    <td className="contract-text-cell">{contrato.objeto}</td>
+                    <td className="contract-text-cell">
+                      <Link to={`/fornecedor/${contrato.fornecedor_id}`}>{fornecedores.find((fornecedor) => fornecedor.id === contrato.fornecedor_id).razao_social}</Link>
+                    </td>
+                    <td className="contract-text-cell">{contrato.procedimento_id}</td>
+                    <td className="contract-text-cell">{contrato.status}</td>
+                    <td>{contrato.valor_global}</td>
+                    <td>{contrato.prorrogavel}</td>
+                    <td>{contrato.data_de_assinatura}</td>
+                    <td>{contrato.data_de_termino}</td>
+                    <td>
+                      <button onClick={() => deletarContrato(contrato.id)}>Deletar</button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
