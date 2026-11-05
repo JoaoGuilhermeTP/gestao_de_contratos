@@ -50,9 +50,7 @@ export default function TabelaContratos({ fornecedorId }) {
                   })
                 }
               >
-                <option value="">
-                  Selecione um fornecedor
-                </option>
+                <option value="">Selecione um fornecedor</option>
 
                 {fornecedores.map((fornecedor) => (
                   <option key={fornecedor.id} value={fornecedor.id}>
@@ -60,7 +58,7 @@ export default function TabelaContratos({ fornecedorId }) {
                   </option>
                 ))}
               </select>
-              <input
+              {/* <input
                 type="text"
                 placeholder="Procedimento"
                 value={filtros.procedimento || ""}
@@ -70,7 +68,28 @@ export default function TabelaContratos({ fornecedorId }) {
                     procedimento: e.target.value,
                   })
                 }
-              />
+              /> */}
+
+
+              {/* <select
+                value={filtros.procedimento_id}
+                onChange={(e) =>
+                  setFiltros({
+                    ...filtros,
+                    procedimento_id: Number(e.target.value),
+                  })
+                }
+              >
+                <option value="">Selecione um procedimento</option>
+
+                {procedimentos.map((procedimento) => (
+                  <option key={procedimento.id} value={procedimento.name}>
+                    {procedimento.name}
+                  </option>
+                ))}
+              </select> */}
+
+
               <input type="text" placeholder="Status" value={filtros.status || ""} onChange={(e) => setFiltros({ ...filtros, status: e.target.value })} />
             </div>
           </div>
