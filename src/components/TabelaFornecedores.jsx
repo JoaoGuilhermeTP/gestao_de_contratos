@@ -24,7 +24,7 @@ export default function TabelaFornecedores() {
     const matchCpfCnpj = !filtros.cpf_cnpj || fornecedor.cpf_cnpj.toLowerCase().includes(filtros.cpf_cnpj.toLowerCase());
     const matchCidade = !filtros.cidade || fornecedor.cidade.toLowerCase().includes(filtros.cidade.toLowerCase());
     const matchEstado = !filtros.estado || String(fornecedor.estado) === filtros.estado;
-    const matchRepresentante = !filtros.representante_legal || fornecedor.representante_legal.toLowerCase().includes(filtros.representante_legal.toLowerCase());
+    const matchRepresentante = !filtros.representante_legal || String(fornecedor.representante_legal ?? "").toLowerCase().includes(filtros.representante_legal.toLowerCase());
     const matchStatus = !filtros.status || String(fornecedor.status) === filtros.status;
     // Only keep the contract if ALL active filters match
     return matchTipo && matchRazaoSocial && matchNomeFantasia && matchCpfCnpj && matchCidade && matchEstado && matchRepresentante && matchStatus;
@@ -45,7 +45,7 @@ export default function TabelaFornecedores() {
               <input type="text" placeholder="CPF ou CNPJ" value={filtros.cpf_cnpj} onChange={(e) => setFiltros({ ...filtros, cpf_cnpj: e.target.value })} />
               <input type="text" placeholder="Cidade" value={filtros.cidade} onChange={(e) => setFiltros({ ...filtros, cidade: e.target.value })} />
               <input type="text" placeholder="Estado" value={filtros.estado} onChange={(e) => setFiltros({ ...filtros, estado: e.target.value })} />
-              <input type="text" placeholder="Representante" value={filtros.representante_legal} onChange={(e) => setFiltros({ ...filtros, representante: e.target.value })} />
+              <input type="text" placeholder="Representante" value={filtros.representante_legal} onChange={(e) => setFiltros({ ...filtros, representante_legal: e.target.value })} />
               <input type="text" placeholder="Status" value={filtros.status} onChange={(e) => setFiltros({ ...filtros, status: e.target.value })} />
             </div>
           </div>
