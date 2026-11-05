@@ -111,7 +111,7 @@ export default function TabelaContratos({ fornecedorId }) {
                     <td className="contract-text-cell">{contrato.procedimento_id}</td>
                     <td className="contract-text-cell">{contrato.status}</td>
                     <td>{contrato.valor_global}</td>
-                    <td>{contrato.prorrogavel}</td>
+                    <td>{contrato.prorrogavel === 1 ? "Sim" : "Não"}</td>
                     <td>{contrato.data_de_assinatura}</td>
                     <td>{contrato.data_de_termino}</td>
                     <td>
