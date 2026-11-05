@@ -16,7 +16,7 @@ export default function TabelaContratos({ fornecedorId }) {
     objeto: "",
     fornecedor_id: "",
     procedimento: "",
-    tipo: "",
+    status: "",
   });
 
   const contratosFiltrados = contratos.filter((contrato) => {
@@ -25,9 +25,9 @@ export default function TabelaContratos({ fornecedorId }) {
     const matchObjeto = !filtros.objeto || contrato.objeto.toLowerCase().includes(filtros.objeto.toLowerCase());
     const matchFornecedor = !filtros.fornecedor_id || Number(contrato.fornecedor_id) === Number(filtros.fornecedor_id);
     const matchProcedimento = !filtros.procedimento || contrato.procedimento.toLowerCase().includes(filtros.procedimento.toLowerCase());
-    const matchTipo = !filtros.tipo || contrato.tipo.toLowerCase().includes(filtros.tipo.toLowerCase());
+    const matchStatus = !filtros.status || contrato.status.toLowerCase().includes(filtros.status.toLowerCase());
     // Only keep the contract if ALL active filters match
-    return matchNumero && matchAno && matchObjeto && matchFornecedor && matchProcedimento && matchTipo;
+    return matchNumero && matchAno && matchObjeto && matchFornecedor && matchProcedimento && matchStatus;
   });
 
   return (
@@ -41,14 +41,6 @@ export default function TabelaContratos({ fornecedorId }) {
               <input type="number" placeholder="Número" value={filtros.numero || ""} onChange={(e) => setFiltros({ ...filtros, numero: e.target.value })} />
               <input type="number" placeholder="Ano" value={filtros.ano || ""} onChange={(e) => setFiltros({ ...filtros, ano: e.target.value })} />
               <input type="text" placeholder="Objeto" value={filtros.objeto || ""} onChange={(e) => setFiltros({ ...filtros, objeto: e.target.value })} />
-              {/* <input
-                type="text"
-                placeholder="Fornecedor"
-                value={filtros.fornecedor || ""}
-                onChange={(e) =>
-                  setFiltros({ ...filtros, fornecedor: e.target.value })
-                }
-              /> */}
               <select
                 value={filtros.fornecedor_id}
                 onChange={(e) =>
@@ -79,7 +71,7 @@ export default function TabelaContratos({ fornecedorId }) {
                   })
                 }
               />
-              <input type="text" placeholder="Tipo" value={filtros.tipo || ""} onChange={(e) => setFiltros({ ...filtros, tipo: e.target.value })} />
+              <input type="text" placeholder="Status" value={filtros.status || ""} onChange={(e) => setFiltros({ ...filtros, status: e.target.value })} />
             </div>
           </div>
           <div className="table-scroll">
