@@ -11,7 +11,6 @@ function getDocumentStatus(validade) {
 
 export default function DocumentosFornecedor({ fornecedorId }) {
   // Variáveis de estado do store
-  const documentosGerais = useDocumentoStore((state) => state.documentos);
   const fetchDocumentosDoFornecedor = useDocumentoStore((state) => state.fetchDocumentosDoFornecedor);
 
   // Variáveis de estado locais
@@ -55,8 +54,8 @@ export default function DocumentosFornecedor({ fornecedorId }) {
               {documentos.map((documento) => (
                 <tr key={documento.id}>
                   <td className="document-name-cell">{documento.nome_documento}</td>
-                  <td>{documentosGerais[documento.documento_id].esfera}</td>
-                  <td>{documentosGerais[documento.documento_id].categoria}</td>
+                  <td>{documento.esfera}</td>
+                  <td>{documento.categoria}</td>
                   <td>{documento.emissao}</td>
                   <td>{documento.validade}</td>
                   <td>
