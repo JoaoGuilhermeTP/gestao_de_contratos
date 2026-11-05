@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useFornecedorStore } from "../store/useFornecedorStore.js";
+import EstadoSelect from "../components/EstadoSelect.jsx";
 
 export default function TabelaFornecedores() {
 
@@ -18,7 +19,7 @@ export default function TabelaFornecedores() {
   });
 
   const fornecedoresFiltrados = fornecedores.filter((fornecedor) => {
-    const matchTipo = !filtros.tipo || String(fornecedor.tipo) === filtros.tipo;
+    const matchTipo = !filtros.tipo || fornecedor.tipo.includes(filtros.tipo);
     const matchRazaoSocial = !filtros.razao_social || fornecedor.razao_social.toLowerCase().includes(filtros.razao_social.toLowerCase());
     const matchNomeFantasia = !filtros.nome_fantasia || fornecedor.nome_fantasia.toLowerCase().includes(filtros.nome_fantasia.toLowerCase());
     const matchCpfCnpj = !filtros.cpf_cnpj || fornecedor.cpf_cnpj.toLowerCase().includes(filtros.cpf_cnpj.toLowerCase());
