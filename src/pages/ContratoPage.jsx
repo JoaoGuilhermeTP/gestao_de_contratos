@@ -1,23 +1,8 @@
 import { useParams, Link, Navigate } from "react-router-dom";
 import { useContratoStore } from "../store/useContratoStore.js";
 import { useFornecedorStore } from "../store/useFornecedorStore.js";
+import { formatDate, formatCurrency } from "../helper_functions/helper.js";
 
-// Helpr functions
-function formatDate(value) {
-  if (!value) return "Não informado";
-
-  return new Intl.DateTimeFormat("pt-BR").format(new Date(value));
-}
-
-function formatCurrency(value) {
-  if (value === undefined || value === null || value === "")
-    return "Não informado";
-
-  return new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(Number(value));
-}
 
 export default function ContratoPage() {
   // Id from parameter variable
@@ -49,7 +34,7 @@ export default function ContratoPage() {
       <header className="detail-header">
         <div>
           <p className="eyebrow">Detalhes do contrato</p>
-          <h1>Contrato nº {contrato.numero}</h1>
+          <h1>Contrato nº {contrato.numero}/{contrato.ano}</h1>
           <p className="detail-subtitle">
             Registro completo, vigência e vínculo com o fornecedor.
           </p>
@@ -97,7 +82,7 @@ export default function ContratoPage() {
           </div>
           <div>
             <dt>Prorrogável</dt>
-            <dd>{contrato.prorrogavel || "Não informado"}</dd>
+            <dd>{contrato.prorrogavel ? "Sim" : "Não" || "Não informado"}</dd>
           </div>
         </dl>
       </div>

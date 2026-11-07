@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useContratoStore } from "../store/useContratoStore";
 import { useFornecedorStore } from "../store/useFornecedorStore";
+import { formatDate, formatCurrency } from "../helper_functions/helper";
 
 export default function TabelaContratos({ fornecedorId }) {
   const todosContratos = useContratoStore((state) => state.contratos);
@@ -104,8 +105,8 @@ export default function TabelaContratos({ fornecedorId }) {
                   <th>Status</th>
                   <th>Valor Global</th>
                   <th>Prorrogável</th>
-                  <th>Data da assinatura</th>
-                  <th>Data de término</th>
+                  <th>Assinatura</th>
+                  <th>Término</th>
                   <th>Ações</th>
                 </tr>
               </thead>
@@ -113,7 +114,7 @@ export default function TabelaContratos({ fornecedorId }) {
                 {contratosFiltrados.map((contrato) => (
                   <tr key={contrato.id}>
                     <td>
-                      <Link to={`/contratos/${contrato.id}`}>{contrato.numero}</Link>
+                      <Link to={`/contratos/${contrato.id}`}>{contrato.numero}/{contrato.ano}</Link>
                     </td>
                     <td className="contract-text-cell">{contrato.objeto}</td>
                     <td className="contract-text-cell">
@@ -121,10 +122,10 @@ export default function TabelaContratos({ fornecedorId }) {
                     </td>
                     <td className="contract-text-cell">{contrato.procedimento_id}</td>
                     <td className="contract-text-cell">{contrato.status}</td>
-                    <td>{contrato.valor_global}</td>
+                    <td>{formatCurrency(contrato.valor_global)}</td>
                     <td>{contrato.prorrogavel === 1 ? "Sim" : "Não"}</td>
-                    <td>{contrato.data_de_assinatura}</td>
-                    <td>{contrato.data_de_termino}</td>
+                    <td>{formatDate(contrato.data_de_assinatura)}</td>
+                    <td>{formatDate(contrato.data_de_termino)}</td>
                     <td>
                       <button onClick={() => deletarContrato(contrato.id)}>Deletar</button>
                     </td>
