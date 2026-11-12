@@ -23,6 +23,7 @@ import { useIbgeStore } from "./store/useIbgeStore";
 import { useDocumentoStore } from "./store/useDocumentoStore";
 import { useServidorStore } from "./store/useServidorStore";
 import { useSecretariaStore } from "./store/useSecretariaStore";
+import { useAtaStore } from "./store/useAtaStore";
 
 function App() {
   const [isInitializing, setIsInitializing] = useState(true);
@@ -33,12 +34,13 @@ function App() {
   const fetchDocumentos = useDocumentoStore((state) => state.fetchDocumentos);
   const fetchServidores = useServidorStore((state) => state.fetchServidores);
   const fetchSecretarias = useSecretariaStore((state) => state.fetchSecretarias);
+  const fetchAtas = useSecretariaStore((state) => state.fetchAtas);
 
   useEffect(() => {
     async function loadInitialData() {
       // Dispara a busca do IBGE em paralelo sem bloquear o carregamento do banco
       fetchEstados();
-      await Promise.all([fetchContratos(), fetchFornecedores(), fetchDocumentos(), fetchServidores(), fetchSecretarias()]);
+      await Promise.all([fetchContratos(), fetchFornecedores(), fetchDocumentos(), fetchServidores(), fetchSecretarias(), fetchAtas()]);
       setIsInitializing(false);
     }
     loadInitialData();
