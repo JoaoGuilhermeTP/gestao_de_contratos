@@ -220,7 +220,8 @@ export default function AddContratoForm() {
           </select>
           {errors.fornecedor_id && <span className="form-error">{errors.fornecedor_id}</span>}
         </label>
-
+        
+        {/* Proedimento */}
         <label>
           Procedimento
           <input
@@ -235,7 +236,8 @@ export default function AddContratoForm() {
           />
           {errors.procedimento_id && <span className="form-error">{errors.procedimento_id}</span>}
         </label>
-
+        
+        {/* Status */}
         <label>
           Status
           <input
@@ -250,7 +252,8 @@ export default function AddContratoForm() {
           />
           {errors.status && <span className="form-error">{errors.status}</span>}
         </label>
-
+        
+        {/* Valor global */}
         <label>
           Valor Global
           <CurrencyInput
@@ -270,7 +273,8 @@ export default function AddContratoForm() {
           />
           {errors.valor_global && <span className="form-error">{errors.valor_global}</span>}
         </label>
-
+        
+        {/* Prorrogável */}
         <label>
           Prorrogável
           <input

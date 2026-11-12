@@ -2,6 +2,8 @@ import { useContratoStore } from "../store/useContratoStore.js";
 import { useFornecedorStore } from "../store/useFornecedorStore.js";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import CurrencyInput from "react-currency-input-field";
+import { formatDateForInput } from "../helper_functions/helper.js";
 
 export default function EditarContratoPage() {
   const navigate = useNavigate();
@@ -17,7 +19,7 @@ export default function EditarContratoPage() {
   const handleSubmit = (event) => {
     event.preventDefault();
     editarContrato(Number(id), edited);
-    navigate("/contratos");
+    navigate(`/contratos/${id}`);
   };
 
   return (
@@ -32,18 +34,44 @@ export default function EditarContratoPage() {
         </header>
 
         <form className="detail-form" onSubmit={handleSubmit}>
+          <div className="form-section-heading">
+            <strong>Identificação do contrato</strong>
+            <span>Dados básicos e vínculo com o fornecedor</span>
+          </div>
+          {/* Ata de Registro de Preços */}
           <label>
-            Número
+            Ata de Registro de Preços
+            <input
+              type="number"
+              value={edited.ata_id}
+              onChange={(e) =>
+                setEdited({
+                  ...edited,
+                  ata_id: Number(e.target.value),
+                })
+              }
+            />
+          </label>
+
+          {/* Número do Contrato */}
+          <label>
+            Número do contrato
             <input type="text" value={edited.numero} onChange={(e) => setEdited({ ...edited, numero: e.target.value })} />
           </label>
+
+          {/* Ano do Contrato */}
           <label>
             Ano
             <input type="number" value={edited.ano} onChange={(e) => setEdited({ ...edited, ano: e.target.value })} />
           </label>
+
+          {/* Objeto do Contrato */}
           <label className="field-wide">
             Objeto
             <input type="text" value={edited.objeto} onChange={(e) => setEdited({ ...edited, objeto: e.target.value })} />
           </label>
+
+          {/* Fornecedor */}
           <label>
             Fornecedor
             <select
@@ -65,6 +93,8 @@ export default function EditarContratoPage() {
               ))}
             </select>
           </label>
+
+          {/* Proedimento */}
           <label>
             Procedimento
             <input
@@ -78,15 +108,67 @@ export default function EditarContratoPage() {
               }
             />
           </label>
+
+          {/* Status */}
           <label>
-            Tipo
-            <input type="text" value={edited.tipo} onChange={(e) => setEdited({ ...edited, tipo: e.target.value })} />
+            Status
+            <input
+              type="text"
+              value={edited.status}
+              onChange={(e) =>
+                setEdited({
+                  ...edited,
+                  status: e.target.value,
+                })
+              }
+            />
           </label>
+
+          {/* Valor global */}
+          <label>
+            Valor Global
+            <CurrencyInput
+              id="contract-currency-input"
+              name="contract-currency-input"
+              placeholder="Informe o valor"
+              allowNegativeValue={false}
+              prefix="R$"
+              decimalsLimit={2}
+              value={edited.valor_global}
+              onValueChange={(value) =>
+                setEdited({
+                  ...edited,
+                  valor_global: value,
+                })
+              }
+            />
+          </label>
+
+          {/* Prorrogável */}
+          <label>
+            Prorrogável
+            <input
+              type="text"
+              value={edited.prorrogavel}
+              onChange={(e) =>
+                setEdited({
+                  ...edited,
+                  prorrogavel: e.target.value,
+                })
+              }
+            />
+          </label>
+
+          <div className="form-section-heading form-section-heading-spaced">
+            <strong>Vigência</strong>
+            <span>Informe o período de validade do contrato</span>
+          </div>
+
           <label>
             Data da assinatura
             <input
               type="date"
-              value={edited.data_de_assinatura}
+              value={formatDateForInput(edited.data_de_assinatura)}
               onChange={(e) =>
                 setEdited({
                   ...edited,
@@ -95,11 +177,12 @@ export default function EditarContratoPage() {
               }
             />
           </label>
+
           <label>
             Data de término
             <input
               type="date"
-              value={edited.data_de_termino}
+              value={formatDateForInput(edited.data_de_termino)}
               onChange={(e) =>
                 setEdited({
                   ...edited,
@@ -108,6 +191,7 @@ export default function EditarContratoPage() {
               }
             />
           </label>
+          
           <div className="detail-form-actions">
             <Link to={`/contratos/${contrato.id}`}>
               <button className="button-secondary">Cancelar</button>

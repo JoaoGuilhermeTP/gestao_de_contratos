@@ -1,35 +1,32 @@
-import { useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ContratosPage from "./pages/ContratosPage";
-import FornecedoresPage from "./pages/FornecedoresPage";
-import HomePage from "./pages/HomePage";
+import { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Navbar from "./components/NavBar";
+import HomePage from "./pages/HomePage";
+import ContratosPage from "./pages/ContratosPage";
 import ContratoPage from "./pages/ContratoPage";
 import AdicionarContratoPage from "./pages/AdicionarContratoPage";
 import EditarContratoPage from "./pages/EditarContratoPage";
+import FornecedoresPage from "./pages/FornecedoresPage";
 import FornecedorPage from "./pages/FornecedorPage";
 import AdicionarFornecedorPage from "./pages/AdicionarFornecedorPage";
 import EditarFornecedorPage from "./pages/EditarFornecedorPage";
 import DocumentosPage from "./pages/DocumentosPage";
 import AdicionarDocumentoPage from "./pages/AdicionarDocumentoPage";
 import AdicionarDocumentoFornecedorPage from "./pages/AdicionarDocumentoFornecedorPage";
-import ServidoresPage from "./pages/ServidoresPage.jsx";
-import AdicionarServidorPage from "./pages/AdicionarServidorPage.jsx";
-import ServidorPage from "./pages/ServidorPage.jsx";
-import EditarServidorPage from "./pages/EditarServidorPage.jsx";
+import ServidoresPage from "./pages/ServidoresPage";
+import ServidorPage from "./pages/ServidorPage";
+import AdicionarServidorPage from "./pages/AdicionarServidorPage";
+import EditarServidorPage from "./pages/EditarServidorPage";
 import { useContratoStore } from "./store/useContratoStore";
 import { useFornecedorStore } from "./store/useFornecedorStore";
-import { useIbgeStore } from "./store/useIbgeStore.js";
-import { useDocumentoStore } from "./store/useDocumentoStore.js";
-import { useServidorStore } from "./store/useServidorStore.js";
-import { useSecretariaStore } from "./store/useSecretariaStore.js";
+import { useIbgeStore } from "./store/useIbgeStore";
+import { useDocumentoStore } from "./store/useDocumentoStore";
+import { useServidorStore } from "./store/useServidorStore";
+import { useSecretariaStore } from "./store/useSecretariaStore";
 
 function App() {
-  const loadingContratos = useContratoStore((state) => state.loading);
-  const loadingFornecedores = useFornecedorStore((state) => state.loading);
-  const loadingDocumentos = useDocumentoStore((state) => state.loading);
-  const loadingServidores = useServidorStore((state) => state.loading);
-  const loadingSecretarias = useSecretariaStore((state) => state.loading);
+  const [isInitializing, setIsInitializing] = useState(true);
+
   const fetchContratos = useContratoStore((state) => state.fetchContratos);
   const fetchFornecedores = useFornecedorStore((state) => state.fetchFornecedores);
   const fetchEstados = useIbgeStore((state) => state.fetchEstados);
@@ -38,41 +35,62 @@ function App() {
   const fetchSecretarias = useSecretariaStore((state) => state.fetchSecretarias);
 
   useEffect(() => {
-    fetchContratos();
-    fetchFornecedores();
-    fetchEstados();
-    fetchDocumentos();
-    fetchServidores();
-    fetchSecretarias();
-  }, []);
-
-  if (loadingContratos || loadingFornecedores || loadingDocumentos || loadingServidores || loadingSecretarias) {
-    return <div style={{ padding: "40px", textAlign: "center", fontFamily: "DM Sans" }}>Conectando ao banco de dados...</div>;
-  }
+    async function loadInitialData() {
+      // Dispara a busca do IBGE em paralelo sem bloquear o carregamento do banco
+      fetchEstados();
+      await Promise.all([fetchContratos(), fetchFornecedores(), fetchDocumentos(), fetchServidores(), fetchSecretarias()]);
+      setIsInitializing(false);
+    }
+    loadInitialData();
+  }, [fetchContratos, fetchFornecedores, fetchEstados, fetchDocumentos, fetchServidores, fetchSecretarias]);
 
   return (
     <BrowserRouter>
       <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/contratos" element={<ContratosPage />} />
-        <Route path="/fornecedores" element={<FornecedoresPage />} />
-        <Route path="/documentos" element={<DocumentosPage />} />
-        <Route path="/servidores" element={<ServidoresPage />} />
-        <Route path="/servidor/:id" element={<ServidorPage />} />
-        <Route path="/servidor/editar/:id" element={<EditarServidorPage />} />
+      {isInitializing ? (
+        <main style={{ textAlign: "center" }}>
+          <p>Conectando ao banco de dados...</p>
+        </main>
+      ) : (
+        <Routes>
+          <Route path="/" element={<HomePage />} />
 
-        <Route path={`/contratos/:id`} element={<ContratoPage />} />
-        <Route path={`/contratos/editar/:id`} element={<EditarContratoPage />} />
-        <Route path={"/adicionar_contrato"} element={<AdicionarContratoPage />} />
+          {/* Contratos */}
+          <Route path="/contratos" element={<ContratosPage />} />
+          <Route path="/contratos/:id" element={<ContratoPage />} />
+          <Route path="/contratos/editar/:id" element={<EditarContratoPage />} />
+          <Route path="/adicionar_contrato" element={<AdicionarContratoPage />} />
 
-        <Route path={"/adicionar_fornecedor"} element={<AdicionarFornecedorPage />} />
-        <Route path={"/adicionar_servidor"} element={<AdicionarServidorPage />} />
-        <Route path={"/adicionar_documento"} element={<AdicionarDocumentoPage />} />
-        <Route path={"/fornecedor/:id/adicionar-documento"} element={<AdicionarDocumentoFornecedorPage />} />
-        <Route path={`/fornecedor/:id`} element={<FornecedorPage />} />
-        <Route path={`/fornecedor/editar/:id`} element={<EditarFornecedorPage />} />
-      </Routes>
+          {/* Fornecedores */}
+          <Route path="/fornecedores" element={<FornecedoresPage />} />
+          <Route path="/fornecedor/:id" element={<FornecedorPage />} />
+          <Route path="/fornecedor/editar/:id" element={<EditarFornecedorPage />} />
+          <Route path="/adicionar_fornecedor" element={<AdicionarFornecedorPage />} />
+          <Route path="/fornecedor/:id/adicionar-documento" element={<AdicionarDocumentoFornecedorPage />} />
+
+          {/* Documentos */}
+          <Route path="/documentos" element={<DocumentosPage />} />
+          <Route path="/adicionar_documento" element={<AdicionarDocumentoPage />} />
+
+          {/* Servidores */}
+          <Route path="/servidores" element={<ServidoresPage />} />
+          <Route path="/servidor/:id" element={<ServidorPage />} />
+          <Route path="/servidor/editar/:id" element={<EditarServidorPage />} />
+          <Route path="/adicionar_servidor" element={<AdicionarServidorPage />} />
+
+          {/* Fallback 404 */}
+          <Route
+            path="*"
+            element={
+              <main>
+                <h1>Página não encontrada</h1>
+                <p>O endereço que você tentou acessar não existe.</p>
+                <Link to="/">Voltar para o início</Link>
+              </main>
+            }
+          />
+        </Routes>
+      )}
     </BrowserRouter>
   );
 }
