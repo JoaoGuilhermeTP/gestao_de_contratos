@@ -34,7 +34,7 @@ function App() {
   const fetchDocumentos = useDocumentoStore((state) => state.fetchDocumentos);
   const fetchServidores = useServidorStore((state) => state.fetchServidores);
   const fetchSecretarias = useSecretariaStore((state) => state.fetchSecretarias);
-  const fetchAtas = useSecretariaStore((state) => state.fetchAtas);
+  const fetchAtas = useAtaStore((state) => state.fetchAtas);
 
   useEffect(() => {
     async function loadInitialData() {

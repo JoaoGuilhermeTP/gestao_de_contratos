@@ -1,3 +1,4 @@
+// backend/server.js
 import express from "express";
 import cors from "cors";
 import { setupDatabase } from "./database.js";
@@ -6,9 +7,9 @@ import fornecedoresRouter from "./routes/fornecedores.js";
 import documentosRouter from "./routes/documentos.js";
 import contratosRouter from "./routes/contratos.js";
 import servidoresRouter from "./routes/servidores.js";
-import secretariasRouter from "./routes/secretarias.js"
-import processosRouter from "./routes/processos.js"
-import atasRouter from "./routes/atas.js"
+import secretariasRouter from "./routes/secretarias.js";
+import processosRouter from "./routes/processos.js";
+import atasRouter from "./routes/atas.js";
 
 const app = express();
 const PORT = 3000;
@@ -18,9 +19,7 @@ app.use(cors());
 app.use(express.json());
 
 // Garante que as tabelas existem quando o servidor inicia
-setupDatabase().catch((error) =>
-  console.error("Erro ao verificar tabelas no banco de dados:", error)
-);
+setupDatabase().catch((error) => console.error("Erro ao verificar tabelas no banco de dados:", error));
 
 // Módulos de rotas da API
 app.use("/api/fornecedores", fornecedoresRouter);
@@ -33,6 +32,12 @@ app.use("/api/atas", atasRouter);
 
 app.get("/api/status", (req, res) => {
   res.json({ message: "O backend está rodando perfeitamente com PostgreSQL!" });
+});
+
+// Central error handler (catches any error thrown in routes or services)
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(err.status || 500).json({ error: err.message || "Erro interno no servidor" });
 });
 
 app.listen(PORT, "0.0.0.0", () => {
