@@ -1,7 +1,7 @@
 // backend/server.js
 import express from "express";
 import cors from "cors";
-import { setupDatabase } from "./database.js";
+import { setupDatabase } from "./db/database.js";
 
 import fornecedoresRouter from "./routes/fornecedores.js";
 import documentosRouter from "./routes/documentos.js";

@@ -1,4 +1,4 @@
-import { pool } from "../database.js";
+import { pool } from "../db/database.js";
 
 export async function findAll() {
   const { rows } = await pool.query(
