@@ -1,17 +1,12 @@
 import { Router } from "express";
-import { pool } from "../database.js";
+import * as ataService from "../services/ataService.js";
 
 const router = Router();
 
-// GET /api/contratos
+// GET /api/atas
 router.get("/", async (req, res) => {
-  try {
-    const { rows } = await pool.query("SELECT * FROM atas_registro_precos ORDER BY id ASC");
-    res.json(rows);
-  } catch (error) {
-    console.error("Erro na rota GET /api/atas:", error);
-    res.status(500).json({ error: "Erro ao buscar atas de registro de preços" });
-  }
+  const atas = await ataService.listarAtas();
+  res.json(atas);
 });
 
 export default router;
