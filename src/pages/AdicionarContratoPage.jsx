@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import CurrencyInput from "react-currency-input-field";
 import { useContratoStore } from "../store/useContratoStore.js";
 import { useFornecedorStore } from "../store/useFornecedorStore.js";
+import { useAtaStore } from "../store/useAtaStore.js";
 
 export default function AddContratoForm() {
   // Navigate hook to navigate to main contratos page after adding new contract
@@ -10,6 +11,7 @@ export default function AddContratoForm() {
 
   const fornecedores = useFornecedorStore((state) => state.fornecedores);
   const addContrato = useContratoStore((state) => state.addContrato);
+  const atas = useAtaStore((state) => state.atas);
 
   // Initial state for contrato
   const initialContrato = {
@@ -134,9 +136,8 @@ export default function AddContratoForm() {
 
         {/* Ata de Registro de Preços */}
         <label>
-          Ata de Registro de Preços
-          <input
-            type="number"
+          Ata de Registro de Preços (Opcional)
+          <select
             value={novoContrato.ata_id}
             onChange={(e) =>
               setNovoContrato({
@@ -144,7 +145,17 @@ export default function AddContratoForm() {
                 ata_id: Number(e.target.value),
               })
             }
-          />
+          >
+            <option value="" disabled>
+              Selecione um termo de ata
+            </option>
+
+            {atas.map((ata) => (
+              <option key={ata.id} value={ata.id}>
+                {ata.numero}/{ata.ano} - {fornecedores.find((fornecedor) => fornecedor.id === ata.id).razao_social}
+              </option>
+            ))}
+          </select>
           {errors.ata_id && <span className="form-error">{errors.ata_id}</span>}
         </label>
 
@@ -220,7 +231,7 @@ export default function AddContratoForm() {
           </select>
           {errors.fornecedor_id && <span className="form-error">{errors.fornecedor_id}</span>}
         </label>
-        
+
         {/* Proedimento */}
         <label>
           Procedimento
@@ -236,7 +247,7 @@ export default function AddContratoForm() {
           />
           {errors.procedimento_id && <span className="form-error">{errors.procedimento_id}</span>}
         </label>
-        
+
         {/* Status */}
         <label>
           Status
@@ -252,7 +263,7 @@ export default function AddContratoForm() {
           />
           {errors.status && <span className="form-error">{errors.status}</span>}
         </label>
-        
+
         {/* Valor global */}
         <label>
           Valor Global
@@ -273,7 +284,7 @@ export default function AddContratoForm() {
           />
           {errors.valor_global && <span className="form-error">{errors.valor_global}</span>}
         </label>
-        
+
         {/* Prorrogável */}
         <label>
           Prorrogável
