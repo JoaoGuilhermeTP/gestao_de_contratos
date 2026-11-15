@@ -4,6 +4,7 @@ import CurrencyInput from "react-currency-input-field";
 import { useContratoStore } from "../store/useContratoStore.js";
 import { useFornecedorStore } from "../store/useFornecedorStore.js";
 import { useAtaStore } from "../store/useAtaStore.js";
+import { useProcedimentoStore } from "../store/useProcedimentoStore.js";
 
 export default function AddContratoForm() {
   // Navigate hook to navigate to main contratos page after adding new contract
@@ -12,6 +13,7 @@ export default function AddContratoForm() {
   const fornecedores = useFornecedorStore((state) => state.fornecedores);
   const addContrato = useContratoStore((state) => state.addContrato);
   const atas = useAtaStore((state) => state.atas);
+  const procedimentos = useProcedimentoStore((state) => state.procedimentos);
 
   // Initial state for contrato
   const initialContrato = {
@@ -235,17 +237,26 @@ export default function AddContratoForm() {
         {/* Proedimento */}
         <label>
           Procedimento
-          <input
-            type="text"
+          <select
             value={novoContrato.procedimento_id}
             onChange={(e) =>
               setNovoContrato({
                 ...novoContrato,
-                procedimento_id: e.target.value,
+                procedimento_id: Number(e.target.value),
               })
             }
-          />
-          {errors.procedimento_id && <span className="form-error">{errors.procedimento_id}</span>}
+          >
+            <option value="" disabled>
+              Selecione um procedimento
+            </option>
+
+            {procedimentos.map((procedimento) => (
+              <option key={procedimento.id} value={procedimento.id}>
+                {procedimento.modalidade} - {procedimento.numero}/{procedimento.ano}
+              </option>
+            ))}
+          </select>
+          {errors.ata_id && <span className="form-error">{errors.ata_id}</span>}
         </label>
 
         {/* Status */}

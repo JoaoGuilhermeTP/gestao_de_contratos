@@ -10,6 +10,7 @@ import servidoresRouter from "./routes/servidores.js";
 import secretariasRouter from "./routes/secretarias.js";
 import processosRouter from "./routes/processos.js";
 import atasRouter from "./routes/atas.js";
+import procedimentosRouter from "./routes/procedimentos.js";
 
 const app = express();
 const PORT = 3000;
@@ -29,6 +30,7 @@ app.use("/api/servidores", servidoresRouter);
 app.use("/api/secretarias", secretariasRouter);
 app.use("/api/processos", processosRouter);
 app.use("/api/atas", atasRouter);
+app.use("/api/procedimentos", procedimentosRouter);
 
 app.get("/api/status", (req, res) => {
   res.json({ message: "O backend está rodando perfeitamente com PostgreSQL!" });
