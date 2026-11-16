@@ -1,6 +1,6 @@
-import TabelaContratos from "../components/TabelaContratos";
+import TabelaContratos from "./TabelaContratos";
 import { Link } from "react-router-dom";
-import { useContratoStore } from "../store/useContratoStore";
+import { useContratoStore } from "../../store/useContratoStore";
 
 export default function ContratosPage() {
 

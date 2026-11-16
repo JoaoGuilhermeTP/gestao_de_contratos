@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Navbar from "./components/NavBar";
 import HomePage from "./pages/HomePage";
-import ContratosPage from "./pages/ContratosPage";
-import ContratoPage from "./pages/ContratoPage";
+import ContratosPage from "./pages/ContratosPage/ContratosPage";
+import AtasPage from "./pages/AtasPage/AtasPage";
+import ContratoPage from "./pages/ContratosPage/ContratosPage"
 import AdicionarContratoPage from "./pages/AdicionarContratoPage/AdicionarContratoPage";
 import EditarContratoPage from "./pages/EditarContratoPage";
 import FornecedoresPage from "./pages/FornecedoresPage";
@@ -64,6 +65,9 @@ function App() {
           <Route path="/contratos/:id" element={<ContratoPage />} />
           <Route path="/contratos/editar/:id" element={<EditarContratoPage />} />
           <Route path="/adicionar_contrato" element={<AdicionarContratoPage />} />
+
+          {/* Atas */}
+          <Route path="/atas" element={<AtasPage />} />
 
           {/* Fornecedores */}
           <Route path="/fornecedores" element={<FornecedoresPage />} />
