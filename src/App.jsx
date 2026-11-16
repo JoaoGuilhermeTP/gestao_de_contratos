@@ -4,7 +4,7 @@ import Navbar from "./components/NavBar";
 import HomePage from "./pages/HomePage";
 import ContratosPage from "./pages/ContratosPage";
 import ContratoPage from "./pages/ContratoPage";
-import AdicionarContratoPage from "./pages/AdicionarContratoPage";
+import AdicionarContratoPage from "./pages/AdicionarContratoPage/AdicionarContratoPage";
 import EditarContratoPage from "./pages/EditarContratoPage";
 import FornecedoresPage from "./pages/FornecedoresPage";
 import FornecedorPage from "./pages/FornecedorPage";
