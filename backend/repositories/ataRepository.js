@@ -5,4 +5,7 @@ export async function findAll() {
   return rows;
 }
 
-
+export async function findById(id) {
+  const { rows } = await pool.query("SELECT * FROM atas_registro_precos WHERE id = $1", [id]);
+  return rows[0] || null;
+}

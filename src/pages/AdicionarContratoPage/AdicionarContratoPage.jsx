@@ -126,7 +126,7 @@ export default function AddContratoForm() {
           Objeto
           <input
             type="text"
-            disabled={novoContrato.ata_id}
+            disabled={novoContrato.id}
             value={novoContrato.objeto}
             onChange={(e) =>
               setNovoContrato({
