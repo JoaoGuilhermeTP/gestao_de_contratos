@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
-import TabelaContratos from "../components/TabelaContratos";
+import TabelaContratos from "../pages/ContratosPage/TabelaContratos.jsx";
 import { useContratoStore } from "../store/useContratoStore.js";
 import { useFornecedorStore } from "../store/useFornecedorStore.js";
 import DocumentosFornecedor from "../components/DocumentosFornecedor.jsx";
+import TabelaAtas from "./AtasPage/TabelaAtas.jsx";
 
 export default function FornecedorPage() {
   // Get fornecedor id from parameters
@@ -93,10 +94,21 @@ export default function FornecedorPage() {
         >
           Contratos
         </button>
+
+        <button
+          type="button"
+          role="tab"
+          aria-selected={activeTab === "atas"}
+          className={`supplier-tab ${activeTab === "atas" ? "supplier-tab-active" : ""}`}
+          onClick={() => setActiveTab("atas")}
+        >
+          Atas de Registro de Preços
+        </button>
       </div>
 
       {activeTab === "documentos" && <DocumentosFornecedor fornecedorId={id} />}
       {activeTab === "contratos" && <TabelaContratos fornecedorId={id} />}
+      {activeTab === "atas" && <TabelaAtas fornecedorId={id} />}
     </section>
   );
 }

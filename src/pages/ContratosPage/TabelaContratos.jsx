@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useContratoStore } from "../store/useContratoStore";
-import { useFornecedorStore } from "../store/useFornecedorStore";
-import { formatDate, formatCurrency } from "../helper_functions/helper";
+import { useContratoStore } from "../../store/useContratoStore";
+import { useFornecedorStore } from "../../store/useFornecedorStore";
+import { formatDate, formatCurrency } from "../../helper_functions/helper";
 
 export default function TabelaContratos({ fornecedorId }) {
   const todosContratos = useContratoStore((state) => state.contratos);
@@ -59,18 +59,6 @@ export default function TabelaContratos({ fornecedorId }) {
                   </option>
                 ))}
               </select>
-              {/* <input
-                type="text"
-                placeholder="Procedimento"
-                value={filtros.procedimento || ""}
-                onChange={(e) =>
-                  setFiltros({
-                    ...filtros,
-                    procedimento: e.target.value,
-                  })
-                }
-              /> */}
-
 
               {/* <select
                 value={filtros.procedimento_id}

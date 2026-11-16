@@ -1,5 +1,6 @@
 // backend/services/contratoService.js
 import * as contratoRepository from "../repositories/contratoRepository.js";
+import { findById } from "../repositories/ataRepository.js";
 
 function createError(status, message) {
   const error = new Error(message);
@@ -15,7 +16,7 @@ function validateId(id) {
   return numericId;
 }
 
-function validateAndNormalizeContrato(dados) {
+async function validateAndNormalizeContrato(dados) {
   const { ata_id, numero, ano, objeto, fornecedor_id, procedimento_id, status, valor_global, prorrogavel, data_de_assinatura, data_de_termino } = dados;
 
   const numeroLimpo = String(numero || "").trim();
@@ -67,6 +68,19 @@ function validateAndNormalizeContrato(dados) {
 
   const prorrogavelNormalizado = prorrogavel === 1 || prorrogavel === true || prorrogavel === "1" || String(prorrogavel).trim().toLowerCase() === "sim" ? 1 : 0;
 
+  if (ata_id) {
+    const ata = await findById(ata_id);
+    if (ata.objeto !== objeto) {
+      throw createError(400, "O objeto do contrato deve corresponder ao objeto da Ata de Registro de Preços da qual ele se originou")
+    };
+    if (Number(ata.fornecedor_id) !== Number(fornecedor_id)) {
+      throw createError(400, "O fornecedor do contrato deve corresponder ao fornecedor da Ata de Registro de Preços da qual ele se originou")
+    };
+    if (Number(ata.procedimento_id) !== Number(procedimento_id)) {
+      throw createError(400, "O procedimento do contrato deve corresponder ao procedimento da Ata de Registro de Preços da qual ele se originou")
+    };
+  }
+
   return {
     ata_id: ataIdNormalizado,
     numero: numeroLimpo,
@@ -98,7 +112,7 @@ export async function buscarContratoPorId(id) {
 }
 
 export async function criarContrato(dados) {
-  const dadosValidados = validateAndNormalizeContrato(dados);
+  const dadosValidados = await validateAndNormalizeContrato(dados);
   return contratoRepository.create(dadosValidados);
 }
 

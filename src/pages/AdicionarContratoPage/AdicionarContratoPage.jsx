@@ -1,104 +1,27 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CurrencyInput from "react-currency-input-field";
-import { useContratoStore } from "../store/useContratoStore.js";
-import { useFornecedorStore } from "../store/useFornecedorStore.js";
-import { useAtaStore } from "../store/useAtaStore.js";
-import { useProcedimentoStore } from "../store/useProcedimentoStore.js";
+import { useContratoStore } from "../../store/useContratoStore.js";
+import { useFornecedorStore } from "../../store/useFornecedorStore.js";
+import { useAtaStore } from "../../store/useAtaStore.js";
+import { useProcedimentoStore } from "../../store/useProcedimentoStore.js";
+import { validateForm, initialContrato } from "./helpers.js";
 
 export default function AddContratoForm() {
   // Navigate hook to navigate to main contratos page after adding new contract
   const navigate = useNavigate();
-
   const fornecedores = useFornecedorStore((state) => state.fornecedores);
   const addContrato = useContratoStore((state) => state.addContrato);
   const atas = useAtaStore((state) => state.atas);
   const procedimentos = useProcedimentoStore((state) => state.procedimentos);
 
-  // Initial state for contrato
-  const initialContrato = {
-    ata_id: "",
-    numero: "",
-    ano: "",
-    objeto: "",
-    fornecedor_id: "",
-    procedimento_id: "",
-    status: "",
-    valor_global: "",
-    prorrogavel: "",
-    data_de_assinatura: "",
-    data_de_termino: "",
-  };
-
   // State variables
   const [novoContrato, setNovoContrato] = useState(initialContrato);
   const [errors, setErrors] = useState({});
 
-  // Function for validating form
-  const validateForm = () => {
-    const newErrors = {};
-    // Check ata number
-    if (novoContrato.ata_id && !Number.isInteger(novoContrato.ata_id)) {
-      newErrors.ata_id = "Informe uma ata de registro de preços válida";
-    }
-    // Check contract number
-    if (!novoContrato.numero) {
-      newErrors.numero = "Informe o número do contrato";
-    }
-    // Check contract year
-    const currentYear = new Date().getFullYear();
-    if (!novoContrato.ano) {
-      newErrors.ano = "Ano é obrigatório.";
-    } else if (novoContrato.ano > currentYear) {
-      newErrors.ano = "O ano não pode ser posterior ao ano atual.";
-    }
-    // Check contract object
-    if (!novoContrato.objeto.trim()) {
-      newErrors.objeto = "Objeto é obrigatório.";
-    }
-    // Check contract supplier
-    if (!novoContrato.fornecedor_id) {
-      newErrors.fornecedor_id = "Selecione um fornecedor.";
-    }
-    // Check contract procediment
-    if (!novoContrato.procedimento_id) {
-      newErrors.procedimento_id = "Informe o procedimento";
-    }
-    // Check contract status
-    if (!novoContrato.status.trim()) {
-      newErrors.status = "Status é obrigatório.";
-    }
-    // Check contract global value
-    if (!novoContrato.valor_global) {
-      newErrors.valor_global = "Valor global é obrigatório.";
-    }
-    // Check contrato "prorrogavel"
-    if (!novoContrato.prorrogavel) {
-      newErrors.prorrogavel = "Informe se o contrato é prorrogável.";
-    } else if (novoContrato.prorrogavel !== "Sim" && novoContrato.prorrogavel !== "Não") {
-      newErrors.prorrogavel = "Valores válidos: Sim ou Não.";
-    }
-    // Check contrato signing date
-    if (!novoContrato.data_de_assinatura) {
-      newErrors.data_de_assinatura = "Data de assinatura é obrigatória.";
-    }
-    // Check contrato due date
-    if (!novoContrato.data_de_termino) {
-      newErrors.data_de_termino = "Data de término é obrigatória.";
-    }
-    // Check if due date comes after signing date
-    if (novoContrato.data_de_assinatura && novoContrato.data_de_termino && novoContrato.data_de_termino < novoContrato.data_de_assinatura) {
-      newErrors.data_de_termino = "A data de término não pode ser anterior à data da assinatura.";
-    }
-    setErrors(newErrors);
-
-    // Check if there's any error added
-    return Object.keys(newErrors).length === 0;
-  };
-
   async function handleSubmit(e) {
     e.preventDefault();
-    if (validateForm()) {
+    if (validateForm(novoContrato, setErrors)) {
       const contratoCriado = await addContrato({
         ...novoContrato,
         ata_id: novoContrato.ata_id ? Number(novoContrato.ata_id) : null,
@@ -141,12 +64,17 @@ export default function AddContratoForm() {
           Ata de Registro de Preços (Opcional)
           <select
             value={novoContrato.ata_id}
-            onChange={(e) =>
+            onChange={(e) => {
+              const ataId = Number(e.target.value);
+              const ataSelecionada = atas.find((ata) => (ata.id = ataId));
               setNovoContrato({
                 ...novoContrato,
                 ata_id: Number(e.target.value),
-              })
-            }
+                objeto: ataSelecionada?.objeto ?? "",
+                fornecedor_id: ataSelecionada?.fornecedor_id ?? "",
+                procedimento_id: ataSelecionada?.procedimento_id?? "",
+              });
+            }}
           >
             <option value="" disabled>
               Selecione um termo de ata
@@ -198,6 +126,7 @@ export default function AddContratoForm() {
           Objeto
           <input
             type="text"
+            disabled={novoContrato.id}
             value={novoContrato.objeto}
             onChange={(e) =>
               setNovoContrato({
@@ -214,6 +143,7 @@ export default function AddContratoForm() {
           Fornecedor
           <select
             value={novoContrato.fornecedor_id}
+            disabled={novoContrato.ata_id}
             onChange={(e) =>
               setNovoContrato({
                 ...novoContrato,
@@ -239,6 +169,7 @@ export default function AddContratoForm() {
           Procedimento
           <select
             value={novoContrato.procedimento_id}
+            disabled={novoContrato.ata_id}
             onChange={(e) =>
               setNovoContrato({
                 ...novoContrato,
