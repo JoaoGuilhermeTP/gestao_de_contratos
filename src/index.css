@@ -70,7 +70,7 @@ button:disabled {
 }
 
 #root {
-  width: min(1440px, calc(100% - 48px));
+  width: calc(100% - 32px);
   min-height: 100vh;
   margin: 0 auto;
   background: var(--paper);
@@ -82,7 +82,7 @@ button:disabled {
   align-items: center;
   gap: 30px;
   min-height: 76px;
-  padding: 0 48px;
+  padding: 0 32px;
   border-bottom: 1px solid var(--line);
   background: rgb(255 255 255 / 0.96);
 }
@@ -147,7 +147,7 @@ main,
 #root > button,
 #root > a,
 #root > span {
-  width: min(100% - 96px, 1250px);
+  width: calc(100% - 64px);
   margin-right: auto;
   margin-left: auto;
 }
@@ -270,7 +270,7 @@ main > section {
 }
 
 .form-page {
-  width: min(100% - 96px, 1250px);
+  width: calc(100% - 64px);
   min-height: calc(100vh - 76px);
   margin: 0 auto;
   padding: 42px 0 72px;
@@ -360,7 +360,7 @@ main > section {
 }
 
 .detail-page {
-  width: min(100% - 96px, 1250px);
+  width: calc(100% - 64px);
   min-height: calc(100vh - 76px);
   margin: 0 auto;
   padding: 42px 0 72px;
@@ -567,7 +567,7 @@ dd {
 }
 
 .listing-page {
-  width: min(100% - 96px, 1250px);
+  width: calc(100% - 64px);
   min-height: calc(100vh - 76px);
   margin: 0 auto;
   padding: 42px 0 72px;
@@ -858,14 +858,14 @@ table {
 }
 
 table {
- min-width: 1080px;
- table-layout: fixed;
- border-collapse: collapse;
+  min-width: 1080px;
+  table-layout: fixed;
+  border-collapse: collapse;
 }
 
 .table-scroll {
- width: 100%;
- overflow-x: auto;
+  width: 100%;
+  overflow-x: auto;
 }
 
 th,
@@ -1015,15 +1015,15 @@ textarea:focus-visible {
   }
 
   .form-page {
-    width: min(100% - 64px, 1250px);
+    width: calc(100% - 64px);
   }
 
   .detail-page {
-    width: min(100% - 64px, 1250px);
+    width: calc(100% - 64px);
   }
 
   .listing-page {
-    width: min(100% - 64px, 1250px);
+    width: calc(100% - 64px);
   }
 
   .form-page-header {
@@ -1049,7 +1049,7 @@ textarea:focus-visible {
   #root > button,
   #root > a,
   #root > span {
-    width: min(100% - 64px, 1250px);
+    width: calc(100% - 64px);
   }
 
   form {
