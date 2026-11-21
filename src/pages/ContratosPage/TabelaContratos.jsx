@@ -2,11 +2,13 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useContratoStore } from "../../store/useContratoStore";
 import { useFornecedorStore } from "../../store/useFornecedorStore";
+import { useProcedimentoStore } from "../../store/useProcedimentoStore";
 import { formatDate, formatCurrency } from "../../helper_functions/helper";
 
 export default function TabelaContratos({ fornecedorId }) {
   const todosContratos = useContratoStore((state) => state.contratos);
   const fornecedores = useFornecedorStore((state) => state.fornecedores);
+  const procedimentos = useProcedimentoStore((state) => state.procedimentos);
   const deletarContrato = useContratoStore((state) => state.deletarContrato);
 
   const contratos = fornecedorId ? todosContratos.filter((contrato) => contrato.fornecedor_id === Number(fornecedorId)) : todosContratos;
@@ -31,10 +33,16 @@ export default function TabelaContratos({ fornecedorId }) {
     return matchNumero && matchAno && matchObjeto && matchFornecedor && matchProcedimento && matchStatus;
   });
 
-  return (
-    <section className="data-section">
-      <h2>Contratos cadastrados</h2>
-      {contratos.length > 0 ? (
+  if (contratos.length === 0) {
+    return (
+      <section>
+        <p>Nenhum contrato cadastrato</p>
+      </section>
+    );
+  } else {
+    return (
+      <section className="data-section">
+        <h2>Contratos cadastrados</h2>
         <>
           <div className="filter-panel">
             <h3>Filtrar contratos</h3>
@@ -78,7 +86,6 @@ export default function TabelaContratos({ fornecedorId }) {
                 ))}
               </select> */}
 
-
               <input type="text" placeholder="Status" value={filtros.status || ""} onChange={(e) => setFiltros({ ...filtros, status: e.target.value })} />
             </div>
           </div>
@@ -99,33 +106,37 @@ export default function TabelaContratos({ fornecedorId }) {
                 </tr>
               </thead>
               <tbody>
-                {contratosFiltrados.map((contrato) => (
-                  <tr key={contrato.id}>
-                    <td>
-                      <Link to={`/contratos/${contrato.id}`}>{contrato.numero}/{contrato.ano}</Link>
-                    </td>
-                    <td className="contract-text-cell">{contrato.objeto}</td>
-                    <td className="contract-text-cell">
-                      <Link to={`/fornecedor/${contrato.fornecedor_id}`}>{fornecedores.find((fornecedor) => fornecedor.id === contrato.fornecedor_id).razao_social}</Link>
-                    </td>
-                    <td className="contract-text-cell">{contrato.procedimento_id}</td>
-                    <td className="contract-text-cell">{contrato.status}</td>
-                    <td>{formatCurrency(contrato.valor_global)}</td>
-                    <td>{contrato.prorrogavel === 1 ? "Sim" : "Não"}</td>
-                    <td>{formatDate(contrato.data_de_assinatura)}</td>
-                    <td>{formatDate(contrato.data_de_termino)}</td>
-                    <td>
-                      <button onClick={() => deletarContrato(contrato.id)}>Deletar</button>
-                    </td>
-                  </tr>
-                ))}
+                {contratosFiltrados.map((contrato) => {
+                  const fornecedor = fornecedores.find((fornecedor) => fornecedor.id === contrato.fornecedor_id);
+                  const procedimento = procedimentos.find((procedimento) => procedimento.id === contrato.procedimento_id);
+                  return (
+                    <tr key={contrato.id}>
+                      <td>
+                        <Link to={`/contratos/${contrato.id}`}>
+                          {contrato.numero}/{contrato.ano}
+                        </Link>
+                      </td>
+                      <td className="contract-text-cell">{contrato.objeto}</td>
+                      <td className="contract-text-cell">
+                        <Link to={`/fornecedor/${fornecedor.id}`}>{fornecedor.razao_social}</Link>
+                      </td>
+                      <td className="contract-text-cell">{procedimento.modalidade} {procedimento.numero}/{procedimento.ano}</td>
+                      <td className="contract-text-cell">{contrato.status}</td>
+                      <td>{formatCurrency(contrato.valor_global)}</td>
+                      <td>{contrato.prorrogavel === 1 ? "Sim" : "Não"}</td>
+                      <td>{formatDate(contrato.data_de_assinatura)}</td>
+                      <td>{formatDate(contrato.data_de_termino)}</td>
+                      <td>
+                        <button onClick={() => deletarContrato(contrato.id)}>Deletar</button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
         </>
-      ) : (
-        <p>Nenhum contrato cadastrato</p>
-      )}
-    </section>
-  );
+      </section>
+    );
+  }
 }

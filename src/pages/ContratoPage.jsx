@@ -1,8 +1,8 @@
 import { useParams, Link, Navigate } from "react-router-dom";
 import { useContratoStore } from "../store/useContratoStore.js";
 import { useFornecedorStore } from "../store/useFornecedorStore.js";
+import { useProcedimentoStore } from "../store/useProcedimentoStore.js";
 import { formatDate, formatCurrency } from "../helper_functions/helper.js";
-
 
 export default function ContratoPage() {
   // Id from parameter variable
@@ -11,14 +11,13 @@ export default function ContratoPage() {
   // Get state variables from store
   const contratos = useContratoStore((state) => state.contratos);
   const fornecedores = useFornecedorStore((state) => state.fornecedores);
-
+  const procedimentos = useProcedimentoStore((state) => state.procedimentos);
   const deletarContrato = useContratoStore((state) => state.deletarContrato);
 
   // Get this contract and fornecedor
   const contrato = contratos.find((contrato) => contrato.id === Number(id));
-  const fornecedor = fornecedores.find(
-    (fornecedor) => fornecedor.id === Number(contrato?.fornecedor_id),
-  );
+  const fornecedor = fornecedores.find((fornecedor) => fornecedor.id === Number(contrato?.fornecedor_id));
+  const procedimento = procedimentos.find((procedimento) => procedimento.id === contrato.procedimento_id);
 
   // Guard clause: if contract is deleted or not found, stop rendering
   if (!contrato) {
@@ -34,20 +33,17 @@ export default function ContratoPage() {
       <header className="detail-header">
         <div>
           <p className="eyebrow">Detalhes do contrato</p>
-          <h1>Contrato nº {contrato.numero}/{contrato.ano}</h1>
-          <p className="detail-subtitle">
-            Registro completo, vigência e vínculo com o fornecedor.
-          </p>
+          <h1>
+            Contrato nº {contrato.numero}/{contrato.ano}
+          </h1>
+          <p className="detail-subtitle">Registro completo, vigência e vínculo com o fornecedor.</p>
         </div>
         <span>
           <Link to={`/contratos/editar/${contrato.id}`}>
             <button className="button-primary">Editar contrato</button>
           </Link>
 
-          <button
-            className="button-danger"
-            onClick={() => handleDelete(contrato.id)}
-          >
+          <button className="button-danger" onClick={() => handleDelete(contrato.id)}>
             Deletar
           </button>
         </span>
@@ -67,14 +63,12 @@ export default function ContratoPage() {
           <div>
             <dt>Fornecedor</dt>
             <dd>
-              <Link to={`/fornecedor/${fornecedor.id}`}>
-                {fornecedor.razao_social}
-              </Link>
+              <Link to={`/fornecedor/${fornecedor.id}`}>{fornecedor.razao_social}</Link>
             </dd>
           </div>
           <div>
             <dt>Procedimento</dt>
-            <dd>{contrato.procedimento_id}</dd>
+            <dd>{procedimento.modalidade} {procedimento.numero}/{procedimento.ano}</dd>
           </div>
           <div>
             <dt>Valor global</dt>
