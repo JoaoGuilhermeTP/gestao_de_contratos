@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import TabelaContratos from "../pages/ContratosPage/TabelaContratos.jsx";
-import { useContratoStore } from "../store/useContratoStore.js";
 import { useFornecedorStore } from "../store/useFornecedorStore.js";
 import DocumentosFornecedor from "../components/DocumentosFornecedor.jsx";
 import TabelaAtas from "./AtasPage/TabelaAtas.jsx";
@@ -13,7 +12,6 @@ export default function FornecedorPage() {
   // State variables
   const [activeTab, setActiveTab] = useState("documentos");
   const fornecedores = useFornecedorStore((status) => status.fornecedores);
-  const contratos = useContratoStore((status) => status.contratos);
 
   // Get current fornecedor
   const fornecedor = fornecedores.find((fornecedor) => fornecedor.id === Number(id));
@@ -40,19 +38,35 @@ export default function FornecedorPage() {
 
       <div className="detail-card">
         <div className="detail-card-heading">
-          <h2>Dados cadastrais</h2>
+          <h2>Identificação</h2>
           <span className="type-badge">{fornecedor.tipo}</span>
           <span className="status-badge">{fornecedor.status}</span>
         </div>
         <dl className="detail-grid">
           <div>
+            <dt>Nome fantasia</dt>
+            <dd>{fornecedor.nome_fantasia || "Não informado"}</dd>
+          </div>
+          <div>
             <dt>CPF/CNPJ</dt>
             <dd>{fornecedor.cpf_cnpj}</dd>
           </div>
           <div>
-            <dt>Nome fantasia</dt>
-            <dd>{fornecedor.nome_fantasia || "Não informado"}</dd>
+            <dt>Inscrição estadual</dt>
+            <dd>{fornecedor.inscricao_estadual || "Não informado"}</dd>
           </div>
+          <div>
+            <dt>Inscrição municipal</dt>
+            <dd>{fornecedor.inscricao_municipal || "Não informado"}</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div className="detail-card">
+        <div className="detail-card-heading">
+          <h2>Contato</h2>
+        </div>
+        <dl className="detail-grid">
           <div>
             <dt>E-mail</dt>
             <dd>{fornecedor.email || "Não informado"}</dd>
@@ -64,6 +78,26 @@ export default function FornecedorPage() {
           <div>
             <dt>Representante legal</dt>
             <dd>{fornecedor.representante_legal || "Não informado"}</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div className="detail-card">
+        <div className="detail-card-heading">
+          <h2>Endereço</h2>
+        </div>
+        <dl className="detail-grid">
+          <div>
+            <dt>Logradouro</dt>
+            <dd>{fornecedor.logradouro}</dd>
+          </div>
+          <div>
+            <dt>Número</dt>
+            <dd>{fornecedor.numero}</dd>
+          </div>
+          <div>
+            <dt>Bairro</dt>
+            <dd>{fornecedor.bairro}</dd>
           </div>
           <div>
             <dt>Localização</dt>
@@ -95,13 +129,7 @@ export default function FornecedorPage() {
           Contratos
         </button>
 
-        <button
-          type="button"
-          role="tab"
-          aria-selected={activeTab === "atas"}
-          className={`supplier-tab ${activeTab === "atas" ? "supplier-tab-active" : ""}`}
-          onClick={() => setActiveTab("atas")}
-        >
+        <button type="button" role="tab" aria-selected={activeTab === "atas"} className={`supplier-tab ${activeTab === "atas" ? "supplier-tab-active" : ""}`} onClick={() => setActiveTab("atas")}>
           Atas de Registro de Preços
         </button>
       </div>

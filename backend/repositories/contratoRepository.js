@@ -3,7 +3,7 @@ import { pool } from "../db/database.js";
 
 export async function findAll() {
   const { rows } = await pool.query(
-    "SELECT * FROM contratos ORDER BY id ASC"
+    "SELECT * FROM contratos ORDER BY data_de_termino ASC"
   );
   return rows;
 }
