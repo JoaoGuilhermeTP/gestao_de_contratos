@@ -4,19 +4,87 @@ Este roadmap organiza o desenvolvimento em **Milestones incrementais (fatias ver
 
 ---
 
-## Fluxo de Trabalho Recomendado (Git & GitHub)
+## 1. Fluxo de Trabalho Padronizado (GitHub Projects + Git)
 
-1. Crie cada **Milestone** abaixo na aba *Issues → Milestones* do GitHub.
-2. Transforme cada item `- [ ]` em uma **Issue** vinculada à respectiva Milestone e aos códigos de requisito (`RF-XX`, `RN-XX`, `RNF-XX`).
-3. Trabalhe em **uma branch por Issue** a partir da `main`:
-   * `fix/nome-curto` para correções de bugs;
-   * `feat/nome-curto` para novas funcionalidades;
-   * `chore/nome-curto` para documentação, limpeza e configuração.
-4. Só considere uma Issue concluída quando **backend + store + UI + validação de erro** estiverem funcionando juntos e passando no `npm run lint`.
+Todo o trabalho diário é guiado pelo quadro Kanban **`Gestão de Contratos — v1.0`** no GitHub Projects, organizado em quatro colunas da esquerda para a direita:
+
+* **`Backlog`:** Ideias futuras, bugs secundários descobertos no caminho e tarefas de Milestones posteriores.
+* **`Todo`:** Apenas as Issues da **Milestone atual**.
+* **`In Progress`:** **No máximo 1 Issue por vez** (limite rígido para evitar desenvolvimento *ad-hoc*).
+* **`Done`:** Issues fechadas automaticamente após o merge na `main`.
+
+### Ciclo Padrão por Issue (Repetir a Cada Tarefa)
+
+#### Fase 1 — Iniciar a Tarefa
+1. No GitHub Projects, arraste **apenas 1 cartão** de `Todo` para `In Progress`.
+2. Abra a Issue, revise a checklist e consulte os requisitos/rotas correspondentes em `docs/REQUIREMENTS.md`, `docs/USE_CASES.md` e `docs/API_SPEC.md`.
+3. No terminal do VS Code, atualize a `main` e crie uma branch exclusiva para a Issue:
+
+```bash
+git checkout main
+git pull origin main
+git checkout -b fix/m0-01-erros-postgres
+```
+
+* **Padrão de nomes de branch:**
+  * `fix/descricao-curta` — correção de bugs;
+  * `feat/descricao-curta` — novas funcionalidades / CRUDs;
+  * `docs/descricao-curta` — documentação;
+  * `chore/descricao-curta` — configuração, limpeza e refatoração.
+
+#### Fase 2 — Implementar, Testar e Manter o Foco
+1. Implemente **somente** o que está listado na checklist da Issue atual, marcando as caixas de progresso conforme concluir cada item.
+2. **Regra contra distrações:** se encontrar outro bug ou melhoria fora do escopo enquanto trabalha, **não corrija na mesma branch**. Abra uma nova Issue rápida no GitHub, deixe-a em `Backlog` e volte imediatamente para a tarefa atual.
+3. Antes de commitar, valide localmente:
+   * Execute `npm run dev` e teste fluxos de sucesso e erro (no navegador e/ou Postman);
+   * Execute `npm run lint` e corrija quaisquer avisos ou erros.
+
+#### Fase 3 — Commit, Pull Request e Merge
+1. Revise os arquivos alterados, faça o commit referenciando o requisito e envie a branch ao GitHub:
+
+```bash
+git status
+git add .
+git commit -m "fix(backend): mapear erros do PostgreSQL e corrigir script seed (RNF-02)"
+git push -u origin fix/m0-01-erros-postgres
+```
+
+2. No GitHub, clique em **Compare & pull request** para abrir um Pull Request da sua branch para a `main`.
+3. Na descrição do Pull Request, vincule a Issue para acionar a automação do quadro (trocando `1` pelo número real da Issue):
+
+```markdown
+Closes #1
+```
+
+4. Faça uma **autorrevisão rápida** na aba **Files changed** (busque `console.log` esquecidos, erros de digitação ou arquivos alterados sem querer).
+5. Clique em **Merge pull request** → **Confirm merge** → **Delete branch**. A automação *Item closed* fechará a Issue, atualizará a barra da Milestone e moverá o cartão automaticamente para `Done`.
+
+#### Fase 4 — Sincronizar Localmente
+Volte ao terminal do VS Code para atualizar sua `main` local e remover a branch já concluída:
+
+```bash
+git checkout main
+git pull origin main
+git branch -d fix/m0-01-erros-postgres
+```
+
+### Definição de Pronto (DoD) por Issue
+Uma Issue só deve ser considerada concluída quando:
+* Backend (`routes` → `services` → `repositories`), store Zustand e interface React (quando aplicáveis) estiverem funcionando integrados;
+* Regras de negócio e mensagens de erro da API forem exibidas corretamente na interface;
+* `npm run lint` passar sem erros e o código estiver integrado na `main` via Pull Request.
+
+### Rotina de Fechamento de Milestone
+Quando todas as Issues da Milestone atual estiverem em `Done`:
+1. Marque `[x]` nos itens concluídos deste arquivo (`docs/ROADMAP.md`) e faça commit na `main` (ex.: `docs(roadmap): marcar Milestone 0 como concluída`).
+2. Feche a Milestone concluída em **Issues → Milestones**.
+3. Crie a próxima Milestone e cadastre **apenas as Issues dela** na coluna `Todo` (evitando poluir o quadro com dezenas de cartões futuros).
 
 ---
 
-## Milestone 0 — Estabilização e Infraestrutura Base
+## 2. Milestones da Versão 1.0
+
+### Milestone 0 — Estabilização e Infraestrutura Base
 **Objetivo:** Eliminar bugs existentes no código atual e padronizar o tratamento global de erros antes de expandir novas telas.
 
 - [ ] **M0-01 — Middleware global de erros PostgreSQL (`RNF-02`, `RN-06`)**
@@ -34,7 +102,7 @@ Este roadmap organiza o desenvolvimento em **Milestones incrementais (fatias ver
 
 ---
 
-## Milestone 1 — Módulo A: Estrutura Organizacional (`secretarias`, `servidores`)
+### Milestone 1 — Módulo A: Estrutura Organizacional (`secretarias`, `servidores`)
 **Objetivo:** Fechar 100% do CRUD de Secretarias e Servidores, estabelecendo o padrão limpo de páginas, formulários e confirmação de exclusão.
 
 - [ ] **M1-01 — CRUD completo de Secretarias no Backend (`RF-01`, `RF-03`, `RN-01`)**
@@ -49,7 +117,7 @@ Este roadmap organiza o desenvolvimento em **Milestones incrementais (fatias ver
 
 ---
 
-## Milestone 2 — Módulo B: Fornecedores e Regularidade Documental (`fornecedores`, `documentos`, `documentos_fornecedores`)
+### Milestone 2 — Módulo B: Fornecedores e Regularidade Documental (`fornecedores`, `documentos`, `documentos_fornecedores`)
 **Objetivo:** Completar operações de edição e exclusão faltantes em Fornecedores, Catálogo de Documentos e Certidões do Fornecedor.
 
 - [ ] **M2-01 — Completar CRUD de Fornecedores (`RF-04`, `RN-01`, `UC-06`)**
@@ -67,7 +135,7 @@ Este roadmap organiza o desenvolvimento em **Milestones incrementais (fatias ver
 
 ---
 
-## Milestone 3 — Módulo C: Fluxo Licitatório (`processos`, `procedimentos`)
+### Milestone 3 — Módulo C: Fluxo Licitatório (`processos`, `procedimentos`)
 **Objetivo:** Permitir gerenciar todo o fluxo pré-contratual (abertura do processo → licitação/contratação direta) com interface integrada.
 
 - [ ] **M3-01 — CRUD completo de Processos Administrativos (`RF-08`, `US-04`)**
@@ -81,7 +149,7 @@ Este roadmap organiza o desenvolvimento em **Milestones incrementais (fatias ver
 
 ---
 
-## Milestone 4 — Módulo D: Execução Contratual e Fornecimento (`atas_registro_precos`, `contratos`, `autorizacoes_de_fornecimento`)
+### Milestone 4 — Módulo D: Execução Contratual e Fornecimento (`atas_registro_precos`, `contratos`, `autorizacoes_de_fornecimento`)
 **Objetivo:** Fechar 100% do CRUD de Atas, refinar Contratos e construir o módulo completo de Autorizações de Fornecimento (AF).
 
 - [ ] **M4-01 — CRUD completo de Atas de Registro de Preços (`RF-10`, `US-05`, `RN-02`)**
@@ -98,7 +166,7 @@ Este roadmap organiza o desenvolvimento em **Milestones incrementais (fatias ver
 
 ---
 
-## Milestone 5 — Módulo E: Acompanhamento e Fiscalização na Tela do Contrato (`alteracoes_contratuais`, `gestao`, `ocorrencias_contrato`)
+### Milestone 5 — Módulo E: Acompanhamento e Fiscalização na Tela do Contrato (`alteracoes_contratuais`, `gestao`, `ocorrencias_contrato`)
 **Objetivo:** Transformar `ContratoPage.jsx` no centro operacional do sistema com abas integradas (mesmo padrão visual de `FornecedorPage.jsx`).
 
 - [ ] **M5-01 — Estrutura de Abas na `ContratoPage.jsx`**
@@ -116,7 +184,7 @@ Este roadmap organiza o desenvolvimento em **Milestones incrementais (fatias ver
 
 ---
 
-## Milestone 6 — Polimento Final de Portfólio (Release v1.0)
+### Milestone 6 — Polimento Final de Portfólio (Release v1.0)
 **Objetivo:** Garantir qualidade de entrega, limpeza do repositório e apresentação impecável para recrutadores.
 
 - [ ] **M6-01 — Padronização de UI e Limpeza do Repositório**
