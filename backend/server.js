@@ -39,7 +39,15 @@ app.get("/api/status", (req, res) => {
 // Central error handler (catches any error thrown in routes or services)
 app.use((err, req, res, next) => {
   console.error(err);
-  res.status(err.status || 500).json({ error: err.message || "Erro interno no servidor" });
+
+  const postgressStatus = {
+    "23505": 409,
+    "23503": 409,
+    "22P02": 400,
+  };
+
+  const status = err.status || postgressStatus[err.code] || 500;
+  res.status(status).json({error: err.message || "Erro interno no servidor"});
 });
 
 app.listen(PORT, "0.0.0.0", () => {
