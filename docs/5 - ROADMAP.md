@@ -87,7 +87,7 @@ Quando todas as Issues da Milestone atual estiverem em `Done`:
 ### Milestone 0 — Estabilização e Infraestrutura Base
 **Objetivo:** Eliminar bugs existentes no código atual e padronizar o tratamento global de erros antes de expandir novas telas.
 
-- [ ] **M0-01 — Middleware global de erros PostgreSQL (`RNF-02`, `RN-06`)**
+- [X] **M0-01 — Middleware global de erros PostgreSQL (`RNF-02`, `RN-06`)**
   * Atualizar o error handler em `backend/server.js` para mapear códigos do PostgreSQL: `23505` (`409 Conflict` — duplicidade), `23503` (`409 Conflict` — registro com vínculos ativos na exclusão ou FK inexistente) e `22P02` (`400 Bad Request`).
   * Corrigir o script `"seed"` em `package.json` para `node backend/db/seed.js`.
 - [ ] **M0-02 — Corrigir bugs críticos de Contratos (Backend e Frontend)**
